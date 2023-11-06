@@ -38,7 +38,7 @@ const initLottie = () => {
         renderer: 'svg',
         loop: true,
         autoplay: true,
-        path: "./assets/data.json"
+        path: "./data.json"
     });
     let loop = () => {
 
