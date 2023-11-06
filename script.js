@@ -535,7 +535,7 @@ let doResize = () => {
 
 let loop = () => {
     counter++;
-    if (counter>200){
+    if (counter>800){
         counter = 0;
         let rand = Math.floor(Math.floor(Math.random()*window.innerWidth)/quadrants.rowWidth)
         // console.log(rand)
