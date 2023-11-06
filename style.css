@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Aleo&display=swap');
+*{
+  font-family: 'Aleo', sans-serif;
+  font-weight:400;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body
+{
+    color: #9D988A;
+    font-size: 0.9em;
+    overflow: hidden;
+}
+
+#lines
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    outline: none;
+    /* z-index: 999; */
+}
+
+#container{
+    /* display: none; */
+    background-color: #000;
+    /* background-size: cover;
+    background-position: center; */
+    width:100vw;
+    height:100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s ease-in-out;
+}
+#lottie{
+    /* display: none; */
+    /* width:25vw; */
+    height:50vh;
+    max-height: 400px;
+    display: flex;
+    z-index: 10;
+}
+
+
+.color1{
+    fill:#222;
+    transition: fill 0.3s ease-in-out;
+}
+.color2{
+    fill:#222;
+    transition: fill 0.3s ease-in-out;
+}
+.color3{
+    fill:#222;
+    transition: fill 0.3s ease-in-out;
+}
+.color4{
+    fill:#222;
+    transition: fill 0.3s ease-in-out;
+}
+.color5{
+    fill:#222;
+    transition: fill 0.3s ease-in-out;
+}
+.color6{
+    fill:#222;
+    transition: fill 0.3s ease-in-out;
+}
+.color7{
+    fill:#222;
+    transition: fill 0.3s ease-in-out;
+}
+.color8{
+    fill:#222;
+    transition: fill 0.3s ease-in-out;
+}
+.color9{
+    fill:#222;
+    transition: fill 0.3s ease-in-out;
+    fill-opacity: 0.0;
+    transition-delay: 0.1s;
+    transition: fill-opacity 0.13s ease-out;
+}
+.show{
+    fill-opacity: 1.0;
+    transition: fill-opacity 0.13s ease-out;
+}
