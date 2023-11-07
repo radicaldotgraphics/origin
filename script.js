@@ -36,13 +36,13 @@ const initLottie = () => {
     anim = Lottie.loadAnimation({
         container: document.getElementById("lottie"),
         renderer: 'svg',
-        loop: true,
+        loop: false,
         autoplay: true,
         path: "./data.json"
     });
     let loop = () => {
 
-        //anim.goToAndPlay(120, true);
+        anim.goToAndPlay(1, true);
     };
     anim.addEventListener("loopComplete", loop);
 }
