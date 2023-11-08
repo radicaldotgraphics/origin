@@ -33,7 +33,6 @@ let ctx = canvas.getContext('2d');
 
 
 const initLottie = () => {
-  console.log("loading");
     anim = Lottie.loadAnimation({
         container: document.getElementById("lottie"),
         renderer: 'svg',
@@ -110,42 +109,34 @@ const initQuadrants = () => {
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
-              items[i].style.stroke = arr[1];
             }
             items = document.getElementsByClassName('color2');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
-              items[i].style.stroke = arr[1];
             }
             items = document.getElementsByClassName('color3');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
-              items[i].style.stroke = arr[1];
             }
             items = document.getElementsByClassName('color4');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
-              items[i].style.stroke = arr[1];
             }
             items = document.getElementsByClassName('color5');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
-              items[i].style.stroke = arr[1];
             }
             items = document.getElementsByClassName('color6');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
-              items[i].style.stroke = arr[1];
             }
             items = document.getElementsByClassName('color7');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
-              items[i].style.stroke = arr[1];
             }
             items = document.getElementsByClassName('color8');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
-              items[i].style.stroke = arr[1];
             }
             items = document.getElementsByClassName('color9');
             for(let i = 0; i < items.length; i++) {
@@ -156,42 +147,34 @@ const initQuadrants = () => {
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
-              items[i].style.stroke = arr[1];
             }
             items = document.getElementsByClassName('color2');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
-              items[i].style.stroke = arr[1];
             }
             items = document.getElementsByClassName('color3');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
-              items[i].style.stroke = arr[1];
             }
             items = document.getElementsByClassName('color4');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
-              items[i].style.stroke = arr[1];
             }
             items = document.getElementsByClassName('color5');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
-              items[i].style.stroke = arr[2];
             }
             items = document.getElementsByClassName('color6');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
-              items[i].style.stroke = arr[2];
             }
             items = document.getElementsByClassName('color7');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
-              items[i].style.stroke = arr[2];
             }
             items = document.getElementsByClassName('color8');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
-              items[i].style.stroke = arr[2];
             }
             items = document.getElementsByClassName('color9');
             for(let i = 0; i < items.length; i++) {
@@ -203,42 +186,34 @@ const initQuadrants = () => {
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
-              items[i].style.stroke = arr[1];
             }
             items = document.getElementsByClassName('color2');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
-              items[i].style.stroke = arr[1];
             }
             items = document.getElementsByClassName('color3');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
-              items[i].style.stroke = arr[2];
             }
             items = document.getElementsByClassName('color4');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[3];
-              items[i].style.stroke = arr[3];
             }
             items = document.getElementsByClassName('color5');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[3];
-              items[i].style.stroke = arr[3];
             }
             items = document.getElementsByClassName('color6');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
-              items[i].style.stroke = arr[2];
             }
             items = document.getElementsByClassName('color7');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
-              items[i].style.stroke = arr[1];
             }
             items = document.getElementsByClassName('color8');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
-              items[i].style.stroke = arr[1];
             }
             items = document.getElementsByClassName('color9');
             for(let i = 0; i < items.length; i++) {
@@ -249,42 +224,34 @@ const initQuadrants = () => {
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
-              items[i].style.stroke = arr[1];
             }
             items = document.getElementsByClassName('color2');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
-              items[i].style.stroke = arr[2];
             }
             items = document.getElementsByClassName('color3');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[3];
-              items[i].style.stroke = arr[3];
             }
             items = document.getElementsByClassName('color4');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[4];
-              items[i].style.stroke = arr[4];
             }
             items = document.getElementsByClassName('color5');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[4];
-              items[i].style.stroke = arr[4];
             }
             items = document.getElementsByClassName('color6');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[3];
-              items[i].style.stroke = arr[3];
             }
             items = document.getElementsByClassName('color7');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
-              items[i].style.stroke = arr[2];
             }
             items = document.getElementsByClassName('color8');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
-              items[i].style.stroke = arr[1];
             }
             items = document.getElementsByClassName('color9');
             for(let i = 0; i < items.length; i++) {
@@ -295,42 +262,34 @@ const initQuadrants = () => {
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
-              items[i].style.stroke = arr[1];
             }
             items = document.getElementsByClassName('color2');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
-              items[i].style.stroke = arr[2];
             }
             items = document.getElementsByClassName('color3');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[3];
-              items[i].style.stroke = arr[3];
             }
             items = document.getElementsByClassName('color4');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[4];
-              items[i].style.stroke = arr[4];
             }
             items = document.getElementsByClassName('color5');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[4];
-              items[i].style.stroke = arr[4];
             }
             items = document.getElementsByClassName('color6');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[3];
-              items[i].style.stroke = arr[3];
             }
             items = document.getElementsByClassName('color7');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
-              items[i].style.stroke = arr[2];
             }
             items = document.getElementsByClassName('color8');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[5];
-              items[i].style.stroke = arr[5];
             }
             items = document.getElementsByClassName('color9');
             for(let i = 0; i < items.length; i++) {
@@ -341,42 +300,34 @@ const initQuadrants = () => {
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
-              items[i].style.stroke = arr[1];
             }
             items = document.getElementsByClassName('color2');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[6];
-              items[i].style.stroke = arr[6];
             }
             items = document.getElementsByClassName('color3');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[3];
-              items[i].style.stroke = arr[3];
             }
             items = document.getElementsByClassName('color4');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[4];
-              items[i].style.stroke = arr[4];
             }
             items = document.getElementsByClassName('color5');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[4];
-              items[i].style.stroke = arr[4];
             }
             items = document.getElementsByClassName('color6');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[3];
-              items[i].style.stroke = arr[3];
             }
             items = document.getElementsByClassName('color7');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
-              items[i].style.stroke = arr[2];
             }
             items = document.getElementsByClassName('color8');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
-              items[i].style.stroke = arr[1];
             }
             items = document.getElementsByClassName('color9');
             for(let i = 0; i < items.length; i++) {
@@ -387,42 +338,34 @@ const initQuadrants = () => {
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
-              items[i].style.stroke = arr[1];
             }
             items = document.getElementsByClassName('color2');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
-              items[i].style.stroke = arr[2];
             }
             items = document.getElementsByClassName('color3');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[3];
-              items[i].style.stroke = arr[3];
             }
             items = document.getElementsByClassName('color4');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[4];
-              items[i].style.stroke = arr[4];
             }
             items = document.getElementsByClassName('color5');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[4];
-              items[i].style.stroke = arr[4];
             }
             items = document.getElementsByClassName('color6');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[5];
-              items[i].style.stroke = arr[5];
             }
             items = document.getElementsByClassName('color7');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[6];
-              items[i].style.stroke = arr[6];
             }
             items = document.getElementsByClassName('color8');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[7];
-              items[i].style.stroke = arr[7];
             }
             items = document.getElementsByClassName('color9');
             for(let i = 0; i < items.length; i++) {
@@ -433,42 +376,34 @@ const initQuadrants = () => {
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
-              items[i].style.stroke = arr[1];
             }
             items = document.getElementsByClassName('color2');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
-              items[i].style.stroke = arr[2];
             }
             items = document.getElementsByClassName('color3');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[3];
-              items[i].style.stroke = arr[3];
             }
             items = document.getElementsByClassName('color4');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[4];
-              items[i].style.stroke = arr[4];
             }
             items = document.getElementsByClassName('color5');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[8];
-              items[i].style.stroke = arr[8];
             }
             items = document.getElementsByClassName('color6');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[5];
-              items[i].style.stroke = arr[5];
             }
             items = document.getElementsByClassName('color7');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[6];
-              items[i].style.stroke = arr[6];
             }
             items = document.getElementsByClassName('color8');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[7];
-              items[i].style.stroke = arr[7];
             }
             items = document.getElementsByClassName('color9');
             for(let i = 0; i < items.length; i++) {
@@ -479,48 +414,39 @@ const initQuadrants = () => {
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
-              items[i].style.stroke = arr[1];
             }
             items = document.getElementsByClassName('color2');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
-              items[i].style.stroke = arr[2];
             }
             items = document.getElementsByClassName('color3');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[3];
-              items[i].style.stroke = arr[3];
             }
             items = document.getElementsByClassName('color4');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[4];
-              items[i].style.stroke = arr[4];
             }
             items = document.getElementsByClassName('color5');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[5];
-              items[i].style.stroke = arr[5];
             }
             items = document.getElementsByClassName('color6');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[6];
-              items[i].style.stroke = arr[6];
             }
             items = document.getElementsByClassName('color7');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[7];
-              items[i].style.stroke = arr[7];
             }
             items = document.getElementsByClassName('color8');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[8];
-              items[i].style.stroke = arr[8];
             }
             items = document.getElementsByClassName('color9');
             for(let i = 0; i < items.length; i++) {
                 items[i].classList.add("show"); 
               items[i].style.fill = arr[9];
-              items[i].style.stroke = arr[9];
             }
             break;
         default:

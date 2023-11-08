@@ -4,7 +4,6 @@
   font-weight:400;
     margin: 0;
     padding: 0;
-    stroke:0;
 }
 
 html,
@@ -49,66 +48,44 @@ body
 
 .color1{
     fill:#222;
-    stroke:#222;
     transition: fill 0.3s ease-in-out;
-    transition: stroke 0.3s ease-in-out;
 }
 .color2{
     fill:#222;
-    stroke:#222;
     transition: fill 0.3s ease-in-out;
-    transition: stroke 0.3s ease-in-out;
 }
 .color3{
     fill:#222;
-    stroke:#222;
     transition: fill 0.3s ease-in-out;
-    transition: stroke 0.3s ease-in-out;
 }
 .color4{
     fill:#222;
-    stroke:#222;
     transition: fill 0.3s ease-in-out;
-    transition: stroke 0.3s ease-in-out;
 }
 .color5{
     fill:#222;
-    stroke:#222;
     transition: fill 0.3s ease-in-out;
-    transition: stroke 0.3s ease-in-out;
 }
 .color6{
     fill:#222;
-    stroke:#222;
     transition: fill 0.3s ease-in-out;
-    transition: stroke 0.3s ease-in-out;
 }
 .color7{
     fill:#222;
-    stroke:#222;
     transition: fill 0.3s ease-in-out;
-    transition: stroke 0.3s ease-in-out;
 }
 .color8{
     fill:#222;
-    stroke:#222;
     transition: fill 0.3s ease-in-out;
-    transition: stroke 0.3s ease-in-out;
 }
 .color9{
     fill:#222;
-    stroke:#222;
     transition: fill 0.3s ease-in-out;
-    transition: stroke 0.3s ease-in-out;
     fill-opacity: 0.0;
-    stroke-opacity: 0.0;
     transition-delay: 0.1s;
     transition: fill-opacity 0.13s ease-out;
-    transition: stroke-opacity 0.13s ease-out;
 }
 .show{
-    /* fill-opacity: 1.0;
-    stroke-opacity: 1.0;
+    fill-opacity: 1.0;
     transition: fill-opacity 0.13s ease-out;
-    transition: stroke-opacity 0.13s ease-out; */
 }
