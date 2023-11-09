@@ -1,7 +1,7 @@
 // import ThreeScene from './threescene'
 import Lottie from 'lottie-web'
 import palettes from './palettes.json'
-// import data from './data.json'
+import data from './data.json'
 
 let anim = null;
 let counter = 0;
@@ -40,6 +40,7 @@ const initLottie = () => {
         loop: true,
         autoplay: true,
         path: "./data.json"
+        // path: "./data.json"
     });
     // let loop = () => {
 
