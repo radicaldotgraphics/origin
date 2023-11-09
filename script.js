@@ -49,10 +49,10 @@ const initLottie = () => {
 
 
 let init = () => {
-    window.addEventListener( 'touchstart', isDown );
-    window.addEventListener( 'mousedown', isDown ); 
-    window.addEventListener( 'mouseup', isUp );
-    window.addEventListener( 'touchend', isUp );
+    // window.addEventListener( 'touchstart', isDown );
+    // window.addEventListener( 'mousedown', isDown ); 
+    // window.addEventListener( 'mouseup', isUp );
+    // window.addEventListener( 'touchend', isUp );
     window.addEventListener( 'mousemove', isMove );
     window.addEventListener( 'touchmove', isMove );
     window.addEventListener( 'resize', doResize )
@@ -70,7 +70,7 @@ const initCanvas = () => {
     ctx.globalCompositeOperation = "exclusion";
     for (let i = 0; i < palettes.length; i++) {
         const itm = palettes[i];
-        ctx.fillStyle = "#ffffff"
+        ctx.fillStyle = "#FFFFFF";
         ctx.beginPath();
         ctx.rect(width*i, 0, 0.2, window.innerHeight)
         ctx.fill();
@@ -106,348 +106,466 @@ const initQuadrants = () => {
         //from 2-10 colors
         switch (num) {
         case 2:
+          //color[0] is bg so the array values starts at array[1] and ends at case [n-1]
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
             }
+            items="";
             items = document.getElementsByClassName('color2');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
             }
+            items="";
             items = document.getElementsByClassName('color3');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
             }
+            items="";
             items = document.getElementsByClassName('color4');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
             }
+            items="";
             items = document.getElementsByClassName('color5');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
             }
+            items="";
             items = document.getElementsByClassName('color6');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
             }
+            items="";
             items = document.getElementsByClassName('color7');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
             }
+            items="";
             items = document.getElementsByClassName('color8');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
             }
+            items="";
             items = document.getElementsByClassName('color9');
             for(let i = 0; i < items.length; i++) {
                 items[i].classList.remove("show");
             }
+            items="";
+            // items = document.getElementsByClassName('colorReveal');
+            // for(let i = 0; i < items.length; i++) {
+            //   items[i].style.fill = arr[0];
+            // }
             break;
         case 3:
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
             }
+            items="";
             items = document.getElementsByClassName('color2');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
             }
+            items="";
             items = document.getElementsByClassName('color3');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
             }
+            items="";
             items = document.getElementsByClassName('color4');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
             }
+            items="";
             items = document.getElementsByClassName('color5');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
             }
+            items="";
             items = document.getElementsByClassName('color6');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
             }
+            items="";
             items = document.getElementsByClassName('color7');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
             }
+            items="";
             items = document.getElementsByClassName('color8');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
             }
+            items="";
             items = document.getElementsByClassName('color9');
             for(let i = 0; i < items.length; i++) {
                 items[i].classList.remove("show");
 
+                items="";
             }
+            // items = document.getElementsByClassName('colorReveal');
+            // for(let i = 0; i < items.length; i++) {
+            //   items[i].style.fill = arr[0];
+            // }
             break;
         case 4:
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
             }
+            items="";
             items = document.getElementsByClassName('color2');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
             }
+            items="";
             items = document.getElementsByClassName('color3');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
             }
+            items="";
             items = document.getElementsByClassName('color4');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[3];
             }
+            items="";
             items = document.getElementsByClassName('color5');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[3];
             }
+            items="";
             items = document.getElementsByClassName('color6');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
             }
+            items="";
             items = document.getElementsByClassName('color7');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
             }
+            items="";
             items = document.getElementsByClassName('color8');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
             }
+            items="";
             items = document.getElementsByClassName('color9');
             for(let i = 0; i < items.length; i++) {
                 items[i].classList.remove("show");
             }
+            items="";
+            // items = document.getElementsByClassName('colorReveal');
+            // for(let i = 0; i < items.length; i++) {
+            //   items[i].style.fill = arr[3];
+            // }
             break;
         case 5:
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
             }
+            items="";
             items = document.getElementsByClassName('color2');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
             }
+            items="";
             items = document.getElementsByClassName('color3');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[3];
             }
+            items="";
             items = document.getElementsByClassName('color4');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[4];
             }
+            items="";
             items = document.getElementsByClassName('color5');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[4];
             }
+            items="";
             items = document.getElementsByClassName('color6');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[3];
             }
+            items="";
             items = document.getElementsByClassName('color7');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
             }
+            items="";
             items = document.getElementsByClassName('color8');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
             }
+            items="";
             items = document.getElementsByClassName('color9');
             for(let i = 0; i < items.length; i++) {
                 items[i].classList.remove("show");
             }
+            items="";
+            // items = document.getElementsByClassName('colorReveal');
+            // for(let i = 0; i < items.length; i++) {
+            //   items[i].style.fill = arr[3];
+            // }
             break;
         case 6:
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
             }
+            items="";
             items = document.getElementsByClassName('color2');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
             }
+            items="";
             items = document.getElementsByClassName('color3');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[3];
             }
+            items="";
             items = document.getElementsByClassName('color4');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[4];
             }
+            items="";
             items = document.getElementsByClassName('color5');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[4];
             }
+            items="";
             items = document.getElementsByClassName('color6');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[3];
             }
+            items="";
             items = document.getElementsByClassName('color7');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
             }
+            items="";
             items = document.getElementsByClassName('color8');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[5];
             }
+            items="";
             items = document.getElementsByClassName('color9');
             for(let i = 0; i < items.length; i++) {
                 items[i].classList.remove("show");
             }
+            items="";
+            // items = document.getElementsByClassName('colorReveal');
+            // for(let i = 0; i < items.length; i++) {
+            //   items[i].style.fill = arr[4];
+            // }
             break;
         case 7:
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
             }
+            items="";
             items = document.getElementsByClassName('color2');
             for(let i = 0; i < items.length; i++) {
-              items[i].style.fill = arr[6];
+              items[i].style.fill = arr[2];
             }
+            items="";
             items = document.getElementsByClassName('color3');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[3];
             }
+            items="";
             items = document.getElementsByClassName('color4');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[4];
             }
+            items="";
             items = document.getElementsByClassName('color5');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[4];
             }
+            items="";
             items = document.getElementsByClassName('color6');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[3];
             }
+            items="";
             items = document.getElementsByClassName('color7');
             for(let i = 0; i < items.length; i++) {
-              items[i].style.fill = arr[2];
+              items[i].style.fill = arr[5];
             }
+            items="";
             items = document.getElementsByClassName('color8');
             for(let i = 0; i < items.length; i++) {
-              items[i].style.fill = arr[1];
+              items[i].style.fill = arr[6];
             }
+            items="";
             items = document.getElementsByClassName('color9');
             for(let i = 0; i < items.length; i++) {
                 items[i].classList.remove("show");
             }
+            items="";
+            // items = document.getElementsByClassName('colorReveal');
+            // for(let i = 0; i < items.length; i++) {
+            //   items[i].style.fill = arr[1];
+            // }
             break;
         case 8:
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
             }
+            items="";
             items = document.getElementsByClassName('color2');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
             }
+            items="";
             items = document.getElementsByClassName('color3');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[3];
             }
+            items="";
             items = document.getElementsByClassName('color4');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[4];
             }
+            items="";
             items = document.getElementsByClassName('color5');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[4];
             }
+            items="";
             items = document.getElementsByClassName('color6');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[5];
             }
+            items="";
             items = document.getElementsByClassName('color7');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[6];
             }
+            items="";
             items = document.getElementsByClassName('color8');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[7];
             }
+            items="";
             items = document.getElementsByClassName('color9');
             for(let i = 0; i < items.length; i++) {
                 items[i].classList.remove("show");
             }
+            items="";
+            // items = document.getElementsByClassName('colorReveal');
+            // for(let i = 0; i < items.length; i++) {
+            //   items[i].style.fill = arr[8];
+            // }
             break;
         case 9:
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
             }
+            items="";
             items = document.getElementsByClassName('color2');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
             }
+            items="";
             items = document.getElementsByClassName('color3');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[3];
             }
+            items="";
             items = document.getElementsByClassName('color4');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[4];
             }
+            items="";
             items = document.getElementsByClassName('color5');
-            for(let i = 0; i < items.length; i++) {
-              items[i].style.fill = arr[8];
-            }
-            items = document.getElementsByClassName('color6');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[5];
             }
-            items = document.getElementsByClassName('color7');
+            items="";
+            items = document.getElementsByClassName('color6');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[6];
             }
-            items = document.getElementsByClassName('color8');
+            items="";
+            items = document.getElementsByClassName('color7');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[7];
             }
+            items="";
+            items = document.getElementsByClassName('color8');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.fill = arr[8];
+            }
+            items="";
             items = document.getElementsByClassName('color9');
             for(let i = 0; i < items.length; i++) {
                 items[i].classList.remove("show"); 
             }
+            items="";
+            // items = document.getElementsByClassName('colorReveal');
+            // for(let i = 0; i < items.length; i++) {
+            //   items[i].style.fill = arr[5];
+            // }
             break;
         case 10:
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
             }
+            items="";
             items = document.getElementsByClassName('color2');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[2];
             }
+            items="";
             items = document.getElementsByClassName('color3');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[3];
             }
+            items="";
             items = document.getElementsByClassName('color4');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[4];
             }
+            items="";
             items = document.getElementsByClassName('color5');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[5];
             }
+            items="";
             items = document.getElementsByClassName('color6');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[6];
             }
+            items="";
             items = document.getElementsByClassName('color7');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[7];
             }
+            items="";
             items = document.getElementsByClassName('color8');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[8];
             }
+            items="";
             items = document.getElementsByClassName('color9');
             for(let i = 0; i < items.length; i++) {
                 items[i].classList.add("show"); 
               items[i].style.fill = arr[9];
+              items="";
             }
+            // items = document.getElementsByClassName('colorReveal');
+            // for(let i = 0; i < items.length; i++) {
+            //   items[i].style.fill = arr[9];
+            // }
             break;
         default:
             break;
