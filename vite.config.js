@@ -1,5 +1,5 @@
 export default {
     build: {
-        outDir: "v1"
+        outDir: "./"
     }
 }
