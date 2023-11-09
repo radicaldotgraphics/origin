@@ -2,8 +2,8 @@
 export default {
     // config options
     build:{
-        outDir: "./",
-        assetsDir: "origin/assets"
+        outDir: "./origin",
+        assetsDir: "assets"
     },
     preview:{
         host: "--host"
