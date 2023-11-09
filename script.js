@@ -39,7 +39,7 @@ const initLottie = () => {
         renderer: 'svg',
         loop: true,
         autoplay: true,
-        path: data;
+        path: data
     });
     // let loop = () => {
 
