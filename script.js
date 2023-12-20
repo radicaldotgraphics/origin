@@ -1,17 +1,22 @@
-// import ThreeScene from './threescene'
 import Lottie from 'lottie-web'
 import palettes from './palettes.json'
-import data from './data.json'
+// import data from './data.json'
+import Particles from './particles';
+import ThreeScene from './threescene';
 
-let anim = null;
+let logoAnim = null;
+let arrowAnim1 = null;
+let arrowAnim2 = null;
+let arrowAnim3 = null;
+let arrowAnims = [];
 let counter = 0;
-let bg = null;
+const time_ms = 800;
 let deviceType = null;
 let mouse = {
     direction:null,
     pressing:false,
     curY:null,
-    isClicking:false,
+    isDown:false,
     dragStarted:false, 
     dragDistance:0
 }
@@ -20,6 +25,7 @@ let quadrants = {
     colCount:0,
     activeQuadrant:0
 }
+let docWidth = document.documentElement.clientWidth || docWidth;
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 if (isMobile) {
       deviceType = 'mobile';
@@ -27,88 +33,169 @@ if (isMobile) {
     deviceType='desktop'
     
 }
-let canvas = document.querySelector('#lines');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-let ctx = canvas.getContext('2d');
+const semicircle = document.querySelector('#semicircle');
+const semicircleFill = document.querySelector('#semicircleFill');
+const headlines = document.querySelectorAll('.headline');
+const explainerTxt = document.querySelectorAll('.explainerTxt');
+const withtxt = document.querySelector('#with');
+const dlmagic = document.querySelector('#dlmagic')
+const rgraphics = document.querySelector('#rgraphics')
+const bg = document.querySelector('body')
+const prtcls = document.querySelector('#particles')
+const overview = document.querySelector('#overview')
+const quoteDiv = document.querySelector('#quote')
+const services = document.querySelector('#services')
+const principles = document.querySelector('#principles')
+const threeModel = document.querySelector('#model')
+const offeringDivs = document.querySelectorAll('.offering')
 
-
-const initLottie = () => {
-    anim = Lottie.loadAnimation({
-        container: document.getElementById("lottie"),
+const initLottieLogo = () => {
+    logoAnim = Lottie.loadAnimation({
+        container: document.querySelector("#lottieLogo"),
         renderer: 'svg',
         loop: true,
         autoplay: true,
         path: "./data.json"
-        // path: "./data.json"
     });
-    // let loop = () => {
-
+    // const loop = () => {
     //     anim.goToAndPlay(1, true);
     // };
     // anim.addEventListener("loopComplete", loop);
 }
 
 
-let init = () => {
-    // window.addEventListener( 'touchstart', isDown );
-    // window.addEventListener( 'mousedown', isDown ); 
-    // window.addEventListener( 'mouseup', isUp );
-    // window.addEventListener( 'touchend', isUp );
+const init = () => {
+    window.addEventListener( 'touchstart', isTouch );
+    window.addEventListener( 'touchend', isUp );
     window.addEventListener( 'mousemove', isMove );
     window.addEventListener( 'touchmove', isMove );
     window.addEventListener( 'resize', doResize )
-    bg = document.getElementById('container')
-    initLottie();
+    window.addEventListener( 'mousedown', isDown )
+    window.addEventListener( 'mouseup', isUp )
+    
+    initLottieLogo();
+    initLottieArrows();
     initQuadrants();
-    initCanvas()
+    initLines();
+    Particles.init();
+    ThreeScene.init();
+    // setTimeout(Particles.updatePoints, 5000)
+    // Particles.updatePoints();
     loop()
 
 }
-const initCanvas = () => {
-    const lineCount = palettes.length;
-    const width = window.innerWidth/lineCount;
-    ctx.globalAlpha = 0.5;
-    ctx.globalCompositeOperation = "exclusion";
-    for (let i = 0; i < palettes.length; i++) {
-        const itm = palettes[i];
-        ctx.fillStyle = "#FFFFFF";
-        ctx.beginPath();
-        ctx.rect(width*i, 0, 0.2, window.innerHeight)
-        ctx.fill();
-        
-    }
+const initLines = () => {
+  let line = document.querySelector(".line");
+  // console.log(line);
+  for (let i = 0; i < palettes.length; i++) {
+    let itm = line.cloneNode(true);
+    
+    // linecontainer.append(itm)
+    line.after(itm)
+    // console.log(itm);
 
+  }
+}
+
+const initLottieArrows = () => {
+  offeringDivs.forEach((itm, i) =>{
+    itm.anim = Lottie.loadAnimation({
+      container: document.querySelector(`#arrow${i+1}`),
+      renderer: 'svg',
+      loop: true,
+      autoplay: true,
+      path: "./arrow.json"
+  })
+    itm.delay = 0;
+    itm.scrollpos = 0;
+    itm.accelAmt = 0.1;
+    arrowAnims.push(itm);
+  })
+  // const loop = () => {
+  //     anim.goToAndPlay(1, true);
+  // };
+  // anim.addEventListener("loopComplete", loop);
 }
 
 const initQuadrants = () => {
     quadrants.rowCount = palettes.length;
-    quadrants.colCount = 10;
-    quadrants.rowWidth = window.innerWidth/quadrants.rowCount;
-    quadrants.rowHeight = window.innerHeight/quadrants.colCount;
+    quadrants.w = (docWidth/quadrants.rowCount);
+    // console.log(quadrants.w);
+    //
     quadrants.calculateQuadrant = (tgt) => {
-        let curQuadrant = Math.floor(tgt.clientX/quadrants.rowWidth)
+      // console.log(tgt.clientX);
+        let curQuadrant = Math.floor(tgt.clientX/quadrants.w)
+        // console.log(curQuadrant, tgt.clientX);
         if(quadrants.activeQuadrant != curQuadrant){
-            quadrants.updateColorScheme(curQuadrant)
+            quadrants.calculateNewPalette(curQuadrant)
             quadrants.activeQuadrant = curQuadrant;
+            // Particles.scale= curQuadrant/1000+.01;
+            Particles.initPoints();
         }
     }
-    quadrants.updateColorScheme = (num) => {
-        // console.log(palettes[num])
+    quadrants.calculateNewPalette = (num) => {
         let colors = palettes[num].colors;
-        // console.log(colors[0], bg);
-        quadrants.defineColorScheme(colors)
-
+        quadrants.changeAllColors(colors)
     }
-    quadrants.defineColorScheme = (arr) => {
-        let items;
+    quadrants.changeAllColors = (arr) => {
+      let items;
         let num = arr.length;
-        // console.log(arr.length);
         bg.style.background = arr[0];
+        semicircleFill.style.fill = arr[0];
+        semicircle.style.fill = arr[arr.length-1];
+        // prtcls.style.background = arr[0];
+        // prtcls.style.background = arr[arr.length-1];
+        if(num>2){
+          headlines.forEach((e)=>{
+            e.style.background = arr[1]
+          })
+        
+          withtxt.style.color = arr[1]
+          withtxt.style.background = arr[2]
+          dlmagic.style.color = arr[2];
+          rgraphics.style.color = arr[0];
+          overview.style.color = arr[0];
+          quoteDiv.style.color = arr[0];
+          services.style.color = arr[0];
+          principles.style.color = arr[0];
+        }else{
+          headlines.forEach((e)=>{
+            e.style.background = arr[0]
+          })
+          withtxt.style.color = arr[0]
+          withtxt.style.background = arr[1]
+          dlmagic.style.color = arr[1];
+          rgraphics.style.color = arr[1];
+          overview.style.color = arr[1];
+          quoteDiv.style.color = arr[1];
+          services.style.color = arr[1];
+          principles.style.color = arr[1];
+          
+        }
+        let itms = lines.querySelectorAll(".line")
+        itms.forEach((itm) => {
+          itm.style.fill = arr[arr.length-1];
+        })
+        explainerTxt.forEach((txt) => {
+          txt.style.color = arr[arr.length-1];
+        })
+        Particles.clr = arr[1];
         //from 2-10 colors
         switch (num) {
         case 2:
           //color[0] is bg so the array values starts at array[1] and ends at case [n-1]
+            items = document.getElementsByClassName('stroke1');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[1];
+            }
+            items = document.getElementsByClassName('stroke2');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[1];
+            }
+            items = document.getElementsByClassName('stroke3');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[1];
+            }
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
@@ -160,6 +247,19 @@ const initQuadrants = () => {
             // }
             break;
         case 3:
+          items = document.getElementsByClassName('stroke1');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[1];
+            }
+            items = document.getElementsByClassName('stroke2');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[1];
+            }
+            items = document.getElementsByClassName('stroke3');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[1];
+            }
+
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
@@ -212,6 +312,19 @@ const initQuadrants = () => {
             // }
             break;
         case 4:
+          items = document.getElementsByClassName('stroke1');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[1];
+            }
+            items = document.getElementsByClassName('stroke2');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[1];
+            }
+            items = document.getElementsByClassName('stroke3');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[2];
+            }
+
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
@@ -263,6 +376,19 @@ const initQuadrants = () => {
             // }
             break;
         case 5:
+          items = document.getElementsByClassName('stroke1');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[1];
+            }
+            items = document.getElementsByClassName('stroke2');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[2];
+            }
+            items = document.getElementsByClassName('stroke3');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[3];
+            }
+
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
@@ -314,6 +440,19 @@ const initQuadrants = () => {
             // }
             break;
         case 6:
+          items = document.getElementsByClassName('stroke1');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[1];
+            }
+            items = document.getElementsByClassName('stroke2');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[2];
+            }
+            items = document.getElementsByClassName('stroke3');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[3];
+            }
+
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
@@ -365,6 +504,19 @@ const initQuadrants = () => {
             // }
             break;
         case 7:
+          items = document.getElementsByClassName('stroke1');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[1];
+            }
+            items = document.getElementsByClassName('stroke2');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[2];
+            }
+            items = document.getElementsByClassName('stroke3');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[3];
+            }
+
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
@@ -416,6 +568,19 @@ const initQuadrants = () => {
             // }
             break;
         case 8:
+          items = document.getElementsByClassName('stroke1');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[1];
+            }
+            items = document.getElementsByClassName('stroke2');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[2];
+            }
+            items = document.getElementsByClassName('stroke3');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[3];
+            }
+
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
@@ -467,6 +632,19 @@ const initQuadrants = () => {
             // }
             break;
         case 9:
+          items = document.getElementsByClassName('stroke1');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[1];
+            }
+            items = document.getElementsByClassName('stroke2');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[2];
+            }
+            items = document.getElementsByClassName('stroke3');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[3];
+            }
+
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
@@ -518,10 +696,23 @@ const initQuadrants = () => {
             // }
             break;
         case 10:
+          items = document.getElementsByClassName('stroke1');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[1];
+            }
+            items = document.getElementsByClassName('stroke2');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[2];
+            }
+            items = document.getElementsByClassName('stroke3');
+            for(let i = 0; i < items.length; i++) {
+              items[i].style.stroke = arr[3];
+            }
             items = document.getElementsByClassName('color1');
             for(let i = 0; i < items.length; i++) {
               items[i].style.fill = arr[1];
             }
+            
             items="";
             items = document.getElementsByClassName('color2');
             for(let i = 0; i < items.length; i++) {
@@ -575,34 +766,23 @@ const initQuadrants = () => {
     }
 
 }
-
+const isTouch = ( e ) => {
+  mouse.isDown=true;
+  Particles.isDown=true;
+  isMove(e)
+}
 const isDown = ( e ) => {
-    // // console.log("donw");
-    // mouse.pressing=true;
-    // let tgt = "";
-    // if (deviceType == "mobile") {
-    //     tgt = e.targetTouches[0]
-    // } else {
-    //     tgt = e;
-    // }
-    // mouse.x = tgt.clientX;
-    // mouse.y = tgt.clientY;
-//
+  mouse.isDown=true;
+  Particles.isDown=true;
 }
 const isUp = ( e ) => {
-    // console.log("uppp");
-    // mouse.pressing = false;
-    // mouse.isClicking = false;
-    // mouse.direction = null;
-    // if(mouse.dragStarted){
-    //     mouse.dragStarted=false;
-
-    // }
+  Particles.isDown=false;
+  mouse.isDown=false;
 
 }
-//
 const isMove = ( e ) => {
     // console.log("isMove");
+    
     counter=0;
     let tgt = "";
     if (deviceType == "mobile") {
@@ -612,62 +792,60 @@ const isMove = ( e ) => {
     }
     mouse.x= tgt.clientX;
     mouse.y= tgt.clientY;
-    if(mouse.x>window.innerWidth || mouse.x <= 0){
+    if(mouse.x>docWidth || mouse.x <= 0){
         return;
     }
     quadrants.calculateQuadrant(tgt);
-    // console.log(mouse.y);
-    // if(mouse.pressing && mouse.isClicking){
-    //     e.preventDefault();
-       
-    //     if(mouse.curY==null){
-    //         //first click
-    //     }else if(mouse.curY>tgt.clientY){
-    //         // console.log("moving up");
-    //         mouse.direction = "up";            
-    //     }else if(mouse.curY<tgt.clientY){
-    //         // console.log("moving down");
-    //         if(mouse.direction!="down"){
-    //             mouse.direction = "down";
-    //             mouse.dragDistance = 0;
-    //         }else{
-    //             //already moving down, lets move the lever
-    //             let dist = tgt.clientY-mouse.curY;
-    //             mouse.dragStarted = true;
-    //             mouse.dragDistance+=dist;
-    //             let r = Math.min(2, (mouse.dragDistance/100)+1)
-    //         }
-    //     }
-    //     mouse.curY = tgt.clientY;
-            
-    // }else{
-    //     mouse.mouseDirection=null;
-    //     mouse.curY=null;
-    //     return;       
-    // }
+  
 }
 
 let doResize = () => {
-    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
     initQuadrants();
-    initCanvas()
 }
 
+let checkIfVisible = () =>{
+  let obj = prtcls.getBoundingClientRect();
+  let hmax = window.innerHeight;  
+  let hmin = 0;
+  if (obj.top < hmax && obj.bottom > hmin){
+    // console.log("visiblee", obj.top);
+    Particles.tick()
+  }
+  obj = threeModel.getBoundingClientRect();
+  if (obj.top < hmax && obj.bottom > hmin){
+    // console.log("three", obj.top);
+    ThreeScene.tick()
+  } 
+  arrowAnims.forEach((itm,i) =>{
+    
+    obj = itm.getBoundingClientRect();
+      // console.log(obj.top+obj.height)
+      if (obj.top < hmax && obj.bottom > hmin){
+        let pct = 1-(obj.top/hmax);
+        let frames = itm.anim.totalFrames;
+        itm.delay+=(pct-itm.delay)*itm.accelAmt;
+        let f = Math.min(Math.floor(itm.delay*frames), frames);
+        // itm.anim.goToAndStop(f, true);
+        // console.log(f);
+        itm.anim.goToAndStop(f, true);
+        // console.log("visible", ((obj.bottom-obj.height)/hmax), itm);
+      } 
+  })
+    
+}
 let loop = () => {
     counter++;
-    if (counter>800){
+    if (counter>time_ms){
         counter = 0;
-        let rand = Math.floor(Math.floor(Math.random()*window.innerWidth)/quadrants.rowWidth)
-        // console.log(rand)
-        
+        let rand = Math.floor(Math.floor(Math.random()*docWidth)/quadrants.w)
         if(quadrants.activeQuadrant != rand){
-            quadrants.updateColorScheme(rand)
+            quadrants.calculateNewPalette(rand)
             quadrants.activeQuadrant = rand;
         }
-
-    }
-    // console.log(counter);
+      }
+    checkIfVisible();
     requestAnimationFrame(loop);
 }
+
 
 init();
