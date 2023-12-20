@@ -81,8 +81,11 @@ let Particles =  {
         p.y += p.vy;
         this.context.lineTo(p.x, p.y);
         this.context.strokeStyle=this.clr;
+        // this.context.fillStyle=this.clr;
         this.context.lineWidth=p.lw;
         this.context.stroke();
+        // this.context.arc(p.x, p.y, 3, 0, 2 * Math.PI);
+        // this.context.fill();
 
         // apply some friction so point doesn't speed up too much
         p.vx *= this.friction;

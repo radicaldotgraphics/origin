@@ -14,8 +14,6 @@ body{
     display: flex;
     flex-direction: column;
     transition: all 0.3s ease-in-out;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
     user-select: none;
  
 }
@@ -71,8 +69,6 @@ body{
     z-index: 0;
     margin: -2vw 0;
     transition: all 0.3s ease-in-out;
-    
-    
 } 
 #magic{
     position: relative;
@@ -116,7 +112,7 @@ body{
     font-weight: 700;
     
     z-index: 61;
-    font-size: max(1.5vw, 16px);
+    font-size: max(1.5vw, 18px);
     
     text-align: left;
     padding: 2vh 16vw;
@@ -138,17 +134,21 @@ body{
     display:flex;
     min-height:200px;
     align-items: center;
-    justify-content: space-around;
-    margin-bottom: 10vh;
+    /* justify-content: space-around; */
+    margin-bottom: 5vh;
     /* background-color: deeppink; */
     padding: 1vh 0vw;
     min-width: 300px
 }
-.offering img{
+.offering .arrowAnim{
     margin: 0;
     max-width: 50vw;
+    min-width: 20vw;
+    flex: 1 0 0;
 }
 .explainerTxt{
+    z-index: 66;
+    flex-shrink: 0;
     max-width: 50vw;
     transition: color 0.3s ease-in-out;
 }
@@ -179,19 +179,9 @@ body{
 }
 #particles{
     display: flex;
-    /* position: absolute; */
-    /* top:150vh; */
-    /* height:50vh; */
-    /* width:90vw; */
-    /* background-color: #666; */
     margin:0;
-    /* margin-top: -10vh; */
-    /* margin-bottom: 5vh; */
     padding:0;
-    /* border-radius: 5px; */
-    /* max-height: 40vh; */
     z-index: 44;
-    /* align-self: center; */
     transition: all 0.3s ease-in-out;
 }
 #model{
@@ -202,6 +192,16 @@ body{
     transition: all 0.3s ease-in-out;
     /* background-color: pink; */
     width:100%;
+}
+
+#qrContainer{
+padding: 5vh;
+    display: flex;
+    justify-content: center;
+}
+
+#qr{
+    max-width: 40vw;
 }
 
 #lines{
@@ -283,3 +283,60 @@ body{
     height:100vh;
     width: 100%;
 }
+@media (max-width: 768px) { 
+    #introContainer{
+        gap: 8vh;
+    }
+    #magic{
+        font-size: 10vw;
+    
+    }
+    .headline #with{
+        font-size: 4vw;
+        padding: 1vw 2vw;
+        border-radius: 6px;
+        margin: -3vw 0;
+        z-index: 0;
+    } 
+    #overview{
+        font-size: 4.25vw;
+        /* padding: 1vw 2vh; */
+    }
+    #quote{
+        padding: 2vh 4vw;
+    }
+    #services{
+        font-size: 8vw;
+        
+    } 
+    .explainerTxt{
+        padding:16px;
+        min-width: 80vw;
+        margin-left: -50vw;
+        background-color: rgba(255, 255, 255, .6)
+
+    }
+    
+    .offering .arrowAnim{
+        max-width: 80vw;
+        min-width: 70vw;
+        flex: 1 0 0;
+    }
+    #qr{
+        max-width: 90vw;
+    }
+ }
+/* Small devices (landscape phones, 576px and up) */
+/* @media (min-width: 576px) { } */
+
+/* Medium devices (tablets, 768px and up) */
+/* @media (min-width: 768px) {} */
+
+/* Large devices (desktops, 992px and up) */
+/* @media (min-width: 992px) { } */
+
+/* X-Large devices (large desktops, 1200px and up) */
+/* @media (min-width: 1200px) {} */
+
+/* XX-Large devices (larger desktops, 1400px and up) */
+/* @media (min-width: 1400px) { } */
