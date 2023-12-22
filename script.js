@@ -30,9 +30,10 @@ if (isMobile) {
     deviceType='desktop'
     
 }
-const semicircle = document.querySelector('#semicircle');
-const semicircleFill = document.querySelector('#semicircleFill');
+// const semicircle = document.querySelector('#semicircle');
+// const semicircleFill = document.querySelector('#semicircleFill');
 const headlines = document.querySelectorAll('.headline');
+const txtContainer = document.querySelectorAll('.txtContainer');
 const explainerTxt = document.querySelectorAll('.explainerTxt');
 const withtxt = document.querySelector('#with');
 const dlmagic = document.querySelector('#dlmagic')
@@ -46,6 +47,8 @@ const principles = document.querySelector('#principles')
 const threeModel = document.querySelector('#model')
 const offeringDivs = document.querySelectorAll('.offering')
 const qr = document.querySelector('#qr')
+const radrow = document.querySelector(".radicalrow")
+const logorowContainer = document.querySelector("#logorowContainer")
 
 const initLottieLogo = () => {
     logoAnim = Lottie.loadAnimation({
@@ -67,6 +70,7 @@ const init = () => {
     window.addEventListener( 'mouseup', isUp )
     
     initLottieLogo();
+    initLogoRows();
     initLottieArrows();
     initQuadrants();
     initLines();
@@ -76,6 +80,18 @@ const init = () => {
     // setTimeout(Particles.updatePoints, 5000)
     // Particles.updatePoints();
     loop();
+
+}
+const initLogoRows = () => {
+  for (let i = 2; i <= 4; i++) {
+    let itm = radrow.cloneNode(true);
+    itm.id = `radicalrow${i}`;
+    let shell = itm.querySelector('.logorowShell');
+    shell.id=`logorowItm${i}`;
+    let l = Math.floor(Math.random()*-100);
+    shell.style.left= `${l}px`;
+    logorowContainer.appendChild(itm);
+  }
 
 }
 const initLines = () => {
@@ -140,8 +156,8 @@ const initQuadrants = () => {
       let items;
         let num = arr.length;
         bg.style.background = arr[0];
-        semicircleFill.style.fill = arr[0];
-        semicircle.style.fill = arr[arr.length-1];
+        // semicircleFill.style.fill = arr[0];
+        // semicircle.style.fill = arr[arr.length-1];
         // prtcls.style.background = arr[0];
         // prtcls.style.background = arr[arr.length-1];
         if(num>2){
@@ -176,7 +192,13 @@ const initQuadrants = () => {
           itm.style.fill = arr[arr.length-1];
         })
         explainerTxt.forEach((txt) => {
+
+          // txt.style.background = arr[0];
           txt.style.color = arr[arr.length-1];
+        })
+        txtContainer.forEach((itm) => {
+
+          itm.style.background = arr[0];
         })
         Particles.clr = arr[1];
         ThreeScene.changeColor(arr[1])

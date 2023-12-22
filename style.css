@@ -1,8 +1,6 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Aleo&display=swap'); */
 @import url("https://use.typekit.net/tok0jjl.css");
 body{
-    /* font-family: 'Aleo', sans-serif; */
-    /* font-display:block; */
     font-family: field-gothic-wide, sans-serif;
     font-style: normal;
     font-weight:400;
@@ -22,11 +20,7 @@ body{
     position: relative;
     display: flex;
     flex-direction: column;
-    /* flex: 1 0 0; */
-
-    /* height:100%; */
-    /* justify-content: center; */
-    gap: 22vh;
+    /* gap: 22vh; */
     align-items: center;
     transition: all 0.3s ease-in-out;
     padding:0;
@@ -39,8 +33,45 @@ body{
     z-index: 20;
     transition: fill 0.3s ease-in-out;
     height: 68vh;
+    overflow-y: hidden;
 }
-
+#lines{
+    display: flex;
+    position: absolute;
+    top:0;
+    left:0;
+    right: 0;
+    bottom: 0;
+    justify-content: space-evenly;
+    opacity: 0.5;
+    z-index: 0;
+    
+}
+.line{
+    transition: fill 0.3s ease-in-out;
+}
+.stroke1{
+    stroke:#222;
+    transition: stroke 0.3s ease-in-out;
+}
+#logorowContainer{
+    width:100%;
+    height:15vh;
+    position: relative;
+    
+}
+.radicalrow{
+    position: relative;
+    height:4vh;
+    overflow: hidden;
+}
+.logorowShell{
+    height: 100%;
+    position: absolute;
+}
+.logorow{
+    height:100%;
+}
 
 #semi{
     z-index: 2;
@@ -75,6 +106,7 @@ body{
 #magic{
     position: relative;
     /* margin-top:-30vh; */
+    margin-top:2vh;
     /* margin-bottom: 10vh; */
     font-size: 6vw;
     font-weight: 700;    
@@ -136,24 +168,46 @@ body{
     display:flex;
     min-height:200px;
     align-items: center;
-    /* justify-content: space-around; */
-    margin-bottom: 5vh;
-    /* background-color: deeppink; */
-    padding: 1vh 0vw;
-    min-width: 300px
+    margin-top: 3vh;
+    padding: 9vh 0vw;
+    min-width: 300px;
+    position: relative;
+}
+#opposite{
+    flex-direction: row-reverse;
+    position: relative;
+    transform: scaleX(-1);
+    
+}
+#text2{
+    transform: scaleX(-1);
+    
 }
 .offering .arrowAnim{
+    position: absolute;
+    left:0;
     margin: 0;
     max-width: 50vw;
     min-width: 20vw;
-    flex: 1 0 0;
+    
 }
-.explainerTxt{
+.txtContainer{
+    position: absolute;
+    right:0;
     z-index: 66;
-    flex-shrink: 0;
-    max-width: 50vw;
-    transition: color 0.3s ease-in-out;
+    max-width: 60vw;
+    transition: all 0.3s ease-in-out;
+    background-color: #222;
+    mix-blend-mode: soft-light;
+    padding: 3vh 3vw;
+
 }
+
+
+.explainerTxt{
+    transition: all 0.3s ease-in-out;
+}
+
 .explainerTxt .titlecopy{
         font-size: max(2vw, 14px);
         text-align: left;
@@ -168,9 +222,7 @@ body{
     padding: 0 2vw;
 
 }
-#arrow2{
-    transform: scaleX(-1);
-}
+
 
 #principles{
     display:flex;
@@ -181,7 +233,7 @@ body{
 }
 #canvases{
     position: relative;
-    height: 400px;
+    height: 450px;
 }
 #particles{
     position: absolute;
@@ -237,26 +289,7 @@ body{
     /* transition: filter 0.3s ease-in-out; */
 }
 
-#lines{
-    display: flex;
-    /* width:100%; */
-    position: absolute;
-    top:0;
-    left:0;
-    right: 0;
-    bottom: 0;
-    justify-content: space-between;
-    opacity: 0.5;
-    z-index: 0;
-    
-}
-.line{
-    transition: fill 0.3s ease-in-out;
-}
-.stroke1{
-    stroke:#222;
-    transition: stroke 0.3s ease-in-out;
-}
+
 .stroke2{
     stroke:#222;
     transition: stroke 0.3s ease-in-out;
@@ -342,19 +375,9 @@ body{
         font-size: 8vw;
         
     } 
-    .explainerTxt{
-        padding:16px;
-        min-width: 80vw;
-        margin-left: -50vw;
-        background-color: rgba(255, 255, 255, .6);
-        
-
-    }
+    .txtContainer{
+        max-width: 90vw;
     
-    .offering .arrowAnim{
-        max-width: 80vw;
-        min-width: 70vw;
-        flex: 1 0 0;
     }
     #qr{
         max-width: 80vw;

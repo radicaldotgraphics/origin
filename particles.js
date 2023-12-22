@@ -22,7 +22,7 @@ let Particles =  {
       this.clr = "#000";
       this.velocity = Math.random()*2-1;
       // this.velocity = -0.61;
-      this.friction = 0.71 ;
+      this.friction = 0.791 ;
       this.scale = 0.016;
       
       this.initPoints(); 
@@ -32,16 +32,16 @@ let Particles =  {
       //
       // console.log(this.points.length);
       this.noise.seed(Math.random());
-      for(let p = 0; p < this.w; p += 1) {
+      for(let p = 0; p < this.w; p += 4) {
       // for(let p = 0; p < 10; p ++) {
-        const lw = Math.random()*.1;
+        const lw = Math.random()*.2+0.1;
         // const lw = .06;
         // const lw = Math.random()*.06;
         if(this.firstTime){
           this.points.push({
             x: ((Math.random()+Math.random()+Math.random())/3)*this.w,
-            // y: Math.random()*height, 
-            //y:0
+            // y: Math.random()*this.h, 
+            // y:0,
             y:this.h/2,
             vx: (Math.random()+Math.random()+Math.random())*3-1.5,
             vy: (Math.random()+Math.random()+Math.random())*3-1.5,
@@ -51,8 +51,9 @@ let Particles =  {
             // scale:(Math.random()-Math.random())*.2,
             // velocity:.81*(-1*(p%2))
             // velocity:81/p,
-            velocity:Math.random()*4-2
+            velocity:(Math.random()*4-2)
           })
+          
         }
         // console.log((Math.random()-Math.random())*0.81)
       }
@@ -91,7 +92,7 @@ let Particles =  {
         this.context.stroke();
         this.contextDot.beginPath();
         this.contextDot.fillStyle=this.clr;
-        this.contextDot.arc(p.x, p.y, 2, 0, 2 * Math.PI);
+        this.contextDot.arc(p.x, p.y, p.lw*12, 0, 2 * Math.PI);
         this.contextDot.fill();
 
         // apply some friction so point doesn't speed up too much
