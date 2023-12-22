@@ -7,12 +7,15 @@ let Particles =  {
       this.firstTime=true;
       // console.log("initting");
       this.canvas = document.querySelector('#particles');
+      this.canvasDot = document.querySelector('#particlesDot');
       this.context = this.canvas.getContext("2d");
+      this.contextDot = this.canvasDot.getContext("2d");
       this.context.globalCompositeOperation = "overlay";
+      this.contextDot.globalCompositeOperation = "overlay";
       this.w = document.documentElement.clientWidth;
       this.h = document.documentElement.clientHeight/2;
-      this.canvas.width = this.w;
-      this.canvas.height = this.h;
+      this.canvas.width = this.canvasDot.width = this.w;
+      this.canvas.height =this.canvasDot.height= this.h;
       this.z=Math.random();
       this.zinc=0.01;
       this.points = [];
@@ -60,7 +63,9 @@ let Particles =  {
     },
     tick(){
       let num = this.points.length;
-      
+      this.contextDot.clearRect(0,0,this.w, this.h)
+      // this.contextDot.fillRect(0,0,100, 100)
+        
       for(let i = 0; i < num; i++) {
         let p = this.points[i];
         // console.log(p);
@@ -82,11 +87,12 @@ let Particles =  {
         p.y += p.vy;
         this.context.lineTo(p.x, p.y);
         this.context.strokeStyle=this.clr;
-        // this.context.fillStyle=this.clr;
         this.context.lineWidth=p.lw;
         this.context.stroke();
-        // this.context.arc(p.x, p.y, 3, 0, 2 * Math.PI);
-        // this.context.fill();
+        this.contextDot.beginPath();
+        this.contextDot.fillStyle=this.clr;
+        this.contextDot.arc(p.x, p.y, 2, 0, 2 * Math.PI);
+        this.contextDot.fill();
 
         // apply some friction so point doesn't speed up too much
         p.vx *= this.friction;

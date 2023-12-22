@@ -52,6 +52,7 @@ body{
 #contentContainer{
     display: flex;
     flex-direction: column;
+    /* position: relative; */
 }
 .headline{
     display: flex;
@@ -178,11 +179,30 @@ body{
     font-weight: 700;
     font-size: 4vw;
 }
+#canvases{
+    position: relative;
+    height: 400px;
+}
 #particles{
+    position: absolute;
     display: flex;
     margin:0;
+    top: 0;
+    left: 0;
     padding:0;
     z-index: 44;
+    transition: all 0.3s ease-in-out;
+    /* background-color: orange; */
+}
+#particlesDot{
+    /* background-color: purple; */
+    position: absolute;
+    display: flex;
+    margin:0;
+    top: 0;
+    left: 0;
+    padding:0;
+    z-index: 45;
     transition: all 0.3s ease-in-out;
 }
 #model{
