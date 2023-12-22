@@ -5,12 +5,9 @@ import Particles from './particles';
 import ThreeScene from './threescene';
 
 let logoAnim = null;
-let arrowAnim1 = null;
-let arrowAnim2 = null;
-let arrowAnim3 = null;
 let arrowAnims = [];
-let counter = 0;
 const time_ms = 800;
+let counter = time_ms-20;
 let deviceType = null;
 let mouse = {
     direction:null,
@@ -48,6 +45,7 @@ const services = document.querySelector('#services')
 const principles = document.querySelector('#principles')
 const threeModel = document.querySelector('#model')
 const offeringDivs = document.querySelectorAll('.offering')
+const qr = document.querySelector('#qr')
 
 const initLottieLogo = () => {
     logoAnim = Lottie.loadAnimation({
@@ -57,12 +55,7 @@ const initLottieLogo = () => {
         autoplay: true,
         path: "./data.json"
     });
-    // const loop = () => {
-    //     anim.goToAndPlay(1, true);
-    // };
-    // anim.addEventListener("loopComplete", loop);
 }
-
 
 const init = () => {
     window.addEventListener( 'touchstart', isTouch );
@@ -79,9 +72,10 @@ const init = () => {
     initLines();
     Particles.init();
     ThreeScene.init();
+
     // setTimeout(Particles.updatePoints, 5000)
     // Particles.updatePoints();
-    loop()
+    loop();
 
 }
 const initLines = () => {
@@ -129,8 +123,13 @@ const initQuadrants = () => {
         if(quadrants.activeQuadrant != curQuadrant){
             quadrants.calculateNewPalette(curQuadrant)
             quadrants.activeQuadrant = curQuadrant;
-            // Particles.scale= curQuadrant/1000+.01;
+            // Particles.scale= curQuadrant/10;
+            // console.log(Particles.scale);
             Particles.initPoints();
+            
+            let img = document.querySelector("#qr");
+            
+            
         }
     }
     quadrants.calculateNewPalette = (num) => {
@@ -180,6 +179,7 @@ const initQuadrants = () => {
           txt.style.color = arr[arr.length-1];
         })
         Particles.clr = arr[1];
+        qr.style.webkitFilter = `drop-shadow(100em 0 0px ${arr[1]} )`;
         //from 2-10 colors
         switch (num) {
         case 2:
@@ -821,7 +821,7 @@ let checkIfVisible = () =>{
     obj = itm.getBoundingClientRect();
       // console.log(obj.top+obj.height)
       if (obj.top < hmax && obj.bottom > hmin){
-        let pct = 1-(obj.top/hmax);
+        let pct = 0.9-(obj.top/hmax);
         let frames = itm.anim.totalFrames;
         itm.delay+=(pct-itm.delay)*itm.accelAmt;
         let f = Math.min(Math.floor(itm.delay*frames), frames);

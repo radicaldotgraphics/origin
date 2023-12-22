@@ -21,14 +21,15 @@ let Particles =  {
       // this.velocity = -0.61;
       this.friction = 0.71 ;
       this.scale = 0.016;
+      
       this.initPoints(); 
       
     },
     initPoints(){
       //
       // console.log(this.points.length);
-      
-      for(let p = 0; p < this.w; p += 3) {
+      this.noise.seed(Math.random());
+      for(let p = 0; p < this.w; p += 1) {
       // for(let p = 0; p < 10; p ++) {
         const lw = Math.random()*.1;
         // const lw = .06;
@@ -97,18 +98,11 @@ let Particles =  {
         if(p.y < 0) p.y = this.h;
       }
         this.z+=this.zinc;
-        // this.z+=(Math.random()-Math.random())*-0.01;
-        // this.z+=(Math.random()-Math.random());
-        // this.scale+=(Math.random()-Math.random());
-        // this.scale++;
-        // this.z-=1
-        // this.context.fillRect(200,200,100,100);
-        // requestAnimationFrame(this.tick.bind(this))
     },
     getValue(x, y, scale) {
       if(this.isDown){
-       
         return this.noise.perlin2(x * scale, y * scale) * Math.PI * 2;
+        // return this.noise.perlin3(x * scale, y * scale, this.z) * Math.PI * 2;
       }else{
         return this.noise.perlin3(x * scale, y * scale, this.z) * Math.PI * 2;
         // return this.noise.perlin2(x * scale, y * scale) * Math.PI * 2;
