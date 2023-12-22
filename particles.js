@@ -108,7 +108,7 @@ let Particles =  {
     getValue(x, y, scale) {
       if(this.isDown){
         return this.noise.perlin2(x * scale, y * scale) * Math.PI * 2;
-        // return this.noise.perlin3(x * scale, y * scale, this.z) * Math.PI * 2;
+        // return this.noise.perlin3(x * scale, y * scale, this.zinc) * Math.PI * 2;
       }else{
         return this.noise.perlin3(x * scale, y * scale, this.z) * Math.PI * 2;
         // return this.noise.perlin2(x * scale, y * scale) * Math.PI * 2;

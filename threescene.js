@@ -23,15 +23,15 @@ let ThreeScene =  {
         this.scene.add(this.camera)
         //
         // this.light1 = new THREE.DirectionalLight( 0xffffff, 2 );
-        // this.light1 = new THREE.PointLight( 0xff0000, 11, 1000 );
-        // this.light1.position.set(1,2,1);
+        this.light1 = new THREE.PointLight( 0xffffff, 31, 1000 );
+        this.light1.position.set(1,2,2);
         
         
         // this.plightHelper = new THREE.PointLightHelper(this.light1, 11)
         // this.plightHelper.intensity=11;
         // this.scene.add(this.plightHelper)
         
-        // this.scene.add(this.light1);
+        this.scene.add(this.light1);
        this.canvas.addEventListener('scroll', this.ignoreScroll, false)
     // //   window.addEventListener('resize', this.resize.bind);
         // Controls
@@ -64,6 +64,14 @@ let ThreeScene =  {
         this.loadGlTF();
 
     },
+    changeColor(clr){
+        // console.log(clr)
+        // this.light1.color=clr;
+        // this.light1.color=clr;
+        let color = new THREE.Color(clr);
+        
+        this.light1.color.setHex( color.getHex() );
+    },
     resize(){
         console.log("this.resize");
         this.init();
@@ -81,13 +89,13 @@ let ThreeScene =  {
                  gltf.scene.traverse((child) =>{
                     // console.log(child.name);  
                     if(child.name == 'Sphere'){
-                       child.material = this.mat;
+                    //    child.material = this.mat;
                     }
                 })
                 // console.log(this.scene);
                 this.scene.add(gltf.scene)
                 this.tick();
-                this.loadHDR.bind(this);
+                // this.loadHDR.bind(this);
             }
         )
         // console.log(this.scene);
@@ -105,7 +113,7 @@ let ThreeScene =  {
             this.envMap = this.pmremGenerator.fromEquirectangular( texture ).texture;
                 this.scene.background = texture;
                 this.scene.environment = this.envMap;
-				thistexture.dispose();
+				this.texture.dispose();
 				this.pmremGenerator.dispose();
             
         }, undefined, function ( error ) {

@@ -148,7 +148,7 @@ const initQuadrants = () => {
           headlines.forEach((e)=>{
             e.style.background = arr[1]
           })
-        
+         
           withtxt.style.color = arr[1]
           withtxt.style.background = arr[2]
           dlmagic.style.color = arr[2];
@@ -179,6 +179,7 @@ const initQuadrants = () => {
           txt.style.color = arr[arr.length-1];
         })
         Particles.clr = arr[1];
+        ThreeScene.changeColor(arr[1])
         qr.style.webkitFilter = `drop-shadow(100em 0 0px ${arr[1]} )`;
         //from 2-10 colors
         switch (num) {
