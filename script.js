@@ -83,6 +83,9 @@ const init = () => {
 
 }
 const initLogoRows = () => {
+console.log(document.querySelector("#vidmask1"));
+console.log(document.querySelector("#vidblur"));
+  return;
   for (let i = 2; i <= 4; i++) {
     let itm = radrow.cloneNode(true);
     itm.id = `radicalrow${i}`;
@@ -92,6 +95,7 @@ const initLogoRows = () => {
     shell.style.left= `${l}px`;
     logorowContainer.appendChild(itm);
   }
+  console.log(logorowContainer);
 
 }
 const initLines = () => {
@@ -141,11 +145,7 @@ const initQuadrants = () => {
             quadrants.activeQuadrant = curQuadrant;
             // Particles.scale= curQuadrant/10;
             // console.log(Particles.scale);
-            Particles.initPoints();
-            
-            let img = document.querySelector("#qr");
-            
-            
+            Particles.initPoints()
         }
     }
     quadrants.calculateNewPalette = (num) => {
@@ -202,7 +202,7 @@ const initQuadrants = () => {
         })
         Particles.clr = arr[1];
         ThreeScene.changeColor(arr[1])
-        qr.style.webkitFilter = `drop-shadow(100em 0 0px ${arr[1]} )`;
+        qr.style.fill = arr[1]
         //from 2-10 colors
         switch (num) {
         case 2:
