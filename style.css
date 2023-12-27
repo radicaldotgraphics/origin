@@ -54,46 +54,36 @@ body{
     stroke:#222;
     transition: stroke 0.3s ease-in-out;
 }
-#vidblur{
-    clip-path: url(#vmask);
+.vidblur{
+    mask-image: url(./assets/logorow.svg);
+    /* mask-image: url(#vidmask1); */
+    mask-size:contain;
+    mask-repeat: repeat-x;
     position: absolute;
-    top: 0;
-    width:100%;
-    height:100%;
-    object-fit: cover;
+    left: -10px;
+    /* webkit-mask-image: url(./assets/logorow.svg); */
+    /* mask-image: url(#vmask); */
+    width:200%;
+    height:auto;
+    z-index: 0;
     filter: blur(11px);      
-}
-#vidmask1{
-    position: absolute;
 }
 
 #logorowContainer{
-    width:100%;
-    height:15vh;
-    position: relative;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-height: 10vh;
     
 }
-.radicalrow{
-    position: relative;
-    height:4vh;
-    overflow: hidden;
+.logo-row{
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap; 
 }
-.logorowShell{
-    height: 100%;
-    position:relative;
-}
-.logorow{
-    height:100%;
+.logo{
+    flex: 0 0 auto;
 }
 
-#semi{
-    z-index: 2;
-    transition: fill 0.3s ease-in-out;
-}
-#semicircle, #semicircleFill{
-    transition: all 0.3s ease-in-out;
-}
 #contentContainer{
     display: flex;
     flex-direction: column;

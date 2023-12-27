@@ -70,8 +70,8 @@ const init = () => {
     window.addEventListener( 'mouseup', isUp )
     
     initLottieLogo();
-    initLogoRows();
     initLottieArrows();
+    // initLogoRows();
     initQuadrants();
     initLines();
     Particles.init();
@@ -83,20 +83,17 @@ const init = () => {
 
 }
 const initLogoRows = () => {
-console.log(document.querySelector("#vidmask1"));
-console.log(document.querySelector("#vidblur"));
-  return;
-  for (let i = 2; i <= 4; i++) {
-    let itm = radrow.cloneNode(true);
-    itm.id = `radicalrow${i}`;
-    let shell = itm.querySelector('.logorowShell');
-    shell.id=`logorowItm${i}`;
-    let l = Math.floor(Math.random()*-100);
-    shell.style.left= `${l}px`;
-    logorowContainer.appendChild(itm);
-  }
-  console.log(logorowContainer);
-
+  const rows = document.querySelectorAll('.logo-row');
+  rows.forEach((row, index) => {
+      for (let i = 0; i < 3; i++) {
+          const logoClone = row.children[0].cloneNode(true);
+          row.appendChild(logoClone);
+      }
+      // Alternate scroll direction
+      // if (index % 2 === 0) {
+      //     row.style.direction = 'rtl';
+      // }
+  });
 }
 const initLines = () => {
   let line = document.querySelector(".line");
