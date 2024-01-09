@@ -23,7 +23,7 @@ let Particles =  {
       this.velocity = Math.random()*2-1;
       // this.velocity = -0.61;
       this.friction = 0.791 ;
-      this.scale = 0.016;
+      this.scale = 0.015; //0.016
       
       this.initPoints(); 
       
@@ -48,7 +48,7 @@ let Particles =  {
             clr:this.clr,
             lw:lw,
             scale:this.scale,
-            // scale:(Math.random()-Math.random())*.2,
+            // scale:(Math.random()-Math.random())*0.1,
             // velocity:.81*(-1*(p%2))
             // velocity:81/p,
             velocity:(Math.random()*4-2)
@@ -70,12 +70,13 @@ let Particles =  {
       for(let i = 0; i < num; i++) {
         let p = this.points[i];
         // console.log(p);
-        let value = this.getValue(p.x, p.y, p.scale);
         // let value = this.getValue(p.x, p.y, p.scale);
         if(this.isDown){
+          let value = this.getValue(p.x, p.y, p.scale);
           p.vx += Math.cos(value) * p.velocity;
           p.vy += Math.sin(value) * p.velocity;
         }else{
+          let value = this.getValue(p.x, p.y, this.scale);
           p.vx += Math.cos(value) * this.velocity;
           p.vy += Math.sin(value) * this.velocity;
         }
