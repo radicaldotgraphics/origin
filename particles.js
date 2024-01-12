@@ -34,7 +34,7 @@ let Particles =  {
       this.noise.seed(Math.random());
       for(let p = 0; p < this.w; p += 4) {
       // for(let p = 0; p < 10; p ++) {
-        const lw = Math.random()*.2+0.1;
+        const lw = Math.random()*.015+0.05;
         // const lw = .06;
         // const lw = Math.random()*.06;
         if(this.firstTime){
@@ -93,7 +93,7 @@ let Particles =  {
         this.context.stroke();
         this.contextDot.beginPath();
         this.contextDot.fillStyle=this.clr;
-        this.contextDot.arc(p.x, p.y, p.lw*12, 0, 2 * Math.PI);
+        this.contextDot.arc(p.x, p.y, p.lw*20, 0, 2 * Math.PI);
         this.contextDot.fill();
 
         // apply some friction so point doesn't speed up too much
@@ -116,6 +116,16 @@ let Particles =  {
         // return this.noise.perlin2(x * scale, y * scale) * Math.PI * 2;
        
       }
+    },resize(){
+      this.w = document.documentElement.clientWidth;
+      this.h = document.documentElement.clientHeight/2;
+      this.canvas.width = this.canvasDot.width = this.w;
+      this.canvas.height =this.canvasDot.height= this.h;
+      
+      this.contextDot.clearRect(0,0,this.w, this.h)
+      this.context.clearRect(0,0,this.w, this.h)
+
+
     }  
 }
 

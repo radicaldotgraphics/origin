@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import {FlakesTexture } from 'three/examples/jsm/textures/FlakesTexture';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+// import { DRACOLoader } from 'https://www.gstatic.com/draco/versioned/decoders/1.4.3/'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader';
 import { PMREMGenerator } from 'three/src/extras/PMREMGenerator';
@@ -9,7 +10,7 @@ import { PMREMGenerator } from 'three/src/extras/PMREMGenerator';
 let ThreeScene =  {
  
     init(){
-        
+        this.wheel = null;
         // console.log("initting");
         this.canvas = document.querySelector('#model');
         this.w = document.documentElement.clientWidth;
@@ -18,15 +19,15 @@ let ThreeScene =  {
         this.canvas.height = this.h;
         //
         this.camera = new THREE.PerspectiveCamera(35, this.w / this.h, 0.1, 1000)
-        this.camera.position.set(0, 0, 7);
+        this.camera.position.set(0, 0, 4);
         //
         this.scene = new THREE.Scene()
         this.scene.add(this.camera)
         //
         // this.light1 = new THREE.DirectionalLight( 0xffffff, 2 );
-        this.light1 = new THREE.PointLight( 0xffffff, 222, 1000 );
+        this.light1 = new THREE.PointLight( 0xffffff, 111, 1000 );
         this.light1.position.set(1,3,1);
-        this.light2 = new THREE.PointLight( 0xffffff, 222, 1000 );
+        this.light2 = new THREE.PointLight( 0xffffff, 111, 1000 );
         this.light2.position.set(-1,-2,0);
         
         
@@ -42,16 +43,17 @@ let ThreeScene =  {
     // //   window.addEventListener('resize', this.resize.bind);
         // Controls
         this.controls = new OrbitControls(this.camera, this.canvas)
-        // this.controls.enableDamping = true;
-        // this.controls.minDistance = 4
-        // this.controls.maxDistance = 7
-        // this.controls.maxPolarAngle = Math.PI / 2
-        // this.controls.maxAzimuthAngle=0.785
-        // this.controls.minAzimuthAngle=-1.5
-        // this.controls.noPan = true;
-        // this.controls.noKeys = true;
-        // this.controls.noRotate = true;
-        // this.controls.enableZoom = false;
+        this.controls.enableDamping = true;
+        this.controls.minDistance = 4
+        this.controls.maxDistance = 7
+        this.controls.maxPolarAngle = Math.PI / 2
+        this.controls.maxAzimuthAngle=0.785
+        this.controls.minAzimuthAngle=-1.5
+        this.controls.noPan = true;
+        this.controls.noKeys = true;
+        this.controls.noRotate = true;
+        // this.controls.autoRotate=true;
+        this.controls.enableZoom = false;
         //
         this.renderer = new THREE.WebGLRenderer({
             canvas: this.canvas,
@@ -66,8 +68,8 @@ let ThreeScene =  {
         // this.renderer.outputEncoding = THREE.SRGBColorSpace;
         this.renderer.toneMappingExposure = 1.4;
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping
-        // this.dracoLoader = new DRACOLoader()
-        // this.dracoLoader.setDecoderPath('./draco/')
+        this.dracoLoader = new DRACOLoader()
+        this.dracoLoader.setDecoderPath('./draco/')
         //
         // this.tl = new THREE.TextureLoader();
         // this.tx = this.tl.load("./assets/wheel1.png");
@@ -107,7 +109,7 @@ let ThreeScene =  {
         // //
 
         this.gltfLoader = new GLTFLoader()
-        // this.gltfLoader.setDRACOLoader(this.dracoLoader)
+        this.gltfLoader.setDRACOLoader(this.dracoLoader)
         this.loadGlTF();
     },
     changeColor(clr){
@@ -119,7 +121,10 @@ let ThreeScene =  {
         this.light2.color.setHex( color.getHex() );
     },
     resize(){
-        console.log("this.resize");
+        this.w = document.documentElement.clientWidth;
+        this.h = document.documentElement.clientHeight/2;
+        this.canvas.width = this.w;
+        this.canvas.height = this.h;
         this.init();
     },
     ignoreScroll(e){
@@ -129,18 +134,19 @@ let ThreeScene =  {
     loadGlTF(){
         
         this.gltfLoader.load(
-            // './assets/wheel2.glb',
-            'assets/test.glb',
+            './assets/wheel.glb',
+            // 'assets/test.glb',
             (gltf) =>{
                 console.log("loaded");
                 // gltf.scene.rotation.x=90-1;
                 // console.log(this.mat4);
                 // gltf.scene.material = this.mat4;
-                //  gltf.scene.traverse((child) =>{
-                //     if(child.name == 'Cylinder'){
+                 gltf.scene.traverse((child) =>{
+                    if(child.name == 'wheel'){
+                        this.wheel = child;
                 //         // console.log(this.mat);
                 //         // child.material = this.mat4;
-                //     }
+                    }
                 //     if(child.name == 'plane1'){
                 //         // console.log(this.mat);
                 //         child.material = this.mat;
@@ -152,7 +158,7 @@ let ThreeScene =  {
                 //         child.material = this.mat3;
                 //         this.wheel3 = child;
                 //     }
-                // })
+                })
                 // console.log(this.scene);
                 this.scene.add(gltf.scene)
                 this.tick();
@@ -187,11 +193,9 @@ let ThreeScene =  {
     tick(){
         this.controls.update()
         // Render
-        if(this.wheel1){
+        if(this.wheel){
 
-            this.wheel1.rotation.y+=.01;
-            this.wheel2.rotation.y-=.02;
-            this.wheel3.rotation.y+=.02;
+            this.wheel.rotation.z+=.1;
         }
         this.renderer.render(this.scene, this.camera)
     //    window.requestAnimationFrame(this.tick.bind(this))

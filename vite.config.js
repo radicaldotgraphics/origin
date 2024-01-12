@@ -4,5 +4,12 @@ export default {
         outDir: "./",
         base: "./"
 
+
+    },
+    server: {
+        proxy:{
+            target:"https://www.gstatic.com"
+        },
+        cors: false
     }
 }

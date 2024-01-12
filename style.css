@@ -13,7 +13,24 @@ body{
     flex-direction: column;
     transition: all 0.3s ease-in-out;
     user-select: none;
- 
+    
+}
+#nav{
+    width: inherit;
+    height: 4vh;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    position: fixed;
+    padding: 4px 0px;
+    transition: all 0.3s ease-in-out;
+    z-index: 999;
+
+    background-color: red;
+}
+#nav > img{
+    margin-right: 8px;
 }
 
 #introContainer{
@@ -82,6 +99,7 @@ body{
 }
 .logo{
     flex: 0 0 auto;
+    max-height: 30px;
 }
 
 #contentContainer{
@@ -134,9 +152,8 @@ body{
 #overview{
     font-size: 3.5vw;
     font-weight: 700;
-    /* display: flex; */
-    flex-direction: column;
     align-items: center;
+    padding: 5vh;
     transition: all 0.3s ease-in-out;
     z-index: 55;
 }
@@ -146,7 +163,7 @@ body{
     font-weight: 700;
     
     z-index: 61;
-    font-size: max(1.5vw, 18px);
+    font-size: max(1.5vw, 24px);
     
     text-align: left;
     padding: 2vh 16vw;
@@ -209,14 +226,14 @@ body{
 }
 
 .explainerTxt .titlecopy{
-    font-size: max(2vw, 14px);
+    font-size: max(2vw, 18px);
     text-align: left;
     padding: 0 2vw;
     
 }
 .explainerTxt .bodycopy{
     font-weight: 200;
-    font-size: max(1vw, 12px);
+    font-size: max(1vw, 16px);
     text-align: left;
     padding: 0 2vw;
 
@@ -366,7 +383,7 @@ body{
     } 
     #overview{
         font-size: 4.25vw;
-        /* padding: 1vw 2vh; */
+        padding: 1vw 2vh;
     }
     #quote{
         padding: 2vh 4vw;
@@ -380,7 +397,9 @@ body{
     
     }
     #qr{
-        max-width: 80vw;
+        width: 100vw;
+        font-size: 100vw;
+        /* max-width: 80vw; */
 
     }
  }

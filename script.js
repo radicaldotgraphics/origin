@@ -35,6 +35,7 @@ if (isMobile) {
 const headlines = document.querySelectorAll('.headline');
 const txtContainer = document.querySelectorAll('.txtContainer');
 const explainerTxt = document.querySelectorAll('.explainerTxt');
+const nav = document.querySelector('#nav');
 const withtxt = document.querySelector('#with');
 const dlmagic = document.querySelector('#dlmagic')
 const rgraphics = document.querySelector('#rgraphics')
@@ -188,6 +189,7 @@ const initQuadrants = () => {
         itms.forEach((itm) => {
           itm.style.fill = arr[arr.length-1];
         })
+        nav.style.background=arr[arr.length-1];
         explainerTxt.forEach((txt) => {
 
           // txt.style.background = arr[0];
@@ -804,6 +806,7 @@ const isMove = ( e ) => {
     // console.log("isMove");
     
     counter=0;
+    return;
     let tgt = "";
     if (deviceType == "mobile") {
         tgt = e.targetTouches[0]
@@ -821,6 +824,8 @@ const isMove = ( e ) => {
 
 let doResize = () => {
     initQuadrants();
+    Particles.resize();
+    ThreeScene.resize();
 }
 
 let checkIfVisible = () =>{
@@ -845,13 +850,11 @@ let checkIfVisible = () =>{
         let frames = itm.anim.totalFrames;
         itm.delay+=(pct-itm.delay)*itm.accelAmt;
         let f = Math.min(Math.floor(itm.delay*frames), frames);
-        // itm.anim.goToAndStop(f, true);
-        // console.log(f);
         itm.anim.goToAndStop(f, true);
         // console.log("visible", ((obj.bottom-obj.height)/hmax), itm);
       } 
   })
-    
+  
 }
 let loop = () => {
     counter++;
@@ -862,7 +865,7 @@ let loop = () => {
             quadrants.calculateNewPalette(rand)
             quadrants.activeQuadrant = rand;
         }
-      }
+     }
     checkIfVisible();
     requestAnimationFrame(loop);
 }
