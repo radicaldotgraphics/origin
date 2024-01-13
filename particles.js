@@ -117,13 +117,14 @@ let Particles =  {
        
       }
     },resize(){
-      this.w = document.documentElement.clientWidth;
-      this.h = document.documentElement.clientHeight/2;
+      return;
+      this.w = window.innerWidth;
+      this.h = window.innerHeight/2;
       this.canvas.width = this.canvasDot.width = this.w;
       this.canvas.height =this.canvasDot.height= this.h;
       
-      this.contextDot.clearRect(0,0,this.w, this.h)
-      this.context.clearRect(0,0,this.w, this.h)
+      // this.contextDot.clearRect(0,0,this.w, this.h)
+      // this.context.clearRect(0,0,this.w, this.h)
 
 
     }  

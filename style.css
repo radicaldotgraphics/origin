@@ -27,7 +27,7 @@ body{
     transition: all 0.3s ease-in-out;
     z-index: 999;
 
-    background-color: red;
+    /* background-color: red; */
 }
 #nav > img{
     margin-right: 8px;
@@ -71,21 +71,18 @@ body{
     stroke:#222;
     transition: stroke 0.3s ease-in-out;
 }
-.vidblur{
+/* .vidblur{
     mask-image: url(./assets/logorow.svg);
-    /* mask-image: url(#vidmask1); */
     mask-size:contain;
     mask-repeat: repeat-x;
     position: absolute;
     left: -10px;
-    /* webkit-mask-image: url(./assets/logorow.svg); */
-    /* mask-image: url(#vmask); */
     width:200%;
     height:auto;
     z-index: 0;
     filter: blur(11px);      
-}
-
+} */
+/* 
 #logorowContainer{
     display: flex;
     flex-direction: column;
@@ -100,7 +97,7 @@ body{
 .logo{
     flex: 0 0 auto;
     max-height: 30px;
-}
+} */
 
 #contentContainer{
     display: flex;
@@ -114,6 +111,7 @@ body{
     padding: 1vw 2vw;
     /* gap: -10; */
     transition: all 0.3s ease-in-out;
+    user-select: none;
 }
 .headline #with{
     color: #fff;
@@ -128,8 +126,9 @@ body{
 #magic{
     position: relative;
     /* margin-top:-30vh; */
-    margin-top:2vh;
+    /* margin-top:2vh; */
     /* margin-bottom: 10vh; */
+    padding: vh 0;
     font-size: 6vw;
     font-weight: 700;    
     z-index:44;
@@ -156,6 +155,11 @@ body{
     padding: 5vh;
     transition: all 0.3s ease-in-out;
     z-index: 55;
+    height: max-content;
+    
+}
+#title{
+    width: max-content;
 }
 #quote{
     display: flex;
@@ -249,7 +253,7 @@ body{
 }
 #canvases{
     position: relative;
-    height: 450px;
+    height: 50vh;
 }
 #particles{
     position: absolute;
@@ -303,6 +307,7 @@ body{
     display: flex;
     height: 1em;
     width: 1em;
+    max-height: 90vh;
     /* position: relative; */
 }
 
@@ -378,7 +383,7 @@ body{
         font-size: 4vw;
         padding: 1vw 2vw;
         border-radius: 6px;
-        margin: -3vw 0;
+        /* margin: -3vw 0; */
         z-index: 0;
     } 
     #overview{
@@ -390,15 +395,15 @@ body{
     }
     #services{
         font-size: 8vw;
-        
     } 
     .txtContainer{
-        max-width: 80vw;
+        max-width: 90vw;
     
     }
     #qr{
         width: 100vw;
         font-size: 100vw;
+       
         /* max-width: 80vw; */
 
     }

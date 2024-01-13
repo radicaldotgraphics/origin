@@ -11,10 +11,12 @@ let ThreeScene =  {
  
     init(){
         this.wheel = null;
+        this.spinBtn = null;
+        this.bm = null;
         // console.log("initting");
         this.canvas = document.querySelector('#model');
-        this.w = document.documentElement.clientWidth;
-        this.h = document.documentElement.clientHeight/2;
+        this.w = window.innerWidth;
+        this.h = window.innerHeight/2;
         this.canvas.width = this.w;
         this.canvas.height = this.h;
         //
@@ -25,9 +27,9 @@ let ThreeScene =  {
         this.scene.add(this.camera)
         //
         // this.light1 = new THREE.DirectionalLight( 0xffffff, 2 );
-        this.light1 = new THREE.PointLight( 0xffffff, 111, 1000 );
+        this.light1 = new THREE.PointLight( 0xffffff,222 );
         this.light1.position.set(1,3,1);
-        this.light2 = new THREE.PointLight( 0xffffff, 111, 1000 );
+        this.light2 = new THREE.PointLight( 0xffffff, 222);
         this.light2.position.set(-1,-2,0);
         
         
@@ -37,7 +39,7 @@ let ThreeScene =  {
         // this.scene.add(this.plightHelper)
         // this.scene.add(this.plightHelper2)
         
-        this.scene.add(this.light1);
+        // this.scene.add(this.light1);
         // this.scene.add(this.light2);
        this.canvas.addEventListener('scroll', this.ignoreScroll, false)
     // //   window.addEventListener('resize', this.resize.bind);
@@ -65,51 +67,40 @@ let ThreeScene =  {
         this.renderer.setSize(this.w, this.h)
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
         this.renderer.outputColorSpace = THREE.SRGBColorSpace;
-        // this.renderer.outputEncoding = THREE.SRGBColorSpace;
+        
         this.renderer.toneMappingExposure = 1.4;
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping
-        this.dracoLoader = new DRACOLoader()
-        this.dracoLoader.setDecoderPath('./draco/')
-        //
-        // this.tl = new THREE.TextureLoader();
-        // this.tx = this.tl.load("./assets/wheel1.png");
-        // this.tx.flipY = false;
-        // this.tx.colorSpace = THREE.SRGBColorSpace
-        // this.mat = new THREE.MeshBasicMaterial({ map: this.tx, transparent:true, side:THREE.DoubleSide})
-    
+        
+        this.spinNrmlMat = new THREE.CanvasTexture(new FlakesTexture());
+        this.spinNrmlMat.wrapS = THREE.RepeatWrapping;
+        this.spinNrmlMat.wrapT = THREE.RepeatWrapping;
+        this.spinNrmlMat.repeat.x = 10;
+        this.spinNrmlMat.repeat.y = 6;
         // //
-        // this.tx2 = this.tl.load("./assets/wheel2.png");
-        // this.tx2.flipY = false;
-        // this.tx2.colorSpace = THREE.SRGBColorSpace
-        // this.mat2 = new THREE.MeshBasicMaterial({ map: this.tx2, transparent:true, side:THREE.DoubleSide})
-        // //
-        // this.tx3 = this.tl.load("./assets/wheel3.png");
-        // this.tx3.flipY = false;
-        // this.tx3.colorSpace = THREE.SRGBColorSpace
-        // this.mat3 = new THREE.MeshBasicMaterial({ map: this.tx3, transparent:true, side:THREE.DoubleSide})
-        // //
-        // //
-        // this.txf = new THREE.CanvasTexture(new FlakesTexture());
-        // this.txf.wrapS = THREE.RepeatWrapping;
-        // this.txf.wrapT = THREE.RepeatWrapping;
-        // this.txf.repeat.x = 10;
-        // this.txf.repeat.y = 6;
-        // //
-        // this.bm = {
-        //     clearcoat:1.0,
-        //     clearcoatRoughness:0.1,
-        //     metalness: 0.9,
-        //     roughness:0.5,
-        //     color:0x8418ca,
-        //     normalMap:this.txf,
-        //     normalScale: new THREE.Vector2(0.15, 0.15)
-        // }
-        // // this.mat4 = new THREE.MeshPhysicalMaterial();
-        // this.mat4 = new THREE.MeshPhysicalMaterial(this.bm);
+        this.bm = {
+            color:0x8418ca,
+            roughness: 0.3,
+            metalness: .51,
+            reflectivity: .61,
+            clearcoat: .81,
+            clearcoatRoughness: .91,
+            transmission:0.01,
+            normalMap:this.spinNrmlMat,
+            normalScale: new THREE.Vector2(0.1, 0.1),
+            side: THREE.DoubleSide
+        }
+        this.test = {
+            color:0x006aff
+        }
+        this.testMat = new THREE.MeshStandardMaterial(this.test);
+        // this.mat4 = new THREE.MeshPhysicalMaterial();
+        // this.mat4 = new THREE.MeshStandardMaterial(this.bm);
+        // this.mat4 = new THREE.MeshStandardMaterial(this.bm);
+        this.mat4 = new THREE.MeshPhysicalMaterial(this.bm);
         // //
 
         this.gltfLoader = new GLTFLoader()
-        this.gltfLoader.setDRACOLoader(this.dracoLoader)
+        // this.gltfLoader.setDRACOLoader(this.dracoLoader)
         this.loadGlTF();
     },
     changeColor(clr){
@@ -121,11 +112,17 @@ let ThreeScene =  {
         this.light2.color.setHex( color.getHex() );
     },
     resize(){
-        this.w = document.documentElement.clientWidth;
-        this.h = document.documentElement.clientHeight/2;
-        this.canvas.width = this.w;
-        this.canvas.height = this.h;
-        this.init();
+       
+        return;
+        // this.w = window.innerWidth;
+        // this.h = window.innerHeight/2;
+        // this.canvas.width=this.w;
+        // this.canvas.height=this.h;
+        // this.camera.updateProjectionMatrix();
+        // this.renderer.setSize(this.w, this.h);
+        // this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        // this.init();
     },
     ignoreScroll(e){
         e.preventDefault();
@@ -142,22 +139,21 @@ let ThreeScene =  {
                 // console.log(this.mat4);
                 // gltf.scene.material = this.mat4;
                  gltf.scene.traverse((child) =>{
+                    // console.log(child.name);
                     if(child.name == 'wheel'){
                         this.wheel = child;
-                //         // console.log(this.mat);
-                //         // child.material = this.mat4;
                     }
-                //     if(child.name == 'plane1'){
-                //         // console.log(this.mat);
-                //         child.material = this.mat;
-                //         this.wheel1 = child;
-                //     }if(child.name == 'plane2'){
-                //         child.material = this.mat2;
-                //         this.wheel2 = child;
-                //     }if(child.name == 'plane3'){
-                //         child.material = this.mat3;
-                //         this.wheel3 = child;
-                //     }
+                    if(child.name == 'spin_button'){
+                        // console.log(this.mat4);
+                        child.material = this.mat4;
+                        this.spinBtn = child;
+                    }
+                    if(child.name == 'btncube-false'){
+                        // console.log(this.testMat);
+                        child.material = this.testMat;
+                        
+                    }
+              
                 })
                 // console.log(this.scene);
                 this.scene.add(gltf.scene)
@@ -176,14 +172,11 @@ let ThreeScene =  {
         t.pmremGenerator = new PMREMGenerator(this.renderer);
         //
         this.rgbeLoader.load( './assets/clouds.hdr', function ( texture ) {
-            console.log("okay got it", this);
-            // this.renderer.toneMappingExposure = 6;
-
             t.scene.environment = t.pmremGenerator.fromEquirectangular( texture ).texture;
-            //    this.bm.xzenvMap = this.envMap // this.scene.background = texture;
-                // t.scene.environment = this.envMap;
-				texture.dispose();
-				t.pmremGenerator.dispose();
+            t.scene.background = t.pmremGenerator.fromEquirectangular( texture ).texture;
+            t.bm.envMap=t.pmremGenerator.fromEquirectangular( texture ).texture;
+           	texture.dispose();
+            t.pmremGenerator.dispose();
             
         }, undefined, function ( error ) {
 	        console.error( error );
