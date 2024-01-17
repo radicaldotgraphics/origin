@@ -2,8 +2,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import {FlakesTexture } from 'three/examples/jsm/textures/FlakesTexture';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-// import { DRACOLoader } from 'https://www.gstatic.com/draco/versioned/decoders/1.4.3/'
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
+import { DRACOLoader } from '/node_modules/three/examples/jsm/loaders/DRACOLoader.js'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader';
 import { PMREMGenerator } from 'three/src/extras/PMREMGenerator';
 
@@ -57,6 +56,10 @@ let ThreeScene =  {
         // this.controls.autoRotate=true;
         this.controls.enableZoom = false;
         //
+        //
+        this.dracoLoader = new DRACOLoader()
+        this.dracoLoader.setDecoderPath('./draco/')
+        // console.log(this.dracoLoader);
         this.renderer = new THREE.WebGLRenderer({
             canvas: this.canvas,
             antialias: true,
@@ -70,6 +73,11 @@ let ThreeScene =  {
         
         this.renderer.toneMappingExposure = 1.4;
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping
+
+        this.shadowTx = new THREE.TextureLoader().load('./assets/shadow.png');
+        this.shadowMat = new THREE.MeshBasicMaterial({map:this.shadowTx, transparent:true, opacity:0.8}) 
+        this.clrTx = new THREE.TextureLoader().load('./assets/wheel_clr.webp');
+        this.clrMat = new THREE.MeshBasicMaterial({map:this.clrTx}) 
         
         this.spinNrmlMat = new THREE.CanvasTexture(new FlakesTexture());
         this.spinNrmlMat.wrapS = THREE.RepeatWrapping;
@@ -78,29 +86,57 @@ let ThreeScene =  {
         this.spinNrmlMat.repeat.y = 6;
         // //
         this.bm = {
-            color:0x8418ca,
+            color:0x8A00D4,
             roughness: 0.3,
-            metalness: .51,
-            reflectivity: .61,
-            clearcoat: .81,
-            clearcoatRoughness: .91,
-            transmission:0.01,
+            metalness: .31,
+            roughnessMap:this.spinNrmlMat,
+            // reflectivity: .61,
+            // clearcoat: .81,
+            // clearcoatRoughness: .91,
+            // transmission:0.01,
+            normalMap:this.spinNrmlMat,
+            normalScale: new THREE.Vector2(0.2, 0.2),
+            side: THREE.DoubleSide
+        }
+        this.test = {
+            color:0xD505B3,
+            roughness: 0.63,
+            roughnessMap:this.spinNrmlMat,
+            metalness: .31,
+            // clearcoat: .81,
+            // clearcoatRoughness: .91,
+            // transmission:0.01,
             normalMap:this.spinNrmlMat,
             normalScale: new THREE.Vector2(0.1, 0.1),
             side: THREE.DoubleSide
         }
-        this.test = {
-            color:0x006aff
-        }
         this.testMat = new THREE.MeshStandardMaterial(this.test);
-        // this.mat4 = new THREE.MeshPhysicalMaterial();
-        // this.mat4 = new THREE.MeshStandardMaterial(this.bm);
-        // this.mat4 = new THREE.MeshStandardMaterial(this.bm);
-        this.mat4 = new THREE.MeshPhysicalMaterial(this.bm);
+        // this.primary = new THREE.MeshPhysicalMaterial();
+        // this.primary = new THREE.MeshStandardMaterial(this.bm);
+        this.primary = new THREE.MeshStandardMaterial(this.bm);
+        this.gold = new THREE.MeshPhysicalMaterial(this.bm);
+        this.mat6 = new THREE.MeshStandardMaterial(this.bm);
+        this.mat7 = new THREE.MeshStandardMaterial(this.bm);
+        this.mat8 = new THREE.MeshStandardMaterial(this.bm);
+        this.mat9 = new THREE.MeshStandardMaterial(this.bm);
+        // this.primary = new THREE.MeshPhysicalMaterial(this.bm);
         // //
+        this.primary.color.setHex( 0x180029);
+        this.gold.color.setHex( 0xfdc500 )
+        this.gold.sheen = 0.4;
+        this.gold.metalness = 0.7;
+        this.gold.iridescence = 0.4;
+        this.gold.roughness = 0.2;
+        this.gold.sheenRoughness = .01;
+        this.gold.clearcoat = 0.54;
+        this.gold.clearcoatRoughness=0.31;
+        this.mat6.color.setHex(0xFF06FF);
+        this.mat7.color.setHex(0xFF4F69);
+        this.mat8.color.setHex(0x5c0099);
+        this.mat9.color.setHex(0x3d0066);
 
         this.gltfLoader = new GLTFLoader()
-        // this.gltfLoader.setDRACOLoader(this.dracoLoader)
+        this.gltfLoader.setDRACOLoader(this.dracoLoader)
         this.loadGlTF();
     },
     changeColor(clr){
@@ -132,27 +168,75 @@ let ThreeScene =  {
         
         this.gltfLoader.load(
             './assets/wheel.glb',
+            // './assets/wheel.glb',
             // 'assets/test.glb',
             (gltf) =>{
                 console.log("loaded");
                 // gltf.scene.rotation.x=90-1;
-                // console.log(this.mat4);
-                // gltf.scene.material = this.mat4;
+                // console.log(this.primary);
+                // gltf.scene.material = this.primary;
                  gltf.scene.traverse((child) =>{
                     // console.log(child.name);
                     if(child.name == 'wheel'){
                         this.wheel = child;
-                    }
-                    if(child.name == 'spin_button'){
-                        // console.log(this.mat4);
-                        child.material = this.mat4;
-                        this.spinBtn = child;
-                    }
-                    if(child.name == 'btncube-false'){
-                        // console.log(this.testMat);
-                        child.material = this.testMat;
+                        child.material=this.clrMat;
+                    }else if(child.name == 'jewels1'){
+                        // console.log(this.primary);
+                        child.material = this.mat8;
                         
+                    }else if(child.name == 'jewels2'){
+                        // console.log(this.primary);
+                        child.material = this.mat9;
+                        // this.spinBtn = child;
+                    }else if(child.name == 'bits1'){
+                        // console.log(this.testMat);
+                        child.material = this.mat9;
+                        
+                    }else if(child.name == 'bits2'){
+                        // console.log(this.testMat);
+                        child.material = this.mat8;
+                        
+                    }else if(child.name == 'bits3'){
+                        // console.log(this.testMat);
+                        child.material = this.gold;
+                        
+                    }else if(child.name == 'rings'){
+                        // console.log(this.testMat);
+                        child.material = this.gold;
+                        
+                    }else if(child.name == 'shadow'){
+                        // console.log(this.testMat);
+                        child.material = this.shadowMat;
+                        
+                    
+                    }else if(child.name == 'gold'){
+                        // console.log(this.testMat);
+                        child.material = this.gold;
+                        
+                    }else{
+                        child.material = this.primary;
                     }
+                    
+                    // if(child.name == 'jewel_001'){
+                    //     // console.log(this.testMat);
+                    //     child.material = this.mat6;
+                        
+                    // }
+                    // if(child.name == 'jewel_002'){
+                    //     // console.log(this.testMat);
+                    //     child.material = this.mat7;
+                        
+                    // }
+                    // if(child.name == 'rock'){
+                    //     // console.log(this.testMat);
+                    //     // child.material = this.mat7;
+                        
+                    // }
+                    // if(child.name == 'jewel_003'){
+                    //     // console.log(this.testMat);
+                    //     child.material = this.mat8;
+                        
+                    // }
               
                 })
                 // console.log(this.scene);
@@ -173,7 +257,9 @@ let ThreeScene =  {
         //
         this.rgbeLoader.load( './assets/clouds.hdr', function ( texture ) {
             t.scene.environment = t.pmremGenerator.fromEquirectangular( texture ).texture;
-            t.scene.background = t.pmremGenerator.fromEquirectangular( texture ).texture;
+            // t.scene.background = t.pmremGenerator.fromEquirectangular( texture ).texture;
+            t.scene.rotation.y = 0.5
+            
             t.bm.envMap=t.pmremGenerator.fromEquirectangular( texture ).texture;
            	texture.dispose();
             t.pmremGenerator.dispose();
@@ -184,11 +270,17 @@ let ThreeScene =  {
 
     },
     tick(){
+        this.counter++;
         this.controls.update()
         // Render
         if(this.wheel){
-
+            // console.log(this.spinBtn.position.z);
             this.wheel.rotation.z+=.1;
+            // this.scene.rotateY(0.01)
+            // console.log(this.scene.rotation.y)
+            // this.spinBtn.position.z=Math.sin(this.wheel.rotation.z)*0.03
+
+            // this.spinBtn.position.z=Math.sin(this.counter)
         }
         this.renderer.render(this.scene, this.camera)
     //    window.requestAnimationFrame(this.tick.bind(this))

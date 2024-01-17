@@ -194,6 +194,7 @@ body{
     padding: 9vh 0vw;
     min-width: 300px;
     position: relative;
+    color: white;
 }
 .arrowAnim{
     position: absolute;
