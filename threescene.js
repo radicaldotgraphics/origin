@@ -11,6 +11,7 @@ let ThreeScene =  {
     init(){
         this.wheel = null;
         this.spinBtn = null;
+        this.model = null;
         this.bm = null;
         // console.log("initting");
         this.canvas = document.querySelector('#model');
@@ -74,7 +75,7 @@ let ThreeScene =  {
         this.renderer.toneMappingExposure = 1.4;
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping
 
-        this.shadowTx = new THREE.TextureLoader().load('./assets/shadow.png');
+        this.shadowTx = new THREE.TextureLoader().load('./assets/shadow.webp');
         this.shadowMat = new THREE.MeshBasicMaterial({map:this.shadowTx, transparent:true, opacity:0.8}) 
         this.clrTx = new THREE.TextureLoader().load('./assets/wheel_clr.webp');
         this.clrMat = new THREE.MeshBasicMaterial({map:this.clrTx}) 
@@ -240,7 +241,8 @@ let ThreeScene =  {
               
                 })
                 // console.log(this.scene);
-                this.scene.add(gltf.scene)
+                this.model = gltf.scene;
+                this.scene.add(this.model)
                 this.tick();
                 // this.loadHDR.bind(this);
                 this.loadHDR(this);
@@ -275,7 +277,8 @@ let ThreeScene =  {
         // Render
         if(this.wheel){
             // console.log(this.spinBtn.position.z);
-            this.wheel.rotation.z+=.1;
+            this.wheel.rotation.z+=.01;
+            this.model.rotation.z-=.0006;
             // this.scene.rotateY(0.01)
             // console.log(this.scene.rotation.y)
             // this.spinBtn.position.z=Math.sin(this.wheel.rotation.z)*0.03
