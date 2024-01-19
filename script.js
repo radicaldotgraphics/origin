@@ -4,9 +4,11 @@ import palettes from './palettes.json'
 import Particles from './particles';
 import ThreeScene from './threescene';
 
+let firstTime=true;
 let logoAnim = null;
 let arrowAnims = [];
-const time_ms = 300;
+const time_ms = 800;
+// let counter = 0;
 let counter = time_ms-22;
 let deviceType = null;
 let mouse = {
@@ -36,6 +38,10 @@ const headlines = document.querySelectorAll('.headline');
 const txtContainer = document.querySelectorAll('.txtContainer');
 const explainerTxt = document.querySelectorAll('.explainerTxt');
 const nav = document.querySelector('#nav');
+const navPanel = document.querySelector('#navPanel');
+const navModal = document.querySelector('#navModal');
+const colorNav = document.querySelector('#colorNav')
+const navBtnClr = document.querySelector("#navBtnClr")
 const withtxt = document.querySelector('#with');
 const dlmagic = document.querySelector('#dlmagic')
 const rgraphics = document.querySelector('#rgraphics')
@@ -48,8 +54,6 @@ const principles = document.querySelector('#principles')
 const threeModel = document.querySelector('#model')
 const offeringDivs = document.querySelectorAll('.offering')
 const qr = document.querySelector('#qr')
-const radrow = document.querySelector(".radicalrow")
-const logorowContainer = document.querySelector("#logorowContainer")
 
 const initLottieLogo = () => {
     logoAnim = Lottie.loadAnimation({
@@ -69,33 +73,69 @@ const init = () => {
     window.addEventListener( 'resize', doResize )
     window.addEventListener( 'mousedown', isDown )
     window.addEventListener( 'mouseup', isUp )
-    
+    initQuadrants();
+    initColorNav();
     initLottieLogo();
     initLottieArrows();
-    // initLogoRows();
-    initQuadrants();
     initLines();
     Particles.init();
     ThreeScene.init();
 
-    // setTimeout(Particles.updatePoints, 5000)
-    // Particles.updatePoints();
+    navBtnClr.onclick = () => {
+      // console.log("btn clicked");   
+      navPanel.classList.toggle('showNav')
+      navPanel.classList.toggle('hideNav')
+      // if(navModal.classList.contains('hideNav')){
+        navModal.classList.toggle('showNav')
+        navModal.classList.toggle('hideNav')
+      // }
+    }
+    navModal.onclick = () => {   
+      // console.log("clickd")
+      navPanel.classList.add('hideNav')
+      navPanel.classList.remove('showNav')
+      navModal.classList.toggle('showNav')
+        navModal.classList.toggle('hideNav')
+    }
+
+
    loop();
 
 }
-const initLogoRows = () => {
-  const rows = document.querySelectorAll('.logo-row');
-  rows.forEach((row, index) => {
-      for (let i = 0; i < 3; i++) {
-          const logoClone = row.children[0].cloneNode(true);
-          row.appendChild(logoClone);
-      }
-      // Alternate scroll direction
-      // if (index % 2 === 0) {
-      //     row.style.direction = 'rtl';
-      // }
-  });
+const initColorNav = () => {
+  // console.log(palettes);
+  
+  // console.log(colorNav);
+  console.log("Radical Graphics");
+  palettes.forEach((e,i)=>{
+    console.log(e.colors.map(c => `%c${"   "}`).join(''), ...e.colors.map(c => `background: ${c};`));      
+    //
+    let pall = document.createElement('div');
+    pall.setAttribute("class", 'palette');
+    pall.setAttribute("pos", i);
+    // pall.style.background = e.colors[0];
+    // d.style.width = '20px'
+    // d.style.height = '20px'
+    e.colors.map(c => {
+      let swatch = document.createElement('div');
+      swatch.setAttribute("class", "paletteItem");
+      swatch.style.background = c;
+      pall.append(swatch)
+    })
+    pall.onclick = (e) => {
+      // console.log(e.target.getAttribute("pos"));
+      let num = e.target.getAttribute("pos");
+      // console.log(quadrants); 
+      if(quadrants.activeQuadrant != num){
+        quadrants.calculateNewPalette(num)
+        quadrants.activeQuadrant = num;
+      }           
+    }
+    colorNav.append(pall);
+  })
+  
 }
+
 const initLines = () => {
   let line = document.querySelector(".line");
   // console.log(line);
@@ -130,36 +170,37 @@ const initLottieArrows = () => {
 }
 
 const initQuadrants = () => {
-    quadrants.rowCount = palettes.length;
-    quadrants.w = (docWidth/quadrants.rowCount);
-    // console.log(quadrants.w);
-    //
-    quadrants.calculateQuadrant = (tgt) => {
-      // console.log(tgt.clientX);
-        let curQuadrant = Math.floor(tgt.clientX/quadrants.w)
-        // console.log(curQuadrant, tgt.clientX);
-        if(quadrants.activeQuadrant != curQuadrant){
-            quadrants.calculateNewPalette(curQuadrant)
-            quadrants.activeQuadrant = curQuadrant;
-            // Particles.scale= curQuadrant/10;
-            // console.log(Particles.scale);
-            Particles.initPoints()
-        }
-    }
+  // console.log("initQuadrants");
+  quadrants.rowCount = palettes.length;
+  quadrants.w = (docWidth/quadrants.rowCount);
+  // console.log(quadrants.w);
+  //
+  
+  // quadrants.calculateQuadrant = (tgt) => {
+      
+  //     console.log("calculating",tgt);
+  //       let curQuadrant = Math.floor(tgt.clientX/quadrants.w)
+  //       console.log(curQuadrant, tgt.clientX);
+  //       if(quadrants.activeQuadrant != curQuadrant){
+  //           quadrants.calculateNewPalette(curQuadrant)
+  //           quadrants.activeQuadrant = curQuadrant;
+  //           // Particles.scale= curQuadrant/10;
+  //           // console.log(Particles.scale);
+  //           Particles.initPoints()
+  //       }
+  //   }
     quadrants.calculateNewPalette = (num) => {
-      console.log(num);
+      // console.log(num);
       num = Math.max(0, num)
         let colors = palettes[num].colors;
         quadrants.changeAllColors(colors)
-    }
+      
+      }
     quadrants.changeAllColors = (arr) => {
       let items;
         let num = arr.length;
         bg.style.background = arr[0];
-        // semicircleFill.style.fill = arr[0];
-        // semicircle.style.fill = arr[arr.length-1];
-        // prtcls.style.background = arr[0];
-        // prtcls.style.background = arr[arr.length-1];
+       
         if(num>2){
           headlines.forEach((e)=>{
             e.style.background = arr[1]
@@ -788,7 +829,10 @@ const initQuadrants = () => {
             break;
        }
     }
-
+    // if(firstTime){
+    //   firstTime=false
+    //   quadrants.calculateNewPalette(1)
+    // }
 }
 const isTouch = ( e ) => {
   mouse.isDown=true;

@@ -172,7 +172,7 @@ let ThreeScene =  {
             // './assets/wheel.glb',
             // 'assets/test.glb',
             (gltf) =>{
-                console.log("loaded");
+                // console.log("loaded");
                 // gltf.scene.rotation.x=90-1;
                 // console.log(this.primary);
                 // gltf.scene.material = this.primary;

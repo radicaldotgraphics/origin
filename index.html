@@ -24,18 +24,20 @@
   
   
   
+    
   
-
-  <!-- <script type="module" crossorigin src="./script.js"></script>
-  <link rel="stylesheet" href="./style.css"> -->
-  <script type="module" crossorigin src="./assets/index-52dfc146.js"></script>
-  <link rel="stylesheet" href="./assets/index-75611bc1.css">
+  
+  
+  <script type="module" crossorigin src="./assets/index-0f60729f.js"></script>
+  <link rel="stylesheet" href="./assets/index-aa12f4a3.css">
 </head>
 <body>
+    <div id="navModal" class="hideNav"></div>
     <nav id="nav">
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAgCAYAAAB6kdqOAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAARGSURBVHgB1Vg9bBxFFJ6/OxA0ayFFcrcWCCkVdpmKuwYJKrugtmlQqHIRTZCQbFcp7Y4CCW8QvZ0q5RkhkdLXpaDwdojKJ4RIcjfvvcz+3szOzJ2dNMlKo9n5e++b7719b2YZe8sezm74PHnyNCWYb1MfPiOhN1kPUqZ0whQwUzOuIOfSlB7mJGePv/rkm7ObyL8WoNPTi+T9mb7HhB6Q0oNKeQWgrKWpey2gql9C05cLQRn28dGX69/lbwTo9OQy+YBNDRAYUcFCqcRS1gCRugXI7Xb53s4tmDv8Yv1+dmNA46PLRPf/v0dcj6gHCS+ZaIB0ANlM2Qy1LNpsogGsz6SC+8O1H/JrARofPUuB2JikTisFllk8ZW4fD4K22cRGnmFLDEOghAPm4WVKL/mYA6YSgUlEJqIFFgWKuUVt+qkep2ZOZw2U7ynH2Xh8dZAuBcRhtt+AaYVABIQ3hn7/8jqVfF6ASoKA/vjxrwHXuCeDyiCw20WRy5Rb6zzGzeb78vlJEBAn2JcxswAGGSvmyxhLIdABVo1Ftv/89/ttx6mfPniWEqNLx3lLJ9S+M8vm0/ad2v+6Gme3nRtruXYN+XvItrbWjqclQ/SSRkETgcuEDNGOAfagXgsdBgNmrWWnWuhRazJF+HmM5iAAgM5XFl4nkVjY+dH3KYLd0mQXo4sEUF01JojGHc+E9lhlDu7FKvTmNKbilamsFGPaXGwp9kJtirJhClqlbJuJhg2zxSImmHd/Hi/nhsfKPoHOGOe2/Lqux4nDpmJIiWiEeoACtQ0EbWXgAhA+UA4uAG8ThjUlNSQVA7bCmhHqKu0AEZZgEd8Exw5zkSIkTpVkhirbRAiuMB4RYO+wBQDO7jknf10Jnjw2C/akZLniSFPeMQmPKcROX5elVYxAmMVaX/7prV8nirP5RJjPM+pDWCttTYkei61QtMbs9+7G6vbCp8h8YHRexqHb2Z1cojnVYSzgLTK610+RGANW/IFY8HTnSpSHbWDkCI/cBYGgR2GwTvCE2KYCOdAaMwwdbmxkeQtICHZsFOZxllyhdirxking6ujszKH849u/HTjZfiMbThmbD43wfNUxQ0Z2XRWKbqRIIxLccUmU91EOnTOZ3fh77zRFwceoIA2mEAmdd+2cl9u+NpVYx9gyjVgnARNzhBRb63cqU3nnoeJZz3YMQzQskK80X5CFRVKVS+aZUJP35mLYBeMBakBxWZgPz5aZzzZhC4BwqTMXxYSHnDM+vDXMJizwLL2X/XP35MBk8P2G5iqbY8Bk0DEndg5rrbnO/9NsZ2Mnm8Z0rry5Xt39KQVFB+aUuOscPTr+UtbtFQgX97AK2JQEHX709S/Hq/Rd+25/NToaoKQ9IbUFDFkXJFcWiwrPqacfsw91traEldcC1AJ78DA1CXlgAOya6/UmF5A0LFFxAVQwMT8hfsf+7Hzt258n7F1/XgGEHcUYKr6STwAAAABJRU5ErkJggg==" alt="">
-        <div class="dropdown-panel">
-            <canvas id="colornav"></canvas>
+        <img id="navBtnClr" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAgCAYAAAB6kdqOAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAARGSURBVHgB1Vg9bBxFFJ6/OxA0ayFFcrcWCCkVdpmKuwYJKrugtmlQqHIRTZCQbFcp7Y4CCW8QvZ0q5RkhkdLXpaDwdojKJ4RIcjfvvcz+3szOzJ2dNMlKo9n5e++b7719b2YZe8sezm74PHnyNCWYb1MfPiOhN1kPUqZ0whQwUzOuIOfSlB7mJGePv/rkm7ObyL8WoNPTi+T9mb7HhB6Q0oNKeQWgrKWpey2gql9C05cLQRn28dGX69/lbwTo9OQy+YBNDRAYUcFCqcRS1gCRugXI7Xb53s4tmDv8Yv1+dmNA46PLRPf/v0dcj6gHCS+ZaIB0ANlM2Qy1LNpsogGsz6SC+8O1H/JrARofPUuB2JikTisFllk8ZW4fD4K22cRGnmFLDEOghAPm4WVKL/mYA6YSgUlEJqIFFgWKuUVt+qkep2ZOZw2U7ynH2Xh8dZAuBcRhtt+AaYVABIQ3hn7/8jqVfF6ASoKA/vjxrwHXuCeDyiCw20WRy5Rb6zzGzeb78vlJEBAn2JcxswAGGSvmyxhLIdABVo1Ftv/89/ttx6mfPniWEqNLx3lLJ9S+M8vm0/ad2v+6Gme3nRtruXYN+XvItrbWjqclQ/SSRkETgcuEDNGOAfagXgsdBgNmrWWnWuhRazJF+HmM5iAAgM5XFl4nkVjY+dH3KYLd0mQXo4sEUF01JojGHc+E9lhlDu7FKvTmNKbilamsFGPaXGwp9kJtirJhClqlbJuJhg2zxSImmHd/Hi/nhsfKPoHOGOe2/Lqux4nDpmJIiWiEeoACtQ0EbWXgAhA+UA4uAG8ThjUlNSQVA7bCmhHqKu0AEZZgEd8Exw5zkSIkTpVkhirbRAiuMB4RYO+wBQDO7jknf10Jnjw2C/akZLniSFPeMQmPKcROX5elVYxAmMVaX/7prV8nirP5RJjPM+pDWCttTYkei61QtMbs9+7G6vbCp8h8YHRexqHb2Z1cojnVYSzgLTK610+RGANW/IFY8HTnSpSHbWDkCI/cBYGgR2GwTvCE2KYCOdAaMwwdbmxkeQtICHZsFOZxllyhdirxking6ujszKH849u/HTjZfiMbThmbD43wfNUxQ0Z2XRWKbqRIIxLccUmU91EOnTOZ3fh77zRFwceoIA2mEAmdd+2cl9u+NpVYx9gyjVgnARNzhBRb63cqU3nnoeJZz3YMQzQskK80X5CFRVKVS+aZUJP35mLYBeMBakBxWZgPz5aZzzZhC4BwqTMXxYSHnDM+vDXMJizwLL2X/XP35MBk8P2G5iqbY8Bk0DEndg5rrbnO/9NsZ2Mnm8Z0rry5Xt39KQVFB+aUuOscPTr+UtbtFQgX97AK2JQEHX709S/Hq/Rd+25/NToaoKQ9IbUFDFkXJFcWiwrPqacfsw91traEldcC1AJ78DA1CXlgAOya6/UmF5A0LFFxAVQwMT8hfsf+7Hzt258n7F1/XgGEHcUYKr6STwAAAABJRU5ErkJggg==" alt="">
+        <div id="navPanel" class="hideNav">
+            <div class="headline">choose a palette</div>
+            <div id="colorNav"></div>
         </div>
     </nav>
     <div id="introContainer">
