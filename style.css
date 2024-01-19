@@ -48,6 +48,7 @@ body{
     padding: 0;
     margin: 0;
     z-index: 999;
+    
   }
   #navModal{
     width:200vw;
@@ -70,7 +71,7 @@ body{
     align-items: stretch;
 }
 .palette{
-    /* background-color: #eFeFeF; */
+    
     margin: .1vw;
     display:flex;
     flex-direction: column;
@@ -451,7 +452,7 @@ body{
     }
    
     .palette{
-        background-color: #eFeFeF;
+        /* background-color: #eFeFeF; */
         margin: .1vw;
         display:flex;
         flex-direction: column;
