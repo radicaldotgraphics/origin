@@ -97,7 +97,11 @@ const init = () => {
       navModal.classList.toggle('showNav')
         navModal.classList.toggle('hideNav')
     }
-
+    if(isMobile){
+      document.querySelector("#desktopInstructions").classList.add('hideNav');
+    }else{
+      document.querySelector("#mobileInstructions").classList.add('hideNav');
+    }
 
    loop();
 
