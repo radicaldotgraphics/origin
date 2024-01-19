@@ -6,8 +6,8 @@ import ThreeScene from './threescene';
 
 let logoAnim = null;
 let arrowAnims = [];
-const time_ms = 800;
-let counter = time_ms-20;
+const time_ms = 300;
+let counter = time_ms-22;
 let deviceType = null;
 let mouse = {
     direction:null,
@@ -80,7 +80,7 @@ const init = () => {
 
     // setTimeout(Particles.updatePoints, 5000)
     // Particles.updatePoints();
-    loop();
+   loop();
 
 }
 const initLogoRows = () => {
@@ -147,6 +147,8 @@ const initQuadrants = () => {
         }
     }
     quadrants.calculateNewPalette = (num) => {
+      console.log(num);
+      num = Math.max(0, num)
         let colors = palettes[num].colors;
         quadrants.changeAllColors(colors)
     }
@@ -872,3 +874,10 @@ let loop = () => {
 
 
 init();
+
+// let rand = Math.floor(Math.floor(Math.random()*docWidth)/quadrants.w)
+//   // if(quadrants.activeQuadrant != rand){
+//       quadrants.calculateNewPalette(rand)
+//       quadrants.activeQuadrant = rand;
+//   // }
+//   loop();

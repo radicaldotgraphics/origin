@@ -27,10 +27,10 @@ let ThreeScene =  {
         this.scene.add(this.camera)
         //
         // this.light1 = new THREE.DirectionalLight( 0xffffff, 2 );
-        this.light1 = new THREE.PointLight( 0xffffff,222 );
-        this.light1.position.set(1,3,1);
-        this.light2 = new THREE.PointLight( 0xffffff, 222);
-        this.light2.position.set(-1,-2,0);
+        // this.light1 = new THREE.PointLight( 0xffffff,222 );
+        // this.light1.position.set(1,3,1);
+        // this.light2 = new THREE.PointLight( 0xffffff, 222);
+        // this.light2.position.set(-1,-2,0);
         
         
         // this.plightHelper = new THREE.PointLightHelper(this.light1, 11)
@@ -76,7 +76,7 @@ let ThreeScene =  {
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping
 
         this.shadowTx = new THREE.TextureLoader().load('./assets/shadow.webp');
-        this.shadowMat = new THREE.MeshBasicMaterial({map:this.shadowTx, transparent:true, opacity:0.8}) 
+        this.shadowMat = new THREE.MeshBasicMaterial({map:this.shadowTx, transparent:true, opacity:0.7}) 
         this.clrTx = new THREE.TextureLoader().load('./assets/wheel_clr.webp');
         this.clrMat = new THREE.MeshBasicMaterial({map:this.clrTx}) 
         
@@ -145,8 +145,8 @@ let ThreeScene =  {
         // this.light1.color=clr;
         let color = new THREE.Color(clr);
         
-        this.light1.color.setHex( color.getHex() );
-        this.light2.color.setHex( color.getHex() );
+        // this.light1.color.setHex( color.getHex() );
+        // this.light2.color.setHex( color.getHex() );
     },
     resize(){
        
@@ -257,6 +257,7 @@ let ThreeScene =  {
         this.rgbeLoader.setDataType( THREE.HalfFloatType );
         t.pmremGenerator = new PMREMGenerator(this.renderer);
         //
+        // this.rgbeLoader.load( './assets/clouds.webp', function ( texture ) {
         this.rgbeLoader.load( './assets/clouds.hdr', function ( texture ) {
             t.scene.environment = t.pmremGenerator.fromEquirectangular( texture ).texture;
             // t.scene.background = t.pmremGenerator.fromEquirectangular( texture ).texture;
