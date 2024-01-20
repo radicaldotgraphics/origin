@@ -38,7 +38,9 @@ const headlines = document.querySelectorAll('.headline');
 const txtContainer = document.querySelectorAll('.txtContainer');
 const explainerTxt = document.querySelectorAll('.explainerTxt');
 const nav = document.querySelector('#nav');
+const footer = document.querySelector('footer');
 const navPanel = document.querySelector('#navPanel');
+const navHeadline = document.querySelector('#navHeadline');
 const navModal = document.querySelector('#navModal');
 const colorNav = document.querySelector('#colorNav')
 const navBtnClr = document.querySelector("#navBtnClr")
@@ -54,6 +56,12 @@ const principles = document.querySelector('#principles')
 const threeModel = document.querySelector('#model')
 const offeringDivs = document.querySelectorAll('.offering')
 const qr = document.querySelector('#qr')
+const qrHeadlines = document.querySelectorAll('#qrContainer > .bodyText');
+const links = document.querySelectorAll('a');
+const logoSrc = document.querySelector('#logoSrc');
+
+
+
 
 const initLottieLogo = () => {
     logoAnim = Lottie.loadAnimation({
@@ -102,6 +110,14 @@ const init = () => {
     }else{
       document.querySelector("#mobileInstructions").classList.add('hideNav');
     }
+    // console.log(logoSrc);
+    let navLogo = logoSrc.cloneNode(true);
+    let footerLogo = logoSrc.cloneNode(true);
+    navLogo.setAttribute("id", "navLogo")
+    footerLogo.setAttribute("id", "footerLogo")
+    nav.appendChild(navLogo);
+    footer.appendChild(footerLogo);
+
 
    loop();
 
@@ -209,7 +225,7 @@ const initQuadrants = () => {
           headlines.forEach((e)=>{
             e.style.background = arr[1]
           })
-         
+          
           withtxt.style.color = arr[1]
           withtxt.style.background = arr[2]
           dlmagic.style.color = arr[2];
@@ -218,6 +234,13 @@ const initQuadrants = () => {
           quoteDiv.style.color = arr[0];
           services.style.color = arr[0];
           principles.style.color = arr[0];
+          navHeadline.style.color = arr[0];
+          qrHeadlines.forEach((e)=>{
+            e.style.color = arr[1]
+          })
+         links.forEach((e)=>{
+            e.style.color = arr[2]
+          })
         }else{
           headlines.forEach((e)=>{
             e.style.background = arr[0]
@@ -230,6 +253,13 @@ const initQuadrants = () => {
           quoteDiv.style.color = arr[1];
           services.style.color = arr[1];
           principles.style.color = arr[1];
+          navHeadline.style.color = arr[1];
+          qrHeadlines.forEach((e)=>{
+            e.style.color = arr[1];
+          })
+          links.forEach((e)=>{
+            e.style.color = arr[1];
+          })
           
         }
         let itms = lines.querySelectorAll(".line")
@@ -237,6 +267,8 @@ const initQuadrants = () => {
           itm.style.fill = arr[arr.length-1];
         })
         nav.style.background=arr[arr.length-1];
+        navLogo.style.fill=arr[0];
+        footerLogo.style.fill=arr[0];
         explainerTxt.forEach((txt) => {
 
           // txt.style.background = arr[0];
