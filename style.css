@@ -66,6 +66,14 @@ footer{
     display: block;
     visibility:visible;
 }
+
+#colorDot{
+    width:50px;
+    height:auto;
+    background-color: hotpink;
+    z-index: 1000;
+}
+
 #navPanel {
     
     transition:visibility 0.3s linear,opacity 0.3s linear;
@@ -306,10 +314,11 @@ footer{
     font-size: max(2vw, 18px);
     text-align: left;
     padding: 0 2vw;
+    font-weight: 700;
     
 }
 .explainerTxt .bodycopy{
-    font-weight: 200;
+    font-weight: 400;
     font-size: max(1vw, 16px);
     text-align: left;
     padding: 0 2vw;
@@ -461,6 +470,7 @@ footer{
     }
     #navPanel{
         width: 100vw;
+        right:0;
     }
    
     .palette{

@@ -267,6 +267,8 @@ const initQuadrants = () => {
           itm.style.fill = arr[arr.length-1];
         })
         nav.style.background=arr[arr.length-1];
+        footer.style.background=arr[arr.length-1];
+        footer.style.color=arr[0];
         navLogo.style.fill=arr[0];
         footerLogo.style.fill=arr[0];
         explainerTxt.forEach((txt) => {
