@@ -43,7 +43,7 @@ const navPanel = document.querySelector('#navPanel');
 const navHeadline = document.querySelector('#navHeadline');
 const navModal = document.querySelector('#navModal');
 const colorNav = document.querySelector('#colorNav')
-const navBtnClr = document.querySelector("#navBtnClr")
+const colorNavBtn = document.querySelector("#colorNavBtn")
 const withtxt = document.querySelector('#with');
 const dlmagic = document.querySelector('#dlmagic')
 const rgraphics = document.querySelector('#rgraphics')
@@ -89,7 +89,7 @@ const init = () => {
     Particles.init();
     ThreeScene.init();
 
-    navBtnClr.onclick = () => {
+    colorNavBtn.onclick = () => {
       // console.log("btn clicked");   
       navPanel.classList.toggle('showNav')
       navPanel.classList.toggle('hideNav')
@@ -152,7 +152,19 @@ const initColorNav = () => {
       }           
     }
     colorNav.append(pall);
+    //
+    
   })
+
+  for (let i = 9; i >= 0; i--) {
+    // create nav btn swatches
+    let swatch = document.createElement('div');
+    swatch.setAttribute("class", "colorNavBtnSwatch");
+    swatch.setAttribute("id", `swatch${i}`);
+    swatch.style.background = '#000';
+    colorNavBtn.append(swatch)
+    
+  }
   
 }
 
@@ -196,24 +208,35 @@ const initQuadrants = () => {
   // console.log(quadrants.w);
   //
   
-  // quadrants.calculateQuadrant = (tgt) => {
-      
-  //     console.log("calculating",tgt);
-  //       let curQuadrant = Math.floor(tgt.clientX/quadrants.w)
-  //       console.log(curQuadrant, tgt.clientX);
-  //       if(quadrants.activeQuadrant != curQuadrant){
-  //           quadrants.calculateNewPalette(curQuadrant)
-  //           quadrants.activeQuadrant = curQuadrant;
-  //           // Particles.scale= curQuadrant/10;
-  //           // console.log(Particles.scale);
-  //           Particles.initPoints()
-  //       }
-  //   }
     quadrants.calculateNewPalette = (num) => {
-      // console.log(num);
       num = Math.max(0, num)
-        let colors = palettes[num].colors;
-        quadrants.changeAllColors(colors)
+      let colors = palettes[num].colors;
+      
+      // console.log(colors);
+      // colors.forEach((c, i) => {
+      //   // console.log(c, i);
+      //   let tgt = document.querySelector(`#swatch${i}`);
+      //   tgt.style.background = c;
+      // })
+      let count = 0;
+      for (let i = 9; i >= 0; i--) {
+        let tgt = document.querySelector(`#swatch${i}`);
+
+        if(count<colors.length){
+          let clr = colors[count];
+          tgt.style.background = clr;
+          tgt.style.opacity = 1;
+        }else{
+          tgt.style.opacity = 0;
+        }
+        count++;
+        
+        
+        
+      }
+
+
+      quadrants.changeAllColors(colors)
       
       }
     quadrants.changeAllColors = (arr) => {

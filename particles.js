@@ -48,6 +48,7 @@ let Particles =  {
             clr:this.clr,
             lw:lw,
             scale:this.scale,
+            // scale:this.scale*2,
             // scale:(Math.random()-Math.random())*0.1,
             // velocity:.81*(-1*(p%2))
             // velocity:81/p,
@@ -69,6 +70,7 @@ let Particles =  {
         
       for(let i = 0; i < num; i++) {
         let p = this.points[i];
+        
         // console.log(p);
         // let value = this.getValue(p.x, p.y, p.scale);
         if(this.isDown){
@@ -106,11 +108,12 @@ let Particles =  {
         if(p.y < 0) p.y = this.h;
       }
         this.z+=this.zinc;
+        this.z = this.z%10;
     },
     getValue(x, y, scale) {
       if(this.isDown){
-        return this.noise.perlin2(x * scale, y * scale) * Math.PI * 2;
-        // return this.noise.perlin3(x * scale, y * scale, this.zinc) * Math.PI * 2;
+        // return this.noise.perlin2(x * scale, y * scale) * Math.PI * 2;
+        return this.noise.perlin3(x * scale, y * scale, this.z) * Math.PI * 2;
       }else{
         return this.noise.perlin3(x * scale, y * scale, this.z) * Math.PI * 2;
         // return this.noise.perlin2(x * scale, y * scale) * Math.PI * 2;

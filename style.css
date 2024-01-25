@@ -67,13 +67,6 @@ footer{
     visibility:visible;
 }
 
-#colorDot{
-    width:50px;
-    height:auto;
-    background-color: hotpink;
-    z-index: 1000;
-}
-
 #navPanel {
     
     transition:visibility 0.3s linear,opacity 0.3s linear;
@@ -103,8 +96,28 @@ footer{
     padding:4px;
     justify-content: space-around;
     align-content: flex-start;
-    align-items: flex-start;
+   
     align-items: stretch;
+}
+#colorNavBtn{
+    width: auto;
+    height: 3vh;
+    max-height: 30px;
+    /* background-color: hotpink; */
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+}
+.colorNavBtnSwatch{
+    aspect-ratio: 1 / 1; 
+    width: 2vw;
+    /* height: 2vh; */
+    max-width: 16px;
+    /* max-height: 16px; */
+    transition: all 0.3s ease-in-out;
+
+    border-radius: 2px;
+    margin: 1px;
 }
 .palette{
     
@@ -202,9 +215,7 @@ footer{
 } 
 #magic{
     position: relative;
-    /* margin-top:-30vh; */
-    /* margin-top:2vh; */
-    /* margin-bottom: 10vh; */
+    
     padding: vh 0;
     font-size: 6vw;
     font-weight: 700;    
@@ -472,7 +483,9 @@ footer{
         width: 100vw;
         right:0;
     }
-   
+    .colorNavBtnSwatch{
+        width: 4vw;
+    }
     .palette{
         /* background-color: #eFeFeF; */
         margin: .1vw;
@@ -481,8 +494,6 @@ footer{
         
     }
     .paletteItem{
-        /* width: 10px;
-        height: 10px; */
         width: max(1vw, 10px);
         height: max(1vh, 10px);
         
