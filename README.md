@@ -2,5 +2,5 @@
  the first placeholder
 
 
-https://radicaldotgraphics.github.io/origin/
+https://radical.graphics
 
