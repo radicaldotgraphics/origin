@@ -15,37 +15,32 @@ body{
     user-select: none;
     
 }
-#nav{
+#nav, #footer{
     width: auto;
     height: 4vh;
     min-height: 32px;
     display: flex;
-    flex-direction: row-reverse;
     align-items: center;
     justify-content: space-between;
+    padding: 4px 16px;
+    transition: all 0.3s ease-in-out;
+    background-color: white;
+    flex-direction: row-reverse;
+    z-index: 999;
     position: fixed;
+}
+#nav{
     top:0;
     left:0;
     right:0;
-    padding: 4px 16px;
-    transition: all 0.3s ease-in-out;
-    z-index: 999;
-    background-color: white;
-    display: flex;
     box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.18);
 }
-footer{
-    width: auto;
-    height: 4vh;
-    min-height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 4px 16px;
-    
-    transition: all 0.3s ease-in-out;
-    background-color: white;
-    
+#footer{
+    bottom:0;
+    left: 0;
+    right: 0;
+    flex-direction: row;
+
     /* box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.18); */
 }
 .hideNav {
@@ -76,9 +71,34 @@ footer{
     box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.12);
     padding: 0;
     margin: 0;
-    z-index: 999;
+    z-index: 44;
     
   }
+#footerPanel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition:visibility 0.3s linear,opacity 0.3s linear;
+    position: absolute;
+    bottom:34px;
+    max-width: 30vw;
+    box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.12);
+    padding: 16px;
+    margin: 0;
+    z-index: 44;
+    background-color: #efefef;
+    flex-direction: column;
+    
+  }
+#footerPanel .titlecopy{
+    font-size: 2vw;
+    font-weight: 700;
+}
+#footerPanel .title{
+    font-family: field-gothic-compact, sans-serif;
+    font-size: 1.5vw;
+    font-weight: 700;
+}
   #navModal{
     width:100vw;
     height: 100%;
@@ -144,9 +164,9 @@ footer{
     
     
 }
-#nav > img{
+/* #nav > img{
     margin-right: 8px;
-}
+} */
 
 #introContainer{
     position: relative;
@@ -328,7 +348,7 @@ footer{
     font-weight: 700;
     
 }
-.explainerTxt .bodycopy{
+.bodycopy{
     font-weight: 400;
     font-size: max(1vw, 16px);
     text-align: left;
@@ -336,6 +356,11 @@ footer{
 
 }
 
+.lists{
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+}
 
 #principles{
     position: relative;
@@ -347,6 +372,7 @@ footer{
 }
 .bodyText{
     text-align: center;
+    font-size: 1.5vw;
 } 
 #canvases{
     position: relative;
@@ -391,7 +417,7 @@ footer{
     flex-direction: column;
     align-items: center;
     font-size: 50vw;
-    
+    transition: all 0.3s ease-in-out;
     
     overflow: hidden;
 }
@@ -539,12 +565,28 @@ footer{
     #qr{
         width: 60vw;
         font-size: 100vw;
-       
         /* max-width: 80vw; */
-
+        
+    }
+    #qrContainer{
+        margin-bottom: 4vh;
     }
     #qrContainer > .bodyText{
         font-size: 0.075em;
+    }
+    #footerPanel {
+        bottom:34px;
+        max-width: 90vw;
+        padding: 8px;
+    }
+    #footerPanel .titlecopy{
+        font-size: 8vw;
+        font-weight: 700;
+    }
+    #footerPanel .title{
+        font-family: field-gothic-compact, sans-serif;
+        font-size: 6vw;
+        font-weight: 700;
     }
  }
  

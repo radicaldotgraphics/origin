@@ -38,8 +38,9 @@ const headlines = document.querySelectorAll('.headline');
 const txtContainer = document.querySelectorAll('.txtContainer');
 const explainerTxt = document.querySelectorAll('.explainerTxt');
 const nav = document.querySelector('#nav');
-const footer = document.querySelector('footer');
+const footer = document.querySelector('#footer');
 const navPanel = document.querySelector('#navPanel');
+const footerPanel = document.querySelector('#footerPanel');
 const navHeadline = document.querySelector('#navHeadline');
 const navModal = document.querySelector('#navModal');
 const colorNav = document.querySelector('#colorNav')
@@ -91,19 +92,33 @@ const init = () => {
 
     colorNavBtn.onclick = () => {
       // console.log("btn clicked");   
-      navPanel.classList.toggle('showNav')
-      navPanel.classList.toggle('hideNav')
+      navPanel.classList.add('showNav')
+      navPanel.classList.remove('hideNav')
       // if(navModal.classList.contains('hideNav')){
-        navModal.classList.toggle('showNav')
-        navModal.classList.toggle('hideNav')
+        navModal.classList.add('showNav')
+        navModal.classList.remove('hideNav')
       // }
+      footerPanel.classList.add('hideNav')
+      footerPanel.classList.remove('showNav')
     }
     navModal.onclick = () => {   
       // console.log("clickd")
       navPanel.classList.add('hideNav')
       navPanel.classList.remove('showNav')
-      navModal.classList.toggle('showNav')
-        navModal.classList.toggle('hideNav')
+      footerPanel.classList.add('hideNav')
+      footerPanel.classList.remove('showNav')
+      navModal.classList.remove('showNav')
+        navModal.classList.add('hideNav')
+    }
+    footer.onclick = () => {
+      footerPanel.classList.add('showNav')
+      footerPanel.classList.remove('hideNav')
+        navModal.classList.add('showNav')
+        navModal.classList.remove('hideNav')
+        navPanel.classList.add('hideNav')
+        navPanel.classList.remove('showNav')
+      
+
     }
     if(isMobile){
       document.querySelector("#desktopInstructions").classList.add('hideNav');
@@ -258,6 +273,7 @@ const initQuadrants = () => {
           services.style.color = arr[0];
           principles.style.color = arr[0];
           navHeadline.style.color = arr[0];
+          footerPanel.style.background = arr[1]
           qrHeadlines.forEach((e)=>{
             e.style.color = arr[1]
           })
@@ -277,6 +293,7 @@ const initQuadrants = () => {
           services.style.color = arr[1];
           principles.style.color = arr[1];
           navHeadline.style.color = arr[1];
+          footerPanel.style.background = arr[1]
           qrHeadlines.forEach((e)=>{
             e.style.color = arr[1];
           })
