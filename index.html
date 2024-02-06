@@ -18,13 +18,15 @@
    
     
     
+    
+    
     <!-- <script type="module" crossorigin src="./script.js"></script>
    <link rel="stylesheet" href="./style.css">  -->
     
   
 
-  <script type="module" crossorigin src="/assets/index-ef74a9e3.js"></script>
-  <link rel="stylesheet" href="/assets/index-09e0176c.css">
+  <script type="module" crossorigin src="./assets/index-e5e3bdef.js"></script>
+  <link rel="stylesheet" href="./assets/index-b8d047fc.css">
 </head>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-BL1ZXZTVPS"></script>
@@ -36,6 +38,7 @@
         <div id="navPanel" class="hideNav">
             <div class="headline" id="navHeadline">choose a palette</div>
             <div id="colorNav"></div>
+			<button id="randomBtn">Randomize</button>
         </div>
     </nav>
     <div id="introContainer">
@@ -64,7 +67,7 @@
             <div id="focus">Our Focus:<span class="thinTxt"> Creative Production</span></div>
         </div> 
         <canvas id="model"></canvas>
-         <div class="headline" id="quote"><p><span class="thinTxt">“Radical is a creative Swiss Army Knife. A five-tool player. <br>Their understanding of design, copy, brand, tech, and UI makes them a uniquely remarkable partner. <br>But it's their ability to iterate on and execute a vision with an open-minded, ego-free, singular focus on creating the best result that makes them an invaluable asset.”</span><br><br> —Current Client</p></div>
+         <div class="headline" id="quote"><p><span class="thinTxt">“Radical is a creative Swiss Army Knife. A five-tool player. Their understanding of design, copy, brand, tech, and UI makes them a uniquely remarkable partner. But it's their ability to iterate on and execute a vision with an open-minded, ego-free, singular focus on creating the best result that makes them an invaluable asset.”</span><br><br> —Current Client</p></div>
        <div class="headline " id="services">Radical's Services</div>
         <!-- offering divs  -->
         <div id="offeringsContainer">
@@ -361,9 +364,10 @@
       
     <footer id="footer">
         <div id="about">about the site</div>
+        <!-- <div id="footerPanel"> -->
         <div id="footerPanel" class="hideNav">
-            <p class="titlecopy">Radical Graphics</p>
-            <p class="bodycopy">Tools & Software Used</p>
+            <p class="titlecopy" style='text-align: center;'>Radical Graphics<br><span class="bodycopy">Tools & Software Used</span></p>
+            
             <div class="lists">
                 <div class="list">
                     <p class="title">Design:</p>
@@ -390,10 +394,22 @@
                         
                     </ul>
                 </div>
-            </div>
-            <p class="bodycopy">Lots of other open-source tooling, ideas, algorithms, etc were used. Where do you draw the line? Chrome Dev Tools? MacOS? Cyberspace?<br><br> The site is a work-in-progress, and a lot of optimization still needs to happen: HDR & GLB compression, lots of orphaned styles and divs, etc. The 3D wheel and the AR demo will be improved in the near future as time allows.</p>
+		</div>
+            <p class="bodycopy">What parts of the site did I make? I used lots of other open-source tooling, ideas, algorithms, etc. Where's the line between what I 'made' and what I just 'used'? I've followed countless tutorials, used Blender plugins, Ken Perlin's noise algorithm, etc...It's tricky to say what "I" did (Chrome Dev Tools? MacOS? Cyberspace?) vs what I 'adapted'.</p>
+			<p class="bodycopy">That's getting pretty philosophical. Suffice to say that other than the tools above this site was created in vanilla Javascript + CSS. </p>
+			<p class="bodycopy">The site is a work-in-progress, and a lot of optimization still needs to happen: HDR & GLB compression, lots of orphaned styles and divs, etc. The 3D wheel and the AR demo will be improved in the near future as time allows.</p>
+			<p class="bodycopy">Wanna build something together? Reach out at <a href="mailto:jared@radical.graphics">jared@radical.graphics</a></p>
+			
             
-        </div>
+        
+		</div>
+		<div id="footer-rt">
+			<a id='email' href="mailto:jared@radical.graphics">
+				<svg viewBox="0 0 222.87 170.17">
+					<path id="mail-icon" d="M3.87,14.38c16.24,18.14,32.47,36.28,48.71,54.41,9.28,10.37,18.53,20.76,27.89,31.07,17.67,19.47,44.3,19.55,61.95-.04,24.08-26.72,47.95-53.62,71.92-80.44,1.61-1.8,3.29-3.55,6.13-6.6.97,5.49,2.27,9.43,2.28,13.38.15,39.47.18,78.95.05,118.42-.05,14.99-10.86,25.54-25.92,25.56-56.94.06-113.88.06-170.83,0-15.07-.01-25.91-10.55-25.96-25.52C-.05,104.97-.01,65.33.14,25.69c.01-3.78,1.31-7.56,2.02-11.33l1.71.02ZM18.74,4.8c25.08,28.01,50.3,55.89,75.21,84.05,8.87,10.03,26.37,9.79,35.28-.32,24.54-27.83,49.42-55.36,74.11-83.06.89-1,1.21-2.51,1.79-3.78-1.32-.52-2.61-1.12-3.97-1.52-.77-.23-1.65-.15-2.48-.15C140.46,0,82.23,0,24,.05c-2.19,0-4.37.64-7.59,1.15,1.28,2.01,1.7,2.9,2.32,3.6Z"/>
+				</svg>
+			</a>
+		</div>
     </footer>
 
     <svg class="logo" id="logoSrc" viewBox="0 0 312 88">

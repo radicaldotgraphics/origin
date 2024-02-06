@@ -7,8 +7,8 @@ import ThreeScene from './threescene';
 let firstTime=true;
 let logoAnim = null;
 let arrowAnims = [];
-const time_ms = 800;
-// let counter = 0;
+const time_ms = 3200;
+// let counter = 1234;
 let counter = time_ms-22;
 let deviceType = null;
 let mouse = {
@@ -45,6 +45,7 @@ const navHeadline = document.querySelector('#navHeadline');
 const navModal = document.querySelector('#navModal');
 const colorNav = document.querySelector('#colorNav')
 const colorNavBtn = document.querySelector("#colorNavBtn")
+const randomBtn = document.querySelector("#randomBtn")
 const withtxt = document.querySelector('#with');
 const dlmagic = document.querySelector('#dlmagic')
 const rgraphics = document.querySelector('#rgraphics')
@@ -60,6 +61,7 @@ const qr = document.querySelector('#qr')
 const qrHeadlines = document.querySelectorAll('#qrContainer > .bodyText');
 const links = document.querySelectorAll('a');
 const logoSrc = document.querySelector('#logoSrc');
+const mailicon = document.querySelector('#mail-icon');
 
 
 
@@ -111,27 +113,33 @@ const init = () => {
         navModal.classList.add('hideNav')
     }
     footer.onclick = () => {
-      footerPanel.classList.add('showNav')
-      footerPanel.classList.remove('hideNav')
+      footerPanel.classList.toggle('showNav')
+      footerPanel.classList.toggle('hideNav')
         navModal.classList.add('showNav')
         navModal.classList.remove('hideNav')
         navPanel.classList.add('hideNav')
         navPanel.classList.remove('showNav')
-      
-
     }
+    randomBtn.onclick = () => {
+      let rand = Math.floor(Math.floor(Math.random()*palettes.length));
+      quadrants.calculateNewPalette(rand)
+    }
+    //
     if(isMobile){
       document.querySelector("#desktopInstructions").classList.add('hideNav');
     }else{
       document.querySelector("#mobileInstructions").classList.add('hideNav');
     }
     // console.log(logoSrc);
-    let navLogo = logoSrc.cloneNode(true);
-    let footerLogo = logoSrc.cloneNode(true);
+    const navLogo = logoSrc.cloneNode(true);
+    const footerLogo = logoSrc.cloneNode(true);
+    const aboutLogo = logoSrc.cloneNode(true);
     navLogo.setAttribute("id", "navLogo")
     footerLogo.setAttribute("id", "footerLogo")
+    aboutLogo.setAttribute("id", "aboutLogo")
     nav.appendChild(navLogo);
-    footer.appendChild(footerLogo);
+    footer.querySelector('#footer-rt').appendChild(footerLogo);
+    footerPanel.appendChild(aboutLogo);
 
 
    loop();
@@ -148,10 +156,7 @@ const initColorNav = () => {
     let pall = document.createElement('div');
     pall.setAttribute("class", 'palette');
     pall.setAttribute("pos", i);
-    // pall.style.background = e.colors[0];
-    // d.style.width = '20px'
-    // d.style.height = '20px'
-    e.colors.map(c => {
+      e.colors.map(c => {
       let swatch = document.createElement('div');
       swatch.setAttribute("class", "paletteItem");
       swatch.style.background = c;
@@ -226,13 +231,6 @@ const initQuadrants = () => {
     quadrants.calculateNewPalette = (num) => {
       num = Math.max(0, num)
       let colors = palettes[num].colors;
-      
-      // console.log(colors);
-      // colors.forEach((c, i) => {
-      //   // console.log(c, i);
-      //   let tgt = document.querySelector(`#swatch${i}`);
-      //   tgt.style.background = c;
-      // })
       let count = 0;
       for (let i = 9; i >= 0; i--) {
         let tgt = document.querySelector(`#swatch${i}`);
@@ -264,7 +262,7 @@ const initQuadrants = () => {
             e.style.background = arr[1]
           })
           
-          withtxt.style.color = arr[1]
+          withtxt.style.color = arr[0]
           withtxt.style.background = arr[2]
           dlmagic.style.color = arr[2];
           rgraphics.style.color = arr[0];
@@ -311,6 +309,10 @@ const initQuadrants = () => {
         footer.style.color=arr[0];
         navLogo.style.fill=arr[0];
         footerLogo.style.fill=arr[0];
+        aboutLogo.style.fill=arr[0];
+        randomBtn.style.background = arr[arr.length-1];
+        randomBtn.style.color = arr[0];
+        mailicon.style.fill=arr[0];
         explainerTxt.forEach((txt) => {
 
           // txt.style.background = arr[0];
@@ -991,6 +993,7 @@ let loop = () => {
         }
      }
     checkIfVisible();
+    // console.log(counter);
     requestAnimationFrame(loop);
 }
 
