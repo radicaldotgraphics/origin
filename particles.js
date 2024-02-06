@@ -120,8 +120,8 @@ let Particles =  {
        
       }
     },resize(){
-      console.log("resizing particles");
-      // return;
+      // console.log("resizing particles");
+      return;
       this.w = window.innerWidth;
       this.h = window.innerHeight/2;
       this.canvas.width = this.canvasDot.width = this.w;
