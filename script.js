@@ -126,9 +126,9 @@ const init = () => {
     }
     //
     if(isMobile){
-      document.querySelector("#desktopInstructions").classList.add('hideNav');
+      document.querySelector("#desktopInstructions")?.classList.add('hideNav');
     }else{
-      document.querySelector("#mobileInstructions").classList.add('hideNav');
+      document.querySelector("#mobileInstructions")?.classList.add('hideNav');
     }
     // console.log(logoSrc);
     const navLogo = logoSrc.cloneNode(true);
@@ -324,7 +324,7 @@ const initQuadrants = () => {
         })
         Particles.clr = arr[1];
         ThreeScene.changeColor(arr[1])
-        qr.style.fill = arr[1]
+        if (qr) qr.style.fill = arr[1]
         //from 2-10 colors
         switch (num) {
         case 2:
