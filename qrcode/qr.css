@@ -1,0 +1,490 @@
+/* QR Code Generator — radical.graphics/qrcode
+   Type + palette follow the main site (style.css). */
+
+:root {
+    --ink: #000;
+    --paper: #fff;
+    --stage: #eaeaea;
+    --line: #d8d8d8;
+    --muted: #767676;
+    --good: #12833b;
+    --warn: #b06a00;
+    --bad: #c62222;
+    --ease: all 0.3s ease-in-out;
+    --shell: 1244px; /* content caps here; below it everything is fluid */
+}
+
+* { box-sizing: border-box; }
+
+/* Class-level `display` would otherwise outrank the UA rule for [hidden]. */
+[hidden] { display: none !important; }
+
+body {
+    font-family: field-gothic-wide, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    color: var(--ink);
+    background: var(--paper);
+    font-size: 0.9em;
+    margin: 0;
+    padding: 0;
+    /* Locked to the viewport so the preview stays put and only the control
+       column scrolls. Released at the mobile breakpoint below. */
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+
+/* Mark sits inline above the title and links back to the main site. */
+#qrMark {
+    display: block;
+    line-height: 0;
+    text-decoration: none;
+    color: inherit;
+    transition: var(--ease);
+}
+
+#qrMark:hover { opacity: 0.55; }
+
+#qrLogo {
+    height: 56px;
+    width: auto;
+    fill: var(--ink);
+    display: block;
+}
+
+#qrMarkAnim {
+    display: none;
+    height: 56px;
+    aspect-ratio: 1607 / 452; /* the artwork's own bounds, matching #qrLogo */
+}
+
+/* Once the animation is live it replaces the static mark. */
+#qrMark.animated #qrLogo { display: none; }
+#qrMark.animated #qrMarkAnim { display: block; }
+
+#qrMarkAnim svg { display: block; width: 100%; height: 100%; }
+
+/* ── Layout ─────────────────────────────────────────────── */
+
+#qrApp {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    width: 100%;
+    max-width: var(--shell);
+    margin: 0 auto;
+}
+
+/* Title and link stack centred across the full width, above everything else. */
+#qrHead {
+    background: var(--paper);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding: 26px 32px 24px;
+    flex: 0 0 auto;
+}
+
+/* Block stays centred; label and note align to the field's left edge. */
+#qrLinkBar {
+    width: min(460px, 100%);
+    text-align: left;
+}
+
+#qrLinkBar .groupLabel { margin-bottom: 8px; }
+
+/* The code and the controls sit side by side beneath the head. */
+#qrBody {
+    flex: 1 1 auto;
+    display: grid;
+    /* Control column is fluid between these bounds, so the two-column layout
+       holds all the way down to the 900px breakpoint. */
+    grid-template-columns: minmax(0, 1fr) clamp(320px, 30%, 420px);
+    align-items: stretch;
+    min-height: 0;
+}
+
+/* Only once the shell stops growing does it need edges to sit against. */
+@media (min-width: 1245px) {
+    #qrApp {
+        border-left: 1px solid var(--line);
+        border-right: 1px solid var(--line);
+    }
+}
+
+#qrPreviewPane {
+    background: var(--stage);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+#qrPreviewInner {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+    width: min(420px, 70%, 46vh);
+}
+
+#qrStageWrap {
+    width: 100%;
+    aspect-ratio: 1;
+}
+
+#qrStage {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#qrStage svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+}
+
+#qrStage .stageMsg {
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+    letter-spacing: 0.04em;
+}
+
+/* Export buttons: a row directly under the code, spanning its width. */
+#qrDownloads {
+    display: flex;
+    gap: 8px;
+}
+
+.dlBtn {
+    flex: 1 1 0;
+    font-family: field-gothic-wide, sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    padding: 11px 8px;
+    border-radius: 99px;
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+    transition: var(--ease);
+}
+
+.dlBtn:hover:not(:disabled) {
+    background: var(--ink);
+    color: var(--paper);
+}
+
+.dlBtn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* Secondary to everything else in the pane — quiet, not a callout. */
+#qrHint {
+    align-self: center;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted);
+    opacity: 0.75;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    margin-top: 2px;
+}
+
+#qrHint::before {
+    content: "i";
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    font-size: 8px;
+    flex: 0 0 auto;
+}
+
+#qrControls {
+    padding: 22px 36px 48px;
+    overflow-y: auto;
+    border-left: 1px solid var(--line);
+
+    /* Scrollbar stays out of the way until you're actually in the panel —
+       a permanent track next to the controls reads as visual noise. */
+    scrollbar-width: none;          /* Firefox */
+    -ms-overflow-style: none;       /* legacy Edge */
+}
+
+#qrControls::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+}
+
+#qrControls:hover,
+#qrControls:focus-within { scrollbar-width: thin; }
+
+#qrControls:hover::-webkit-scrollbar,
+#qrControls:focus-within::-webkit-scrollbar { width: 6px; }
+
+#qrControls::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.22);
+    border-radius: 99px;
+}
+
+#qrControls .group:first-of-type { padding-top: 0; }
+
+#qrTitle {
+    font-family: field-gothic-compact, sans-serif;
+    font-weight: 700;
+    font-size: clamp(26px, 2.8vw, 38px);
+    line-height: 1.05;
+    margin: 0;
+    letter-spacing: 0.01em;
+    text-align: center;
+}
+
+/* ── Groups ─────────────────────────────────────────────── */
+
+.group {
+    padding: 22px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+#qrControls .group:last-of-type { border-bottom: none; }
+
+.groupLabel {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+}
+
+.optRow + .groupLabel { margin-top: 20px; }
+
+.note {
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--muted);
+    margin-top: 10px;
+    letter-spacing: 0.02em;
+}
+
+.note:empty { display: none; }
+
+.note.alert { color: var(--bad); }
+
+/* ── Link input ─────────────────────────────────────────── */
+
+#qrUrl {
+    width: 100%;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    border-radius: 6px;
+    padding: 12px 14px;
+    transition: var(--ease);
+}
+
+#qrUrl:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
+}
+
+#qrUrl::placeholder { color: #aaa; }
+
+/* ── Option buttons ─────────────────────────────────────── */
+
+.optRow {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.opt {
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: #f2f2f2;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: var(--ink);
+    cursor: pointer;
+    transition: var(--ease);
+}
+
+.opt svg { width: 24px; height: 24px; display: block; }
+
+.opt:hover { background: #e4e4e4; }
+
+.opt[aria-checked="true"] {
+    background: var(--paper);
+    border-color: var(--ink);
+    box-shadow: 0 0 0 1px var(--ink);
+}
+
+.opt:disabled { opacity: 0.35; cursor: not-allowed; }
+.opt:disabled:hover { background: #f2f2f2; }
+
+.opt.pill {
+    width: auto;
+    min-width: 84px;
+    height: 40px;
+    padding: 0 20px;
+    border-radius: 99px;
+    font-family: inherit;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+}
+
+/* ── Color ──────────────────────────────────────────────── */
+
+.colorRow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    transition: var(--ease);
+}
+
+/* Transparent background switches the colour off, so the whole row —
+   swatch, hex field and label — dims to match the disabled control. */
+.colorRow.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.swatch {
+    position: relative;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 auto;
+    cursor: pointer;
+}
+
+.swatch input[type="color"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+}
+
+.swatchChip {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+.hex {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 13px;
+    text-transform: uppercase;
+    width: 100px;
+    padding: 10px 12px;
+    color: var(--ink);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    transition: var(--ease);
+}
+
+.hex:focus { outline: none; border-color: var(--ink); }
+.hex.invalid { border-color: var(--bad); }
+
+.swatchName {
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+}
+
+.check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    margin-top: 12px;
+    cursor: pointer;
+}
+
+.check input { margin: 0; cursor: pointer; accent-color: var(--ink); }
+
+.contrast {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+}
+
+.contrastDot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+    background: var(--muted);
+}
+
+.contrast.good .contrastDot { background: var(--good); }
+.contrast.warn .contrastDot { background: var(--warn); }
+.contrast.bad  .contrastDot { background: var(--bad); }
+.contrast.good .contrastText { color: var(--good); }
+.contrast.warn .contrastText { color: var(--warn); }
+.contrast.bad  .contrastText { color: var(--bad); }
+
+/* ── Responsive ─────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+    body { height: auto; min-height: 100vh; overflow: visible; }
+
+    /* Head stacks, then the code, then the controls beneath it. */
+    #qrBody { grid-template-columns: 1fr; }
+
+    #qrHead {
+        gap: 16px;
+        padding: 24px 24px 22px;
+    }
+
+    #qrPreviewPane {
+        min-height: 0;
+        padding: 28px 24px 32px;
+    }
+
+    #qrPreviewInner { width: min(320px, 88%); }
+
+    #qrControls {
+        border-left: none;
+        border-top: 1px solid var(--line);
+        padding: 28px 24px 48px;
+        overflow-y: visible;
+    }
+}
