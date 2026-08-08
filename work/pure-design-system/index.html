@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Design System: Pure Storage — Radical Graphics</title>
+<meta name="description" content="I led the UX of a global rebrand for Pure Storage in 2020, encompassing everything from the layout grid to the interaction design. 
+I led the design-to-dev">
+<link rel="icon" href="../../favicon.ico">
+<link rel="stylesheet" href="../work.css">
+</head>
+<body class="detail">
+<header class="nav">
+  <a class="nav-home" href="https://radical.graphics/">Radical<span>.Graphics</span></a>
+  <nav>
+    <a href="../index.html">Work</a>
+    <a href="https://radical.graphics/">Studio</a>
+    <a href="mailto:jared@radical.graphics">Contact</a>
+  </nav>
+</header>
+
+<article>
+  <header class="case-head">
+    <h1>Design System: Pure Storage</h1>
+    <dl class="case-meta">
+      <div><dt>Year</dt><dd>2020</dd></div>
+      <div><dt>Discipline</dt><dd>Design System, UX, Figma</dd></div>
+    </dl>
+  </header>
+  <section class="prose"><p>I led the UX of a global rebrand for Pure Storage in 2020, encompassing everything from the layout grid to the interaction design. <br>I led the design-to-dev handoff process and established Pure's Design System from the atomic-level on up, and the rebuild of a completely new set of AEM Components.</p></section>
+  <section class="media hero"><figure><img src="../img/pure-design-system/01-1600.webp" srcset="../img/pure-design-system/01-800.webp 800w, ../img/pure-design-system/01-1600.webp 1600w" sizes="100vw" width="1920" height="1128" loading="eager" decoding="async" alt=""></figure><p class="modcap">Screenshot of Pure's new expanded color palette.</p></section>
+  <section class="prose"><h2>Objective</h2><p>Pure's brand hadn't evolved much in the last few years.<br>The creative was often recycled and the brand felt restricting; Pure's primary orange color and icon was well-known within the industry but beyond that the brand didn't have any flexibility when it came to colors etc.<br> <br>In recent years the company expanded beyond storage to include other data solutions and products, but their name still had 'Storage' in it and their stock ticker ($PSTG) used 3 of the 4 letters for 'Storage'. <br>Pure's brand needed an overhaul.<br>This initiative was led by our VP of Brand, Sun Lee. <br>Sun thinks big and initially wanted to change the company name, the logo, the stock ticker etc. <br>Eventually we settled on a much more tame version of a rebrand, primarily around design/fonts/components based on a re-defined set of core brand principles; that alone ended up being a big enough undertaking.</p></section>
+  <section class="media"><figure><img src="../img/pure-design-system/02-1600.webp" srcset="../img/pure-design-system/02-800.webp 800w, ../img/pure-design-system/02-1600.webp 1600w" sizes="(max-width:800px) 92vw, 70vw" width="1920" height="1128" loading="lazy" decoding="async" alt=""></figure><p class="modcap">Figma Home Screens showing our different levels of elements, components and templates.</p></section>
+  <section class="prose"><h2>Foundation</h2><p>Colors &amp; Fonts<br>The design team worked with some outside agencies to help settle on a color palette. We also moved from Proxima Nova and opted to stay within what was available with Google Fonts for a number of reasons. We ended up with Inter a nd Space Mono.<br>Grid\<br>Pure's component system was the result of years of rapid growth; an accumulation of technical debt essentially removed any sort of standard responsive grid. <br>I advocated for this grid implementation with the dev team and was able to get this prioritized, as it was foundational to all the other parts of the system we were building. <br>We created global shared styles in Figma so that all our designers could work on the same grid to ensure consistency.</p></section>
+  <section class="media"><figure><img src="../img/pure-design-system/03-1600.webp" srcset="../img/pure-design-system/03-800.webp 800w, ../img/pure-design-system/03-1600.webp 1600w" sizes="(max-width:800px) 92vw, 70vw" width="1920" height="1128" loading="lazy" decoding="async" alt=""></figure><p class="modcap">Pure's Grid System, documented here in Figma. Figma styles were created for consistency in all future page/component builds.</p></section>
+  <section class="prose"><h2>Design</h2><p>Components<br>We spent a lot of time with messaging, deciding how to best present content at a system level in a way that aligned both to our brand principles and our actual content structures and narratives.<br>Initially we began with some atomic elements but then immediately jumped in to specific components, e.g. the 'Text + Image' component. This is a component we knew would be on most of the pages, and we knew we were creating a more illustrative style, so we wanted to establish design patterns at this level and base other components off of this. <br>Templates<br>As we progressed, design patterns began to emerge and we began to construct Page Templates, ensuring they worked together as a group of components visually and technically, as well as ensuring that they worked as a storytelling mechanism.<br>Designing a system is no easy feat; there are many considerations that Dev, Brand &amp; Design, UX, SEO, Publishing, Content and Stakeholder teams all want to prioritize.<br>We zoomed in and out from a Micro, atomic level to a Macro, template/system level.<br>Resources were scarce and deadlines were tight, so we opted to only loosely organize components etc - Design documented each component for handoff to Dev, but formalizing documentation was deferred until post-launch and the system was more stable and established.</p></section>
+  <section class="media"><figure><img src="../img/pure-design-system/04-1600.webp" srcset="../img/pure-design-system/04-800.webp 800w, ../img/pure-design-system/04-1600.webp 1600w" sizes="(max-width:800px) 92vw, 70vw" width="1920" height="1128" loading="lazy" decoding="async" alt=""></figure><p class="modcap">Screenshots of design comps (blurred). In the beginning the sky was the limit, and it felt great to be exploring all these different possible directions.</p></section>
+  <section class="prose"><h2>Organizing the System</h2><p>There was still a ton of work to do once the site launched and the dust settled. The work was broken into 3 separate buckets:<br>Documentation/Organization <br>We needed to document these freshly-built components in the system and organize the files into a coherent structure.<br>Consolidation<br>We found many components solved the same problem, or that the mobile view on two different components were very similar. In these cases we replaced these components with different Variants of a single component or else aligned different mobile views to simplify the experience<br>Iteration <br>We reduced scope on most of the components to meet our deadline, and there was oversight on some elements (some small alignment issues etc). Additionally, stakeholders wanted more features once they got their hands on the site, and different teams began asking for improvements. </p><p>The system is broken down into Assets, Visual Attributes, Components and Layouts. <br>Each Components' Figma file contains the following:</p><p>1. Title Page - Consists of the thumbnail, readme and changelog.<br>2. Library Components Page - The components to be published to the shared library.<br>3. Handoff Page - This is primarily documentation for the Dev team and a list of the different variants to be referenced by the Design team.</p></section>
+  <section class="media"><figure><img src="../img/pure-design-system/05-1600.webp" srcset="../img/pure-design-system/05-800.webp 800w, ../img/pure-design-system/05-1600.webp 1600w" sizes="(max-width:800px) 92vw, 70vw" width="1920" height="1128" loading="lazy" decoding="async" alt=""></figure><p class="modcap">Components each have their own Figma file.</p></section>
+  <section class="media"><figure><img src="../img/pure-design-system/06-1600.webp" srcset="../img/pure-design-system/06-800.webp 800w, ../img/pure-design-system/06-1600.webp 1600w" sizes="(max-width:800px) 92vw, 70vw" width="1920" height="1128" loading="lazy" decoding="async" alt=""></figure><p class="modcap">Each Component is exported separately, when creating a new page layout the designer can turn on everything they need and immediately have access.
+Colors, Grid, Typography is all turned on at the team level so it's on by default for each project.</p></section>
+  <section class="prose"><h2>A word about Figma</h2><p>I generally try to be tool-agnostic and use the best tool for the job. <br>Figma has turned me into a loyal fan. <br>I won't hesitate to consider new software tooling if something better comes along, but Figma is fantastic and this project was made 10x easier with Figma than without. <br>Shared Libraries, Auto-Layout, etc. have changed so much about how design and dev stay in sync, it's definitely a game-changer.</p></section>
+  <section class="prose"><h2>The Future</h2><p>A design system needs to be treated like a product, or it's going to quickly show signs of neglect.<br>There's a backlog a mile long for feature requests, but thus far it's been a very successful launch. </p><p> <br> <br> <br> <br> </p><p> </p><p> </p><p> <br> <br> ↑Back to Top</p></section>
+</article>
+<nav class="prevnext"><a class="pn prev" href="../graphytequeue-redesign-quantifind/"><span>Previous</span><b>GraphyteQueue Redesign: Quantifind</b></a><a class="pn next" href="../pure-customer-stories/"><span>Next</span><b>Customer Stories: Pure Storage</b></a></nav>
+<footer class="foot">
+  <span>© 2026 Radical Graphics</span>
+  <a href="mailto:jared@radical.graphics">jared@radical.graphics</a>
+</footer>
+<script src="../work.js" defer></script>
+</body>
+</html>

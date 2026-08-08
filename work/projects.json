@@ -1,0 +1,1651 @@
+{
+  "curated": [
+    {
+      "slug": "radical-graphics",
+      "title": "Radical Graphics",
+      "year": 2023,
+      "tags": [
+        "Brand",
+        "Web",
+        "Creative Dev"
+      ],
+      "intro": "Radical.Graphics is a creative technology studio specializing in cutting-edge front-end development and immersive visual design. The company blends technical innovation with artistic direction to build visually stunning, performant web experiences.\nI started this company when I realized the potential that AI brings to a generalist like myself. AI makes an accountant a better accountant, a designer a better designer, an engineer a better engineer\u2014but it doesn't make a designer an accountant. \nFor generalists, this is great! I feel like I have superpowers.",
+      "cover": {
+        "variants": [
+          {
+            "w": 800,
+            "src": "img/radical-graphics/01-800.webp",
+            "bytes": 26536
+          },
+          {
+            "w": 1600,
+            "src": "img/radical-graphics/01-1600.webp",
+            "bytes": 83496
+          }
+        ],
+        "width": 3592,
+        "height": 2382,
+        "ratio": 0.6631
+      },
+      "modules": [
+        {
+          "type": "text",
+          "heading": "",
+          "body": "Radical.Graphics is a creative technology studio specializing in cutting-edge front-end development and immersive visual design. The company blends technical innovation with artistic direction to build visually stunning, performant web experiences.\nI started this company when I realized the potential that AI brings to a generalist like myself. AI makes an accountant a better accountant, a designer a better designer, an engineer a better engineer\u2014but it doesn't make a designer an accountant. \nFor generalists, this is great! I feel like I have superpowers."
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/radical-graphics/01-800.webp",
+                  "bytes": 26536
+                },
+                {
+                  "w": 1600,
+                  "src": "img/radical-graphics/01-1600.webp",
+                  "bytes": 83496
+                }
+              ],
+              "width": 3592,
+              "height": 2382,
+              "ratio": 0.6631
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "heading": "",
+          "body": "The site, https://radical.graphics, is created in vanilla javascript. I tried as much as possible to stick to that - although I used some core libraries like three.js."
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 762,
+                  "src": "img/radical-graphics/02-800.webp",
+                  "bytes": 9318
+                }
+              ],
+              "width": 762,
+              "height": 246,
+              "ratio": 0.3228,
+              "animated": {
+                "frames": 163,
+                "source": "cfd06c32-1723-4acb-8a52-253286b67013.gif",
+                "bytes": 689666,
+                "mp4_bytes": 55222
+              },
+              "video": {
+                "mp4": "img/radical-graphics/02.mp4"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "heading": "",
+          "body": "Radical's brand is emphasizing the 'adaptable' feature of being a generalist - as such I created a brand that wasn't tied to a color palette; the brand could adapt to the current client's colors in presentations, etc. \n\nOn the site the Lottie animations and scroll-driven animations are all dynamically-styled based on the colors assigned."
+        },
+        {
+          "type": "gallery",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/radical-graphics/03-800.webp",
+                  "bytes": 150004
+                },
+                {
+                  "w": 1600,
+                  "src": "img/radical-graphics/03-1600.webp",
+                  "bytes": 390330
+                }
+              ],
+              "width": 1920,
+              "height": 6181,
+              "ratio": 3.2193
+            },
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/radical-graphics/04-800.webp",
+                  "bytes": 160752
+                },
+                {
+                  "w": 1600,
+                  "src": "img/radical-graphics/04-1600.webp",
+                  "bytes": 433926
+                }
+              ],
+              "width": 1920,
+              "height": 6181,
+              "ratio": 3.2193
+            },
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/radical-graphics/05-800.webp",
+                  "bytes": 177120
+                },
+                {
+                  "w": 1600,
+                  "src": "img/radical-graphics/05-1600.webp",
+                  "bytes": 457528
+                }
+              ],
+              "width": 1920,
+              "height": 6181,
+              "ratio": 3.2193
+            },
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/radical-graphics/06-800.webp",
+                  "bytes": 151398
+                },
+                {
+                  "w": 1600,
+                  "src": "img/radical-graphics/06-1600.webp",
+                  "bytes": 404886
+                }
+              ],
+              "width": 1920,
+              "height": 6181,
+              "ratio": 3.2193
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "heading": "",
+          "body": "The logo was designed to work with any color palette, from 2-10 colors - as seen below:"
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/radical-graphics/07-800.webp",
+                  "bytes": 89068
+                },
+                {
+                  "w": 1600,
+                  "src": "img/radical-graphics/07-1600.webp",
+                  "bytes": 183302
+                }
+              ],
+              "width": 2011,
+              "height": 9280,
+              "ratio": 4.6146
+            }
+          ],
+          "caption": "The logo adapts to client colors, and works with palettes from 2-10 colors."
+        }
+      ]
+    },
+    {
+      "slug": "knowledgegraph-quantifind",
+      "title": "KnowledgeGraph: Quantifind",
+      "year": 2022,
+      "tags": [
+        "Product",
+        "Data Viz",
+        "UI"
+      ],
+      "intro": "I Designed KnowledgeGraph, a geo-spatial view for Quantifind's GraphyteSearch product.. I gathered requirements, created visual comps, and wrote JIRA tickets, working with the dev team on daily calls to refine specifications.",
+      "cover": {
+        "variants": [
+          {
+            "w": 800,
+            "src": "img/knowledgegraph-quantifind/01-800.webp",
+            "bytes": 34434
+          },
+          {
+            "w": 1392,
+            "src": "img/knowledgegraph-quantifind/01-1600.webp",
+            "bytes": 81764
+          }
+        ],
+        "width": 1392,
+        "height": 861,
+        "ratio": 0.6185,
+        "animated": {
+          "frames": 390,
+          "source": "8a978512-b698-4c1e-aec1-c46ab653d584.gif",
+          "bytes": 15137832,
+          "mp4_bytes": 1246208
+        },
+        "video": {
+          "mp4": "img/knowledgegraph-quantifind/01.mp4"
+        }
+      },
+      "modules": [
+        {
+          "type": "text",
+          "heading": "",
+          "body": "I Designed KnowledgeGraph, a geo-spatial view for Quantifind's GraphyteSearch product.. I gathered requirements, created visual comps, and wrote JIRA tickets, working with the dev team on daily calls to refine specifications."
+        },
+        {
+          "type": "text",
+          "heading": "Project Overview",
+          "body": "KnowledgeGraph was developed as a geo-spatial extension of Quantifind\u2019s GraphyteSearch product. Designed to provide a global perspective, this view offered analysts a visual approximation of an individual or organization\u2019s network distributed across geographic locations."
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/knowledgegraph-quantifind/01-800.webp",
+                  "bytes": 34434
+                },
+                {
+                  "w": 1392,
+                  "src": "img/knowledgegraph-quantifind/01-1600.webp",
+                  "bytes": 81764
+                }
+              ],
+              "width": 1392,
+              "height": 861,
+              "ratio": 0.6185,
+              "animated": {
+                "frames": 390,
+                "source": "8a978512-b698-4c1e-aec1-c46ab653d584.gif",
+                "bytes": 15137832,
+                "mp4_bytes": 1246208
+              },
+              "video": {
+                "mp4": "img/knowledgegraph-quantifind/01.mp4"
+              }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "heading": "The Challenge",
+          "body": "Understanding networks at a global scale required more than traditional node-link diagrams. Analysts needed a spatially intuitive interface that could surface geographic insights while maintaining the investigative depth of the core product."
+        },
+        {
+          "type": "text",
+          "heading": "My Role",
+          "body": "I led the design and prototyping of the KnowledgeGraph interface, focusing on:\nMap-Based UI Design: \nI designed all custom map elements, ensuring clarity, scalability, and consistency with Graphyte\u2019s visual language.\nInteractive Prototyping: \nI built a high-fidelity Figma prototype with full interaction logic, allowing for seamless usability testing and iteration. The design team was in the process of switching to Figma from Sketch, so I ended up designing in both products as we worked to transition them over. \nCross-Functional Collaboration: \nI worked closely with product, engineering, and fellow designers to align user needs with technical feasibility, iterating on feedback throughout the process."
+        },
+        {
+          "type": "text",
+          "heading": "Impact",
+          "body": "KnowledgeGraph provided users with a new, intuitive way to explore global networks. It elevated investigative capabilities by allowing analysts to visually correlate geographic patterns and connections, ultimately enriching the GraphyteSearch experience. NOTE: I left the company before this feature was fully-implemented."
+        },
+        {
+          "type": "gallery",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/knowledgegraph-quantifind/02-800.webp",
+                  "bytes": 34236
+                },
+                {
+                  "w": 1600,
+                  "src": "img/knowledgegraph-quantifind/02-1600.webp",
+                  "bytes": 84308
+                }
+              ],
+              "width": 1785,
+              "height": 1117,
+              "ratio": 0.6258,
+              "caption": "Dark Mode - Default View"
+            },
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/knowledgegraph-quantifind/03-800.webp",
+                  "bytes": 38776
+                },
+                {
+                  "w": 1600,
+                  "src": "img/knowledgegraph-quantifind/03-1600.webp",
+                  "bytes": 100174
+                }
+              ],
+              "width": 1785,
+              "height": 1117,
+              "ratio": 0.6258,
+              "caption": "Light Mode - Default View"
+            },
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/knowledgegraph-quantifind/04-800.webp",
+                  "bytes": 41222
+                },
+                {
+                  "w": 1600,
+                  "src": "img/knowledgegraph-quantifind/04-1600.webp",
+                  "bytes": 105080
+                }
+              ],
+              "width": 1785,
+              "height": 1117,
+              "ratio": 0.6258,
+              "caption": "Detail View"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "network-graph-quantifind",
+      "title": "Network Graph: Quantifind",
+      "year": 2022,
+      "tags": [
+        "Product",
+        "Data Viz",
+        "Creative Dev"
+      ],
+      "intro": "I Designed Network Graph, a node-based network view for Quantifind's GraphyteSearch product. I gathered requirements, created visual comps, built prototypes, chose the animation libraries and wrote JIRA tickets, working with the dev team on daily calls to refine specifications.",
+      "cover": {
+        "variants": [
+          {
+            "w": 800,
+            "src": "img/network-graph-quantifind/01-800.webp",
+            "bytes": 39922
+          },
+          {
+            "w": 1600,
+            "src": "img/network-graph-quantifind/01-1600.webp",
+            "bytes": 99036
+          }
+        ],
+        "width": 1884,
+        "height": 1136,
+        "ratio": 0.603
+      },
+      "modules": [
+        {
+          "type": "text",
+          "heading": "",
+          "body": "I Designed Network Graph, a node-based network view for Quantifind's GraphyteSearch product. I gathered requirements, created visual comps, built prototypes, chose the animation libraries and wrote JIRA tickets, working with the dev team on daily calls to refine specifications."
+        },
+        {
+          "type": "text",
+          "heading": "Project Overview",
+          "body": "The Network Graph was a core visualization feature designed to display the complex web of connections around a subject\u2014individuals, entities, and their relationships. As part of Quantifind\u2019s broader investigative platform, this node-based view became essential for understanding and exploring entity networks in depth."
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/network-graph-quantifind/01-800.webp",
+                  "bytes": 39922
+                },
+                {
+                  "w": 1600,
+                  "src": "img/network-graph-quantifind/01-1600.webp",
+                  "bytes": 99036
+                }
+              ],
+              "width": 1884,
+              "height": 1136,
+              "ratio": 0.603
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "heading": "The Challenge",
+          "body": "Quantifind needed a performant, highly customizable graph interface that could support real-time exploration, visual clarity, and integration with other investigative tools. The solution had to be both technically robust and flexible enough to meet the visual and functional needs of analysts."
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/network-graph-quantifind/02-800.webp",
+                  "bytes": 23510
+                },
+                {
+                  "w": 1600,
+                  "src": "img/network-graph-quantifind/02-1600.webp",
+                  "bytes": 58258
+                }
+              ],
+              "width": 2808,
+              "height": 1466,
+              "ratio": 0.5221
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "heading": "My Role",
+          "body": "I led the technical implementation of the Network Graph, bridging design and development:\nPrototype Development: \nI collaborated closely with the dev team to build and test early-stage prototypes, helping evaluate various technical approaches.\nLibrary Selection & Integration: \nI drove the decision to use a React-based graph library that enabled rapid deployment and deep visual customization.\nCustom Canvas Rendering:\nUsing vanilla JavaScript, I created bespoke canvas-based shapes and visual elements to meet the unique design requirements of the product.\nInteraction Design & Communication: \nI presented detailed interaction designs to the dev team and played a critical role in aligning design and engineering efforts\u2014ensuring smooth collaboration and a unified product vision."
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/network-graph-quantifind/03-800.webp",
+                  "bytes": 30758
+                },
+                {
+                  "w": 1600,
+                  "src": "img/network-graph-quantifind/03-1600.webp",
+                  "bytes": 76470
+                }
+              ],
+              "width": 1785,
+              "height": 1117,
+              "ratio": 0.6258
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "heading": "Impact",
+          "body": "This feature was pivotal in securing a 5-year contract with the U.S. Department of Defense, validating both its technical execution and strategic value. The Network Graph has since become a cornerstone in Quantifind\u2019s suite of investigative tools.\n\n \n \n \n \n \n\n \n\n \n\n \n \n \u2191Back to Top"
+        }
+      ]
+    },
+    {
+      "slug": "graphytequeue-redesign-quantifind",
+      "title": "GraphyteQueue Redesign: Quantifind",
+      "year": 2021,
+      "tags": [
+        "Product",
+        "UI/UX",
+        "Design System"
+      ],
+      "intro": "I Designed & Delivered one of Quantifind's key products. I gathered requirements, created visual comps, and wrote JIRA tickets, working with the dev team on daily calls to refine specifications.",
+      "cover": {
+        "variants": [
+          {
+            "w": 800,
+            "src": "img/graphytequeue-redesign-quantifind/01-800.webp",
+            "bytes": 37868
+          },
+          {
+            "w": 1542,
+            "src": "img/graphytequeue-redesign-quantifind/01-1600.webp",
+            "bytes": 94156
+          }
+        ],
+        "width": 1542,
+        "height": 863,
+        "ratio": 0.5597,
+        "animated": {
+          "frames": 645,
+          "source": "d03c7922-4685-46b1-a15d-8f6ba505a5a8.gif",
+          "bytes": 15960737,
+          "mp4_bytes": 1223429
+        },
+        "video": {
+          "mp4": "img/graphytequeue-redesign-quantifind/01.mp4"
+        }
+      },
+      "modules": [
+        {
+          "type": "text",
+          "heading": "",
+          "body": "I Designed & Delivered one of Quantifind's key products. I gathered requirements, created visual comps, and wrote JIRA tickets, working with the dev team on daily calls to refine specifications."
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/graphytequeue-redesign-quantifind/01-800.webp",
+                  "bytes": 37868
+                },
+                {
+                  "w": 1542,
+                  "src": "img/graphytequeue-redesign-quantifind/01-1600.webp",
+                  "bytes": 94156
+                }
+              ],
+              "width": 1542,
+              "height": 863,
+              "ratio": 0.5597,
+              "animated": {
+                "frames": 645,
+                "source": "d03c7922-4685-46b1-a15d-8f6ba505a5a8.gif",
+                "bytes": 15960737,
+                "mp4_bytes": 1223429
+              },
+              "video": {
+                "mp4": "img/graphytequeue-redesign-quantifind/01.mp4"
+              }
+            }
+          ],
+          "caption": "Animated portion of Quantifind's GraphyteQueue and Report Generator functionality."
+        },
+        {
+          "type": "text",
+          "heading": "Project Overview",
+          "body": "GraphyteQueue is a core product at Quantifind, used by analysts to investigate and visualize connections between individuals and companies. It enables users to uncover complex networks and trace the relationships and activities that define risk and influence."
+        },
+        {
+          "type": "text",
+          "heading": "The Challenge",
+          "body": "While the tool was powerful, the existing interface lacked visual clarity and responsiveness, limiting its usability across devices and workflows\u2014particularly when analysts needed to present findings to stakeholders in a concise format."
+        },
+        {
+          "type": "text",
+          "heading": "My Role",
+          "body": "I led the UI/UX redesign, focusing on two key goals:\nImproved Responsiveness and Visual Clarity: \nI restructured the component system to be fully responsive, ensuring the application performed consistently across different screen sizes. UI elements were redesigned for better hierarchy and readability, making complex network data easier to interpret.\nExecutive Summary Export: \nI designed and implemented a printable, shareable profile view. This new 'executive summary' feature allowed users to generate a clean, one-page overview of an individual\u2019s network\u2014ideal for reporting and briefing scenarios."
+        },
+        {
+          "type": "text",
+          "heading": "Impact",
+          "body": "The redesign significantly enhanced user experience and workflow efficiency, particularly in collaborative and reporting contexts. The responsive component system also laid the groundwork for easier future development and feature expansion."
+        },
+        {
+          "type": "gallery",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/graphytequeue-redesign-quantifind/02-800.webp",
+                  "bytes": 73228
+                },
+                {
+                  "w": 1250,
+                  "src": "img/graphytequeue-redesign-quantifind/02-1600.webp",
+                  "bytes": 130514
+                }
+              ],
+              "width": 1250,
+              "height": 1684,
+              "ratio": 1.3472
+            },
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/graphytequeue-redesign-quantifind/03-800.webp",
+                  "bytes": 44462
+                },
+                {
+                  "w": 1600,
+                  "src": "img/graphytequeue-redesign-quantifind/03-1600.webp",
+                  "bytes": 113746
+                }
+              ],
+              "width": 1920,
+              "height": 1210,
+              "ratio": 0.6302
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "pure-design-system",
+      "title": "Design System: Pure Storage",
+      "year": 2020,
+      "tags": [
+        "Design System",
+        "UX",
+        "Figma"
+      ],
+      "intro": "I led the UX of a global rebrand for Pure Storage in 2020, encompassing everything from the layout grid to the interaction design. \nI led the design-to-dev handoff process and established Pure's Design System from the atomic-level on up, and the rebuild of a completely new set of AEM Components.",
+      "cover": {
+        "variants": [
+          {
+            "w": 800,
+            "src": "img/pure-design-system/01-800.webp",
+            "bytes": 13512
+          },
+          {
+            "w": 1600,
+            "src": "img/pure-design-system/01-1600.webp",
+            "bytes": 29854
+          }
+        ],
+        "width": 1920,
+        "height": 1128,
+        "ratio": 0.5875
+      },
+      "modules": [
+        {
+          "type": "text",
+          "heading": "",
+          "body": "I led the UX of a global rebrand for Pure Storage in 2020, encompassing everything from the layout grid to the interaction design. \nI led the design-to-dev handoff process and established Pure's Design System from the atomic-level on up, and the rebuild of a completely new set of AEM Components."
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/pure-design-system/01-800.webp",
+                  "bytes": 13512
+                },
+                {
+                  "w": 1600,
+                  "src": "img/pure-design-system/01-1600.webp",
+                  "bytes": 29854
+                }
+              ],
+              "width": 1920,
+              "height": 1128,
+              "ratio": 0.5875
+            }
+          ],
+          "caption": "Screenshot of Pure's new expanded color palette."
+        },
+        {
+          "type": "text",
+          "heading": "Objective",
+          "body": "Pure's brand hadn't evolved much in the last few years.\nThe creative was often recycled and the brand felt restricting; Pure's primary orange color and icon was well-known within the industry but beyond that the brand didn't have any flexibility when it came to colors etc.\n \nIn recent years the company expanded beyond storage to include other data solutions and products, but their name still had 'Storage' in it and their stock ticker ($PSTG) used 3 of the 4 letters for 'Storage'. \nPure's brand needed an overhaul.\nThis initiative was led by our VP of Brand, Sun Lee. \nSun thinks big and initially wanted to change the company name, the logo, the stock ticker etc. \nEventually we settled on a much more tame version of a rebrand, primarily around design/fonts/components based on a re-defined set of core brand principles; that alone ended up being a big enough undertaking."
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/pure-design-system/02-800.webp",
+                  "bytes": 28500
+                },
+                {
+                  "w": 1600,
+                  "src": "img/pure-design-system/02-1600.webp",
+                  "bytes": 73668
+                }
+              ],
+              "width": 1920,
+              "height": 1128,
+              "ratio": 0.5875
+            }
+          ],
+          "caption": "Figma Home Screens showing our different levels of elements, components and templates."
+        },
+        {
+          "type": "text",
+          "heading": "Foundation",
+          "body": "Colors & Fonts\nThe design team worked with some outside agencies to help settle on a color palette. We also moved from Proxima Nova and opted to stay within what was available with Google Fonts for a number of reasons. We ended up with Inter a nd Space Mono.\nGrid\\\nPure's component system was the result of years of rapid growth; an accumulation of technical debt essentially removed any sort of standard responsive grid. \nI advocated for this grid implementation with the dev team and was able to get this prioritized, as it was foundational to all the other parts of the system we were building. \nWe created global shared styles in Figma so that all our designers could work on the same grid to ensure consistency."
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/pure-design-system/03-800.webp",
+                  "bytes": 11282
+                },
+                {
+                  "w": 1600,
+                  "src": "img/pure-design-system/03-1600.webp",
+                  "bytes": 29724
+                }
+              ],
+              "width": 1920,
+              "height": 1128,
+              "ratio": 0.5875
+            }
+          ],
+          "caption": "Pure's Grid System, documented here in Figma. Figma styles were created for consistency in all future page/component builds."
+        },
+        {
+          "type": "text",
+          "heading": "Design",
+          "body": "Components\nWe spent a lot of time with messaging, deciding how to best present content at a system level in a way that aligned both to our brand principles and our actual content structures and narratives.\nInitially we began with some atomic elements but then immediately jumped in to specific components, e.g. the 'Text + Image' component. This is a component we knew would be on most of the pages, and we knew we were creating a more illustrative style, so we wanted to establish design patterns at this level and base other components off of this. \nTemplates\nAs we progressed, design patterns began to emerge and we began to construct Page Templates, ensuring they worked together as a group of components visually and technically, as well as ensuring that they worked as a storytelling mechanism.\nDesigning a system is no easy feat; there are many considerations that Dev, Brand & Design, UX, SEO, Publishing, Content and Stakeholder teams all want to prioritize.\nWe zoomed in and out from a Micro, atomic level to a Macro, template/system level.\nResources were scarce and deadlines were tight, so we opted to only loosely organize components etc - Design documented each component for handoff to Dev, but formalizing documentation was deferred until post-launch and the system was more stable and established."
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/pure-design-system/04-800.webp",
+                  "bytes": 23264
+                },
+                {
+                  "w": 1600,
+                  "src": "img/pure-design-system/04-1600.webp",
+                  "bytes": 44734
+                }
+              ],
+              "width": 1920,
+              "height": 1128,
+              "ratio": 0.5875
+            }
+          ],
+          "caption": "Screenshots of design comps (blurred). In the beginning the sky was the limit, and it felt great to be exploring all these different possible directions."
+        },
+        {
+          "type": "text",
+          "heading": "Organizing the System",
+          "body": "There was still a ton of work to do once the site launched and the dust settled. The work was broken into 3 separate buckets:\nDocumentation/Organization \nWe needed to document these freshly-built components in the system and organize the files into a coherent structure.\nConsolidation\nWe found many components solved the same problem, or that the mobile view on two different components were very similar. In these cases we replaced these components with different Variants of a single component or else aligned different mobile views to simplify the experience\nIteration \nWe reduced scope on most of the components to meet our deadline, and there was oversight on some elements (some small alignment issues etc). Additionally, stakeholders wanted more features once they got their hands on the site, and different teams began asking for improvements. \n\nThe system is broken down into Assets, Visual Attributes, Components and Layouts. \nEach Components' Figma file contains the following:\n\n1. Title Page - Consists of the thumbnail, readme and changelog.\n2. Library Components Page - The components to be published to the shared library.\n3. Handoff Page - This is primarily documentation for the Dev team and a list of the different variants to be referenced by the Design team."
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/pure-design-system/05-800.webp",
+                  "bytes": 16524
+                },
+                {
+                  "w": 1600,
+                  "src": "img/pure-design-system/05-1600.webp",
+                  "bytes": 42484
+                }
+              ],
+              "width": 1920,
+              "height": 1128,
+              "ratio": 0.5875
+            }
+          ],
+          "caption": "Components each have their own Figma file."
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/pure-design-system/06-800.webp",
+                  "bytes": 9592
+                },
+                {
+                  "w": 1600,
+                  "src": "img/pure-design-system/06-1600.webp",
+                  "bytes": 25226
+                }
+              ],
+              "width": 1920,
+              "height": 1128,
+              "ratio": 0.5875
+            }
+          ],
+          "caption": "Each Component is exported separately, when creating a new page layout the designer can turn on everything they need and immediately have access.\nColors, Grid, Typography is all turned on at the team level so it's on by default for each project."
+        },
+        {
+          "type": "text",
+          "heading": "A word about Figma",
+          "body": "I generally try to be tool-agnostic and use the best tool for the job. \nFigma has turned me into a loyal fan. \nI won't hesitate to consider new software tooling if something better comes along, but Figma is fantastic and this project was made 10x easier with Figma than without. \nShared Libraries, Auto-Layout, etc. have changed so much about how design and dev stay in sync, it's definitely a game-changer."
+        },
+        {
+          "type": "text",
+          "heading": "The Future",
+          "body": "A design system needs to be treated like a product, or it's going to quickly show signs of neglect.\nThere's a backlog a mile long for feature requests, but thus far it's been a very successful launch. \n\n \n \n \n \n \n\n \n\n \n\n \n \n \u2191Back to Top"
+        }
+      ]
+    },
+    {
+      "slug": "pure-customer-stories",
+      "title": "Customer Stories: Pure Storage",
+      "year": 2018,
+      "tags": [
+        "UX",
+        "Web",
+        "Prototyping"
+      ],
+      "intro": "The customer team designed a PDF in InDesign through a third-party agency and then posted that online. In order to gather analytics on the PDF, an HTML page was generated that contained a link to the file and one or two bullet points pulled from the content of the file.\nThis process resulted in some challenges: \n\u2022 A very large collection of utility pages that did not help Pure\u2019s mission. \nFurther, users had to download a file to read much about the actual story; this took them away from the site and was generally a bad experience.\n\u2022 There was a lot of duplicate effort: We were creating PDFs, then creating nearly identical web pages. \n\u2022 Mobile users had difficulty downloading and viewing PDF content.\n\u2022 Perhaps the worst of all: These are amazing stories about real people who have real problems that Pure has helped; this was not communicated effectively and is a missed opportunity.",
+      "cover": {
+        "variants": [
+          {
+            "w": 800,
+            "src": "img/pure-customer-stories/01-800.webp",
+            "bytes": 18402
+          },
+          {
+            "w": 1600,
+            "src": "img/pure-customer-stories/01-1600.webp",
+            "bytes": 55126
+          }
+        ],
+        "width": 2000,
+        "height": 1425,
+        "ratio": 0.7125
+      },
+      "modules": [
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/pure-customer-stories/01-800.webp",
+                  "bytes": 18402
+                },
+                {
+                  "w": 1600,
+                  "src": "img/pure-customer-stories/01-1600.webp",
+                  "bytes": 55126
+                }
+              ],
+              "width": 2000,
+              "height": 1425,
+              "ratio": 0.7125
+            }
+          ],
+          "caption": "screenshots: before and after."
+        },
+        {
+          "type": "text",
+          "heading": "1. Challenge",
+          "body": "Rethink how customer success stories are used and presented on Pure\u2019s site.\n\nPure's customers are very happy. Pure has some phenomenal quotes and success stories from their customers, but they were not showcased on the site in an effective way."
+        },
+        {
+          "type": "text",
+          "heading": "2. Analysis & Research",
+          "body": "Pure Storage\nPure ($PSTG) is a multi-billion dollar company that sells enterprise data storage. \nThe Problem\nPure had over 200 unique Customer Detail pages, and they all looked like this:"
+        },
+        {
+          "type": "gallery",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 672,
+                  "src": "img/pure-customer-stories/02-800.webp",
+                  "bytes": 33552
+                }
+              ],
+              "width": 672,
+              "height": 726,
+              "ratio": 1.0804
+            },
+            {
+              "variants": [
+                {
+                  "w": 642,
+                  "src": "img/pure-customer-stories/03-800.webp",
+                  "bytes": 33848
+                }
+              ],
+              "width": 642,
+              "height": 725,
+              "ratio": 1.1293
+            },
+            {
+              "variants": [
+                {
+                  "w": 690,
+                  "src": "img/pure-customer-stories/04-800.webp",
+                  "bytes": 29306
+                }
+              ],
+              "width": 690,
+              "height": 726,
+              "ratio": 1.0522
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "heading": "",
+          "body": "The customer team designed a PDF in InDesign through a third-party agency and then posted that online. In order to gather analytics on the PDF, an HTML page was generated that contained a link to the file and one or two bullet points pulled from the content of the file.\nThis process resulted in some challenges: \n\u2022 A very large collection of utility pages that did not help Pure\u2019s mission. \nFurther, users had to download a file to read much about the actual story; this took them away from the site and was generally a bad experience.\n\u2022 There was a lot of duplicate effort: We were creating PDFs, then creating nearly identical web pages. \n\u2022 Mobile users had difficulty downloading and viewing PDF content.\n\u2022 Perhaps the worst of all: These are amazing stories about real people who have real problems that Pure has helped; this was not communicated effectively and is a missed opportunity."
+        },
+        {
+          "type": "text",
+          "heading": "3. Objectives",
+          "body": "The objectives then became clear:\n1. Create an easier way for users to browse and consume these stories.\n2. Clearly communicate the problems being solved, both from technical & business perspectives.\n3. Reposition the narrative of these stories to be partnership-focused instead of Pure-focused or even customer-focused.\n4. Show just how happy our customers really are; show that they\u2019re real people and really humanize the stories.\n5. Elevate the design experience for the brand and the user.\n6. Streamline the production process."
+        },
+        {
+          "type": "text",
+          "heading": "4. Execution: Wireframes",
+          "body": "I began with the hero component. The two things I wanted to improve here were: \n1. Concise Headline\n2. Emphasis on the partnership\nIf users saw both of these and simply wanted the PDF, we would have a link right there; that user's experience could potentially end here.\nBeyond that I wanted to provide a more in-depth experience. After researching all the existing Case Studies I opted to include the following:\n1. Summary: a concise paragraph summarizing the benefits of the partnership\n2. Use-Cases: Specific implementations or subjects relevant to this experience (e.g. healthcare, or SAP or something akin to a category label).\n3. Rename: I wanted to make these more personal and appealing. Since we had \u2018Use Cases\u2019 in use (see previous point) and after some competitive research I opted to rename these pages to \u2018Customer Stories\u2019\n4. Customer Description: Brief Overview of who this customer was and what they were trying to achieve\n5. Challenge: Briefly described the challenge(s) preventing them from achieving their objective\n6. Results: Showcase Business and Technology results, emphasizing that a better IT solution ultimately was a better Business solution\n7. Video: Many of the pages had existing videos; via an audit I found that no page had more than one video - as such I wanted a video player that felt tightly-integrated into the site, but that was completely optional, so excluding it wouldn\u2019t affect the layout or story.\n8. We had such a plethora of amazing quotes, I wanted to ensure that we validated each Case Study with an actual quote from the customer."
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/pure-customer-stories/05-800.webp",
+                  "bytes": 22704
+                },
+                {
+                  "w": 1400,
+                  "src": "img/pure-customer-stories/05-1600.webp",
+                  "bytes": 66976
+                }
+              ],
+              "width": 1400,
+              "height": 1288,
+              "ratio": 0.92
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "heading": "5. Execution: Design",
+          "body": "At this time Pure had no web standards and really hadn\u2019t given the site the attention it deserved (again due to resources not talent). \nI opted to reference some industry-leading best-in-class sites and try to borrow some interactions and layout; Uber\u2019s design case studies are great so those were referenced - namely the parallaxing box movement, the pinned \u2018chapter heading\u2019 indicator, and the use of svg patterns.\nI worked with a designer at one of our agencies who I really like; She knew Pure\u2019s brand well and did an amazing job on execution. We worked closely through rounds of feedback, updating and iterating on the wireframes as well as the design. It was a great process and we both felt that it produced successful results.\nImagery\nWe added imagery; we wanted to add visual texture but wanted to keep the attention on the story and also needed this to scale across hundreds of pages.\nCopy\nPure at the time had one single copywriter, who was hired by the stakeholders. The result of this was very verbose titles and descriptions; the justification was keyword stuffing for SEO, but definitely not web-friendly from a user-perspective. On top of that we used ALL-CAPS TITLES, which made the pages very dense and difficult to read. \nThe fix was simple:\n\u2022 Character Limits: We employed character counts to ensure the titles were readable. We opted not to limit this in code and just enforce by policy; this allowed for overrides for German and other longer languages.\n\u2022 Camel-Case: We reduced the <h1> font size and moved to {text-transform: capitalize;} which was a simple change across the site. We also had an override for this - we learned that capitalized letters can sometimes have different meanings in German."
+        },
+        {
+          "type": "text",
+          "heading": "6. Execution: Development",
+          "body": "I built the interaction prototypes:\n\u2022 I used Javascript/CSS/HTML for interaction comps. \n\u2022 I used After Effects for strictly motion and animation comps.\n\u2022 I established our usage of svg patterns\n\u2022 I defined the repeating pattern as an svg <pattern id=\u201dpatternA\u201d> element and then filled an svg <rect> that was 100% with #patternA.\n\u2022 Styling was done in CSS, limited to max 2 colors.\nI worked closely with the Dev and Scrum team to define requirements and clarify questions during Sprint Planning & Estimation.\nI did working sessions with the devs for motion and timing, and to resolve edge-case scenarios.\nThere were concessions within the existing component framework that we came up against which required UX & Design changes on the fly."
+        },
+        {
+          "type": "text",
+          "heading": "7. Execution: Scaling the Template",
+          "body": "Logos\n+240 logo files, all different colors and resolutions. In an effort to unify the presentation of our Customer Stories, I opted to use 1-color svgs of all of our client logos. \nImages\nThe images were primarily used on the Hero and the Quote component.\nSource templates were set up for production design at the proper dimensions. For consistent contrast I built out a tool using Javascript (ImageMagick) that would add a dark layer on top of any image in a folder. This worked for the 240 images but for new images we opted for Photoshop as any of our designers could handle the task.\nLastly, we added an image in the <meta> tags for integration with a page scraping service used elsewhere on the site."
+        },
+        {
+          "type": "text",
+          "heading": "8. Results",
+          "body": "The results here were positive all-around. \nQuantitative:\nTime on site increased overall on these pages. Downloads went down slightly, but we can assume that the user was able to glean the info needed by hoisting more content from the PDF into the page. \nQualitative:\nWe\u2019ve only had positive feedback from our users and stakeholders. \nLong-term this effort helps us elevate our most important differentiator, our happy customers\u2019 experience."
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/pure-customer-stories/06-800.webp",
+                  "bytes": 25412
+                },
+                {
+                  "w": 1600,
+                  "src": "img/pure-customer-stories/06-1600.webp",
+                  "bytes": 82978
+                }
+              ],
+              "width": 1600,
+              "height": 1765,
+              "ratio": 1.1031
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "martian-portfolio-site",
+      "title": "Martian Portfolio Site",
+      "year": 2017,
+      "tags": [
+        "Brand",
+        "Web",
+        "Art Direction"
+      ],
+      "intro": "Portfolio Site for the Creative Agency that I started and ran for 4 years. I concepted this site and did the wireframes as well as interaction design.",
+      "cover": {
+        "variants": [
+          {
+            "w": 800,
+            "src": "img/martian-portfolio-site/01-800.webp",
+            "bytes": 40812
+          },
+          {
+            "w": 1600,
+            "src": "img/martian-portfolio-site/01-1600.webp",
+            "bytes": 135030
+          }
+        ],
+        "width": 2872,
+        "height": 1456,
+        "ratio": 0.507
+      },
+      "modules": [
+        {
+          "type": "text",
+          "heading": "",
+          "body": "Portfolio Site for the Creative Agency that I started and ran for 4 years. I concepted this site and did the wireframes as well as interaction design."
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/martian-portfolio-site/01-800.webp",
+                  "bytes": 40812
+                },
+                {
+                  "w": 1600,
+                  "src": "img/martian-portfolio-site/01-1600.webp",
+                  "bytes": 135030
+                }
+              ],
+              "width": 2872,
+              "height": 1456,
+              "ratio": 0.507
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/martian-portfolio-site/02-800.webp",
+                  "bytes": 11464
+                },
+                {
+                  "w": 1600,
+                  "src": "img/martian-portfolio-site/02-1600.webp",
+                  "bytes": 31066
+                }
+              ],
+              "width": 2874,
+              "height": 1446,
+              "ratio": 0.5031
+            }
+          ],
+          "caption": "An attempt to flatten the navigational hierarchy as much as possible."
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/martian-portfolio-site/03-800.webp",
+                  "bytes": 118448
+                },
+                {
+                  "w": 1600,
+                  "src": "img/martian-portfolio-site/03-1600.webp",
+                  "bytes": 348686
+                }
+              ],
+              "width": 3320,
+              "height": 11478,
+              "ratio": 3.4572
+            }
+          ],
+          "caption": "Screenshot of the entire home page."
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/martian-portfolio-site/04-800.webp",
+                  "bytes": 140916
+                },
+                {
+                  "w": 1600,
+                  "src": "img/martian-portfolio-site/04-1600.webp",
+                  "bytes": 374794
+                }
+              ],
+              "width": 1982,
+              "height": 8193,
+              "ratio": 4.1337
+            }
+          ],
+          "caption": "Screenshot of a project detail page."
+        }
+      ]
+    },
+    {
+      "slug": "metagramme",
+      "title": "Metagramme",
+      "year": 2016,
+      "tags": [
+        "Creative Dev",
+        "Data Viz",
+        "Experiment"
+      ],
+      "intro": "Internal project while at Martian. Mathematically averaging image results based on a hashtag, effectively creating a visual representation for what society thinks abstract terms like 'sadness' or 'love' looks like. \nFeatured in Gizmodo, Wired.",
+      "cover": {
+        "variants": [
+          {
+            "w": 103,
+            "src": "img/metagramme/01-800.webp",
+            "bytes": 1910
+          }
+        ],
+        "width": 103,
+        "height": 103,
+        "ratio": 1.0,
+        "animated": {
+          "frames": 30,
+          "source": "02ed3345-e97f-4d1d-b143-b7cf1d3d709a.gif",
+          "bytes": 45047,
+          "mp4_bytes": 9319
+        },
+        "video": {
+          "mp4": "img/metagramme/01.mp4"
+        }
+      },
+      "modules": [
+        {
+          "type": "text",
+          "heading": "",
+          "body": "Internal project while at Martian. Mathematically averaging image results based on a hashtag, effectively creating a visual representation for what society thinks abstract terms like 'sadness' or 'love' looks like. \nFeatured in Gizmodo, Wired."
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 103,
+                  "src": "img/metagramme/01-800.webp",
+                  "bytes": 1910
+                }
+              ],
+              "width": 103,
+              "height": 103,
+              "ratio": 1.0,
+              "animated": {
+                "frames": 30,
+                "source": "02ed3345-e97f-4d1d-b143-b7cf1d3d709a.gif",
+                "bytes": 45047,
+                "mp4_bytes": 9319
+              },
+              "video": {
+                "mp4": "img/metagramme/01.mp4"
+              }
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/metagramme/02-800.webp",
+                  "bytes": 49894
+                },
+                {
+                  "w": 1440,
+                  "src": "img/metagramme/02-1600.webp",
+                  "bytes": 121788
+                }
+              ],
+              "width": 1440,
+              "height": 826,
+              "ratio": 0.5736
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/metagramme/03-800.webp",
+                  "bytes": 14010
+                },
+                {
+                  "w": 1440,
+                  "src": "img/metagramme/03-1600.webp",
+                  "bytes": 34468
+                }
+              ],
+              "width": 1440,
+              "height": 826,
+              "ratio": 0.5736
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/metagramme/04-800.webp",
+                  "bytes": 26868
+                },
+                {
+                  "w": 1440,
+                  "src": "img/metagramme/04-1600.webp",
+                  "bytes": 68596
+                }
+              ],
+              "width": 1440,
+              "height": 826,
+              "ratio": 0.5736
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/metagramme/05-800.webp",
+                  "bytes": 45678
+                },
+                {
+                  "w": 1440,
+                  "src": "img/metagramme/05-1600.webp",
+                  "bytes": 113588
+                }
+              ],
+              "width": 1440,
+              "height": 826,
+              "ratio": 0.5736
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 478,
+                  "src": "img/metagramme/06-800.webp",
+                  "bytes": 19376
+                }
+              ],
+              "width": 478,
+              "height": 478,
+              "ratio": 1.0
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/metagramme/07-800.webp",
+                  "bytes": 51242
+                },
+                {
+                  "w": 1600,
+                  "src": "img/metagramme/07-1600.webp",
+                  "bytes": 134146
+                }
+              ],
+              "width": 1920,
+              "height": 1437,
+              "ratio": 0.7484
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "images": [
+            {
+              "variants": [
+                {
+                  "w": 800,
+                  "src": "img/metagramme/08-800.webp",
+                  "bytes": 83562
+                },
+                {
+                  "w": 844,
+                  "src": "img/metagramme/08-1600.webp",
+                  "bytes": 93478
+                }
+              ],
+              "width": 844,
+              "height": 1390,
+              "ratio": 1.6469
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "archive": [
+    {
+      "slug": "codepen",
+      "title": "Codepen Experiments",
+      "year": 2020,
+      "source": "https://jareds.myportfolio.com/codepen",
+      "images": 5
+    },
+    {
+      "slug": "web-app-game-series",
+      "title": "Progression: A Web-App Game Series",
+      "year": 2020,
+      "source": "https://jareds.myportfolio.com/web-app-game-series",
+      "images": 10
+    },
+    {
+      "slug": "jumpdeck",
+      "title": "JumpDeck",
+      "year": 2019,
+      "source": "https://jareds.myportfolio.com/jumpdeck",
+      "images": 10
+    },
+    {
+      "slug": "esurance-how-to-videos",
+      "title": "Esurance: How-To Videos",
+      "year": 2018,
+      "source": "https://jareds.myportfolio.com/esurance-how-to-videos",
+      "images": 1
+    },
+    {
+      "slug": "esurance-super-bowl-pre-game-15-spot",
+      "title": "Esurance: Super Bowl Pre-Game :15 Spot",
+      "year": 2018,
+      "source": "https://jareds.myportfolio.com/esurance-super-bowl-pre-game-15-spot",
+      "images": 1
+    },
+    {
+      "slug": "heavycom-magrack",
+      "title": "Heavy.com: MagRack",
+      "year": 2018,
+      "source": "https://jareds.myportfolio.com/heavycom-magrack",
+      "images": 4
+    },
+    {
+      "slug": "kohls-summer-wardrobe",
+      "title": "Kohl's Summer Wardrobe",
+      "year": 2018,
+      "source": "https://jareds.myportfolio.com/kohls-summer-wardrobe",
+      "images": 3
+    },
+    {
+      "slug": "mtv-networks",
+      "title": "MTV Networks",
+      "year": 2018,
+      "source": "https://jareds.myportfolio.com/mtv-networks",
+      "images": 8
+    },
+    {
+      "slug": "mastercard-iconnicholsson",
+      "title": "MasterCard: IconNicholsson",
+      "year": 2018,
+      "source": "https://jareds.myportfolio.com/mastercard-iconnicholsson",
+      "images": 3
+    },
+    {
+      "slug": "mede-jumbotron-app",
+      "title": "Mede: Jumbotron App",
+      "year": 2018,
+      "source": "https://jareds.myportfolio.com/mede-jumbotron-app",
+      "images": 6
+    },
+    {
+      "slug": "pxl-multi-screen-display",
+      "title": "PXL: Multi-Screen Display System",
+      "year": 2018,
+      "source": "https://jareds.myportfolio.com/pxl-multi-screen-display",
+      "images": 7
+    },
+    {
+      "slug": "procedural-watercolor",
+      "title": "Plaster: Procedural Drawing Tool",
+      "year": 2018,
+      "source": "https://jareds.myportfolio.com/procedural-watercolor",
+      "images": 9
+    },
+    {
+      "slug": "samsung-a940-upstage",
+      "title": "Samsung: A940 & Upstage",
+      "year": 2018,
+      "source": "https://jareds.myportfolio.com/samsung-a940-upstage",
+      "images": 7
+    },
+    {
+      "slug": "scrum-poker",
+      "title": "Scrum Poker: Planner App",
+      "year": 2018,
+      "source": "https://jareds.myportfolio.com/scrum-poker",
+      "images": 4
+    },
+    {
+      "slug": "serenade-iot-prototype",
+      "title": "Serenade: IoT Prototype",
+      "year": 2018,
+      "source": "https://jareds.myportfolio.com/serenade-iot-prototype",
+      "images": 1
+    },
+    {
+      "slug": "sony-hmz",
+      "title": "Sony HMZ: Site Experience",
+      "year": 2018,
+      "source": "https://jareds.myportfolio.com/sony-hmz",
+      "images": 3
+    },
+    {
+      "slug": "state-farm-march-madness",
+      "title": "State Farm: March Madness",
+      "year": 2018,
+      "source": "https://jareds.myportfolio.com/state-farm-march-madness",
+      "images": 3
+    },
+    {
+      "slug": "stereotype-design",
+      "title": "Stereotype-Design",
+      "year": 2018,
+      "source": "https://jareds.myportfolio.com/stereotype-design",
+      "images": 3
+    },
+    {
+      "slug": "subarucom-core-technology-rga",
+      "title": "Subaru.com + Core Technology",
+      "year": 2018,
+      "source": "https://jareds.myportfolio.com/subarucom-core-technology-rga",
+      "images": 6
+    },
+    {
+      "slug": "tmbr-app",
+      "title": "TMBR: Audio/Visual Web App",
+      "year": 2018,
+      "source": "https://jareds.myportfolio.com/tmbr-app",
+      "images": 5
+    },
+    {
+      "slug": "trump-art-data-visualization-bot",
+      "title": "Trump Art: Data Visualization Bot",
+      "year": 2018,
+      "source": "https://jareds.myportfolio.com/trump-art-data-visualization-bot",
+      "images": 9
+    },
+    {
+      "slug": "twitter-fingerprint",
+      "title": "Twitter Fingerprint: Data Visualization Web Tool",
+      "year": 2018,
+      "source": "https://jareds.myportfolio.com/twitter-fingerprint",
+      "images": 2
+    },
+    {
+      "slug": "projection-mapping-socket-game",
+      "title": "VS: Projection-Mapped Game",
+      "year": 2018,
+      "source": "https://jareds.myportfolio.com/projection-mapping-socket-game",
+      "images": 4
+    },
+    {
+      "slug": "wordpress-plugin-image-visualization",
+      "title": "Wordpress Plugin: Color Data",
+      "year": 2018,
+      "source": "https://jareds.myportfolio.com/wordpress-plugin-image-visualization",
+      "images": 1
+    },
+    {
+      "slug": "airbnb-road-trips",
+      "title": "Airbnb Road Trips",
+      "year": 2016,
+      "source": "https://jareds.myportfolio.com/airbnb-road-trips",
+      "images": 2
+    },
+    {
+      "slug": "airbnb-home-for-the-holidays",
+      "title": "Airbnb: Home for the Holidays",
+      "year": 2016,
+      "source": "https://jareds.myportfolio.com/airbnb-home-for-the-holidays",
+      "images": 2
+    },
+    {
+      "slug": "airbnb-maisondefrance",
+      "title": "Airbnb: Maison de France Contest",
+      "year": 2016,
+      "source": "https://jareds.myportfolio.com/airbnb-maisondefrance",
+      "images": 2
+    },
+    {
+      "slug": "copy-of-mede-jumbotron-app",
+      "title": "Twitter Flight: Conference Website",
+      "year": 2015,
+      "source": "https://jareds.myportfolio.com/copy-of-mede-jumbotron-app",
+      "images": 5
+    },
+    {
+      "slug": "twitter-video-hub",
+      "title": "Twitter: Video Hub",
+      "year": 2015,
+      "source": "https://jareds.myportfolio.com/twitter-video-hub",
+      "images": 6
+    },
+    {
+      "slug": "copy-of-yahoo-sports-grudge-judge",
+      "title": "Adidas: ClimaCool Mobile Web App",
+      "year": 2011,
+      "source": "https://jareds.myportfolio.com/copy-of-yahoo-sports-grudge-judge",
+      "images": 3
+    },
+    {
+      "slug": "copy-of-adidas-climacool-mobile-web-app-1",
+      "title": "Adidas: Game Face",
+      "year": 2011,
+      "source": "https://jareds.myportfolio.com/copy-of-adidas-climacool-mobile-web-app-1",
+      "images": 3
+    },
+    {
+      "slug": "copy-of-adidas-climacool-mobile-web-app",
+      "title": "Kohler: Multi-Flushers Anonymous",
+      "year": 2011,
+      "source": "https://jareds.myportfolio.com/copy-of-adidas-climacool-mobile-web-app",
+      "images": 4
+    },
+    {
+      "slug": "copy-of-adidas-climacool-mobile-web-app-2",
+      "title": "Siri Claus: Mobile Web App",
+      "year": 2011,
+      "source": "https://jareds.myportfolio.com/copy-of-adidas-climacool-mobile-web-app-2",
+      "images": 4
+    },
+    {
+      "slug": "copy-of-adidas-world-cup-ball-reveal-desktop-app",
+      "title": "Adidas: Live Chat",
+      "year": 2010,
+      "source": "https://jareds.myportfolio.com/copy-of-adidas-world-cup-ball-reveal-desktop-app",
+      "images": 4
+    },
+    {
+      "slug": "copy-of-adidas-world-cup",
+      "title": "Adidas: World Cup Ball Reveal Desktop App",
+      "year": 2010,
+      "source": "https://jareds.myportfolio.com/copy-of-adidas-world-cup",
+      "images": 2
+    },
+    {
+      "slug": "copy-of-dolby-update-theater-with-adam-west",
+      "title": "Adidas: World Cup Facebook Video Experience",
+      "year": 2010,
+      "source": "https://jareds.myportfolio.com/copy-of-dolby-update-theater-with-adam-west",
+      "images": 4
+    },
+    {
+      "slug": "copy-of-adidas-product-wall-web-experience",
+      "title": "Dolby: Update Theater w/ Adam West",
+      "year": 2010,
+      "source": "https://jareds.myportfolio.com/copy-of-adidas-product-wall-web-experience",
+      "images": 3
+    },
+    {
+      "slug": "copy-of-dolby-update-theater-with-adam-west-1",
+      "title": "Yahoo! Sports: Grudge Judge",
+      "year": 2010,
+      "source": "https://jareds.myportfolio.com/copy-of-dolby-update-theater-with-adam-west-1",
+      "images": 4
+    },
+    {
+      "slug": "adidas-product-wall",
+      "title": "Adidas Product Wall: Web Experience",
+      "year": 2009,
+      "source": "https://jareds.myportfolio.com/adidas-product-wall",
+      "images": 4
+    },
+    {
+      "slug": "toyota-corolla-2009-live-the-dream",
+      "title": "Toyota Corolla (2009) Live the Dream",
+      "year": 2009,
+      "source": "https://jareds.myportfolio.com/toyota-corolla-2009-live-the-dream",
+      "images": 4
+    },
+    {
+      "slug": "workbrain-visualization-for-cumulative-team-effort",
+      "title": "WorkBrain: Team Effort Visualization",
+      "year": 2009,
+      "source": "https://jareds.myportfolio.com/workbrain-visualization-for-cumulative-team-effort",
+      "images": 4
+    },
+    {
+      "slug": "doritos-the-quest-2008",
+      "title": "Doritos: The Quest (2008)",
+      "year": 2008,
+      "source": "https://jareds.myportfolio.com/doritos-the-quest-2008",
+      "images": 5
+    },
+    {
+      "slug": "hyundai-genesis-environmental-road-test-2008",
+      "title": "Hyundai Genesis: Environmental Road Test",
+      "year": 2008,
+      "source": "https://jareds.myportfolio.com/hyundai-genesis-environmental-road-test-2008",
+      "images": 3
+    },
+    {
+      "slug": "ufc-83-serra-vs-st-pierre-ii-2008",
+      "title": "UFC 83: Serra vs. St-Pierre II (2008)",
+      "year": 2008,
+      "source": "https://jareds.myportfolio.com/ufc-83-serra-vs-st-pierre-ii-2008",
+      "images": 3
+    },
+    {
+      "slug": "walt-disney-world-american-idol-experience-2008",
+      "title": "Walt Disney World: American Idol Experience",
+      "year": 2008,
+      "source": "https://jareds.myportfolio.com/walt-disney-world-american-idol-experience-2008",
+      "images": 3
+    }
+  ]
+}
