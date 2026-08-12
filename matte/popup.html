@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prettify</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+    <div id="pop">
+        <div id="popPreview" class="preview">
+            <img id="popThumb" alt="" hidden>
+            <div id="popSpinner" class="spinner" aria-hidden="true"></div>
+        </div>
+
+        <p id="popStatus" class="status" role="status" aria-live="polite">Reading the clipboard…</p>
+        <p id="popDetail" class="detail"></p>
+
+        <div id="popActions" class="actions">
+            <button id="popSave" class="btn" hidden>Save PNG</button>
+            <button id="popOptions" class="btn quiet">Style</button>
+        </div>
+    </div>
+
+    <script type="module" src="popup.js"></script>
+</body>
+</html>
