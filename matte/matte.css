@@ -1,0 +1,733 @@
+/* Matte — radical.graphics/matte
+   Type + palette follow the main site (style.css) and /qrcode. */
+
+:root {
+    --ink: #000;
+    --paper: #fff;
+    --stage: #eaeaea;
+    --line: #d8d8d8;
+    --muted: #767676;
+    --bad: #c62222;
+    --ease: all 0.3s ease-in-out;
+    --shell: 1440px; /* content caps here; below it everything is fluid */
+}
+
+* { box-sizing: border-box; }
+
+/* Class-level `display` would otherwise outrank the UA rule for [hidden]. */
+[hidden] { display: none !important; }
+
+body {
+    font-family: field-gothic-wide, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    color: var(--ink);
+    background: var(--paper);
+    font-size: 0.9em;
+    margin: 0;
+    padding: 0;
+    /* Locked to the viewport so the stage stays put and only the control
+       column scrolls. Released at the mobile breakpoint below. */
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+
+#shotHead {
+    background: var(--paper);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 18px 32px;
+    flex: 0 0 auto;
+    border-bottom: 1px solid var(--line);
+}
+
+/* Mark links back to the main site. */
+#shotMark {
+    display: block;
+    line-height: 0;
+    text-decoration: none;
+    color: inherit;
+    flex: 0 0 auto;
+    transition: var(--ease);
+}
+
+#shotMark:hover { opacity: 0.55; }
+
+#shotLogo {
+    height: 34px;
+    width: auto;
+    fill: var(--ink);
+    display: block;
+}
+
+#shotMarkAnim {
+    display: none;
+    height: 34px;
+    aspect-ratio: 1607 / 452; /* the artwork's own bounds, matching #shotLogo */
+}
+
+/* Once the animation is live it replaces the static mark. */
+#shotMark.animated #shotLogo { display: none; }
+#shotMark.animated #shotMarkAnim { display: block; }
+
+#shotMarkAnim svg { display: block; width: 100%; height: 100%; }
+
+#shotTitleBlock { flex: 1 1 auto; }
+
+#shotTitle {
+    font-family: field-gothic-compact, sans-serif;
+    font-weight: 700;
+    font-size: clamp(18px, 1.8vw, 26px);
+    line-height: 1.05;
+    margin: 0;
+    letter-spacing: 0.01em;
+}
+
+#shotTagline {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 1.3;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    margin: 4px 0 0;
+}
+
+/* ── Layout ─────────────────────────────────────────────── */
+
+#shotApp {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    width: 100%;
+    max-width: var(--shell);
+    margin: 0 auto;
+}
+
+#shotBody {
+    flex: 1 1 auto;
+    display: grid;
+    /* Control column is fluid between these bounds, so the two-column layout
+       holds all the way down to the 900px breakpoint. */
+    grid-template-columns: minmax(0, 1fr) clamp(300px, 27%, 380px);
+    align-items: stretch;
+    min-height: 0;
+}
+
+/* Only once the shell stops growing does it need edges to sit against. */
+@media (min-width: 1441px) {
+    #shotApp {
+        border-left: 1px solid var(--line);
+        border-right: 1px solid var(--line);
+    }
+}
+
+#shotStagePane {
+    background: var(--stage);
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+}
+
+#shotStage {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    min-height: 0;
+    min-width: 0;
+    position: relative;
+}
+
+/* Shrink-wraps the canvas so the swap control can hang off its real corner
+   rather than the stage's. */
+#shotCanvasWrap {
+    position: relative;
+    display: flex;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* Sized in JS to the fitted CSS box; the backing store is dpr-scaled. */
+#shotCanvas {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    /* The composition can be transparent or near-white, so it needs its own
+       edge against the stage grey. */
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+/* Quiet until you're over the image, so it never competes with the artwork. */
+.swapBtn {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: none;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+    opacity: 0.3;
+    transition: opacity 0.2s ease-in-out;
+}
+
+#shotCanvasWrap:hover .swapBtn,
+.swapBtn:focus-visible { opacity: 1; }
+
+.swapBtn img { width: 18px; height: 18px; display: block; }
+
+/* ── Empty state ────────────────────────────────────────── */
+
+#shotDrop {
+    position: absolute;
+    inset: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px dashed #bdbdbd;
+    border-radius: 14px;
+    color: var(--muted);
+    text-align: center;
+    transition: var(--ease);
+}
+
+.dropInner { padding: 24px; }
+
+.dropIcon {
+    width: 48px;
+    height: 48px;
+    display: block;
+    margin: 0 auto 16px;
+    opacity: 0.55;
+}
+
+.dropTitle {
+    font-family: field-gothic-compact, sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--ink);
+    margin: 0 0 8px;
+}
+
+.dropSub {
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    line-height: 1.6;
+    margin: 0;
+}
+
+kbd {
+    font-family: inherit;
+    font-size: 11px;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    border-radius: 4px;
+    padding: 2px 5px;
+    margin: 0 1px;
+    color: var(--ink);
+}
+
+.linkBtn {
+    font: inherit;
+    color: var(--ink);
+    background: none;
+    border: none;
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+}
+
+/* Whole-window drag: the drop target lights up wherever the file is headed. */
+body.dragging #shotDrop {
+    border-color: var(--ink);
+    background: rgba(255, 255, 255, 0.75);
+    color: var(--ink);
+}
+
+/* With a screenshot loaded the zone is gone, but a drag still needs a target. */
+body.dragging #shotDrop[hidden] {
+    display: flex !important;
+    background: rgba(255, 255, 255, 0.85);
+}
+
+/* ── Export bar (standalone site only) ──────────────────── */
+
+#shotBar {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 14px 32px 20px;
+}
+
+#shotActions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dlBtn {
+    font-family: field-gothic-wide, sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    padding: 11px 18px;
+    border-radius: 99px;
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+    transition: var(--ease);
+}
+
+.dlBtn:hover:not(:disabled) {
+    background: var(--ink);
+    color: var(--paper);
+}
+
+.dlBtn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* Sits under the resolution buttons, where the numbers it reports are set. */
+.meta {
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    margin-top: 12px;
+}
+
+.meta:empty { display: none; }
+
+.iconBtn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border-radius: 99px;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    cursor: pointer;
+    flex: 0 0 auto;
+    transition: var(--ease);
+}
+
+.iconBtn:hover { border-color: var(--ink); }
+.iconBtn img { width: 17px; height: 17px; display: block; }
+
+/* ── Controls ───────────────────────────────────────────── */
+
+#shotControls {
+    padding: 4px 28px 48px;
+    overflow-y: auto;
+    border-left: 1px solid var(--line);
+
+    /* The panel scrolls, but never shows a track — not on hover, not on focus.
+       A bar appearing next to the controls is pure visual noise. */
+    scrollbar-width: none;          /* Firefox */
+    -ms-overflow-style: none;       /* legacy Edge */
+}
+
+#shotControls::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    background: transparent;
+}
+
+.group {
+    padding: 22px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+#shotControls .group:last-of-type { border-bottom: none; }
+
+.groupLabel {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+}
+
+.optRow + .groupLabel,
+.slider + .groupLabel { margin-top: 22px; }
+
+.note {
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--muted);
+    margin-top: 10px;
+    letter-spacing: 0.02em;
+}
+
+.note:empty { display: none; }
+.note.alert { color: var(--bad); }
+
+.fields { margin-top: 16px; }
+
+/* ── Option buttons ─────────────────────────────────────── */
+
+.optRow {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.optRow.tight { gap: 4px; margin-right: 6px; }
+
+/* The control column is too narrow for a flex row of icons to space evenly. */
+.iconRow { display: grid; gap: 6px; }
+#optRatio { grid-template-columns: repeat(5, 1fr); }
+#optFrame { grid-template-columns: repeat(3, 1fr); }
+
+.opt.icon { height: 38px; border-radius: 8px; }
+.opt.icon img { width: 22px; height: 22px; display: block; }
+
+/* ── Background modes ───────────────────────────────────── */
+
+/* The mode row and the swatch row share a template, so each mode's swatches
+   line up directly beneath the button that owns them. */
+.modeRow,
+.swatchRow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+/* Presets are a different kind of thing — give them room to separate. */
+.modeRow { margin-top: 18px; }
+
+.swatchRow { margin-top: 8px; }
+
+.opt.mode {
+    height: 24px;
+    padding: 0 6px;
+    border-radius: 99px;
+    font-family: inherit;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+}
+
+.opt.mode.iconOnly { padding: 0; }
+.opt.mode.iconOnly img { width: 14px; height: 14px; display: block; }
+
+/* The two stops butt together and share the column, so the pair is exactly as
+   wide as the single solid swatch next to it. */
+.swatchPair { display: flex; }
+.swatchPair .swatch { flex: 1 1 0; }
+
+.swatchPair .swatch:first-child .swatchChip {
+    border-radius: 6px 0 0 6px;
+    border-right-width: 0;
+}
+
+.swatchPair .swatch:last-child .swatchChip { border-radius: 0 6px 6px 0; }
+
+.swatchRow .swatch {
+    width: auto;
+    height: 26px;
+}
+
+.swatchRow .swatchChip { border-radius: 6px; }
+
+.swatchSolo { position: relative; }
+
+.opt {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: #f2f2f2;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: var(--ink);
+    cursor: pointer;
+    transition: var(--ease);
+}
+
+.opt:hover { background: #e4e4e4; }
+
+.opt[aria-checked="true"] {
+    background: var(--paper);
+    border-color: var(--ink);
+    box-shadow: 0 0 0 1px var(--ink);
+}
+
+.opt.pill {
+    min-width: 76px;
+    height: 38px;
+    padding: 0 16px;
+    border-radius: 99px;
+    font-family: inherit;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+}
+
+.opt.pill.sm {
+    min-width: 0;
+    height: 32px;
+    padding: 0 13px;
+    font-size: 11px;
+}
+
+/* ── Sliders ────────────────────────────────────────────── */
+
+.slider {
+    display: grid;
+    grid-template-columns: 68px minmax(0, 1fr) 38px;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+/* The last slider in a group would otherwise add its 14px on top of the group's
+   22px padding, sitting lower than a group that ends in buttons. */
+.slider:last-child { margin-bottom: 0; }
+
+/* ── Angle dial ─────────────────────────────────────────── */
+
+/* Reads the gradient direction at a glance instead of as a number. The hand
+   spins from --angle, matching CSS gradient convention: 0° points up. */
+.angleDial {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    justify-self: center;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    /* Crops the marker to the rim, so it reads as part of the dial rather than
+       a hand sticking out of it. */
+    overflow: hidden;
+}
+
+/* No transition here, deliberately. A transition on `transform` whose value
+   comes from an *unregistered* custom property doesn't re-evaluate in Chrome —
+   the dial silently sticks at its first angle. The slider fires continuously
+   while dragging, so there is nothing to smooth anyway. */
+.angleHand {
+    position: absolute;
+    inset: 0;
+    transform: rotate(var(--angle, 135deg));
+}
+
+/* Sits at the rim pointing inward, its outer corners shaved by the circle. */
+.angleHand::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -4px;
+    width: 0;
+    height: 0;
+    transform: translateX(-50%);
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 6px solid var(--ink);
+}
+
+.sliderLabel {
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    color: var(--muted);
+}
+
+.slider output {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11px;
+    color: var(--ink);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 18px;
+    background: none;
+    cursor: pointer;
+    margin: 0;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    height: 2px;
+    background: var(--line);
+    border-radius: 2px;
+}
+
+input[type="range"]::-moz-range-track {
+    height: 2px;
+    background: var(--line);
+    border-radius: 2px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    margin-top: -6px;
+    border-radius: 50%;
+    background: var(--ink);
+    border: none;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--ink);
+    border: none;
+}
+
+input[type="range"]:focus-visible { outline: none; }
+input[type="range"]:focus-visible::-webkit-slider-thumb {
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.15);
+}
+
+/* ── Colour swatches ────────────────────────────────────── */
+
+.swatch {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    flex: 0 0 auto;
+    cursor: pointer;
+}
+
+.swatch input[type="color"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    border: none;
+    padding: 0;
+}
+
+.swatchChip {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+/* ── Preset swatches ────────────────────────────────────── */
+
+/* Flex rather than grid so the gradient/solid divider can be a real element in
+   the flow — a pseudo-element would ride the hover scale of whatever it hung off. */
+.presetGrid {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.presetGrid:empty { display: none; }
+
+.presetDivider {
+    flex: 0 0 1px;
+    height: 20px;
+    background: var(--line);
+}
+
+.preset {
+    flex: 1 1 0;
+    aspect-ratio: 1;
+    border-radius: 7px;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    padding: 0;
+    cursor: pointer;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.preset:hover { transform: scale(1.08); }
+
+.preset[aria-selected="true"] {
+    box-shadow: 0 0 0 2px var(--paper), 0 0 0 3.5px var(--ink);
+}
+
+/* ── Toast ──────────────────────────────────────────────── */
+
+#shotToast {
+    position: fixed;
+    left: 50%;
+    bottom: 28px;
+    transform: translate(-50%, 12px);
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    padding: 11px 20px;
+    border-radius: 99px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
+    z-index: 10;
+}
+
+#shotToast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ── Responsive ─────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+    body { height: auto; min-height: 100vh; overflow: visible; }
+
+    #shotBody { grid-template-columns: 1fr; }
+
+    #shotHead { padding: 16px 20px; gap: 14px; }
+
+    #shotStage {
+        padding: 20px;
+        min-height: 42vh;
+    }
+
+    #shotBar { padding: 12px 20px 18px; }
+
+    #shotControls {
+        border-left: none;
+        border-top: 1px solid var(--line);
+        padding: 4px 20px 48px;
+        overflow-y: visible;
+    }
+}
+
+/* Below this the mark, the title and Settings can't share a line without the
+   title collapsing to three words wide — give it its own row. */
+@media (max-width: 560px) {
+    #shotHead { flex-wrap: wrap; }
+
+    /* The title block drops to its own row rather than collapsing to three
+       words wide next to the mark and the reset button. */
+    #shotTitleBlock {
+        order: 3;
+        flex-basis: 100%;
+    }
+
+    #shotTitle { font-size: 18px; }
+
+    #shotReset { margin-left: auto; }
+}
