@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "dev:shaders": "vite --config shaders/vite.config.js",
+    "build": "vite build && vite build --config shaders/vite.config.js",
     "preview": "vite preview",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
