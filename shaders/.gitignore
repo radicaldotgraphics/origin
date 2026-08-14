@@ -1,0 +1,5 @@
+# Vite writes the production bundle here and rewrites index.html in place.
+# CI builds from a clean checkout, so these are never committed — if `git status`
+# shows index.html modified after a local build, that is the build output, not
+# an edit: restore it with `git checkout shaders/index.html`.
+assets/
