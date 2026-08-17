@@ -1,0 +1,422 @@
+/* Undertone — image-to-music toy. House style follows /matte. */
+
+:root {
+    --ink: #000;
+    --paper: #fff;
+    --stage: #eaeaea;
+    --line: #d8d8d8;
+    --muted: #767676;
+    --accent: #c62222;
+    --ease: all 0.3s ease-in-out;
+    --shell: 1440px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    height: 100%;
+    font-family: field-gothic-wide, sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    background: var(--paper);
+}
+
+#utApp {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* ---------- header ---------- */
+
+#utHead {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--line);
+    background: var(--paper);
+}
+
+#utMark { display: block; line-height: 0; }
+
+#utLogo {
+    display: block;
+    width: 96px;
+    height: auto;
+    fill: var(--ink);
+    transition: var(--ease);
+}
+#utMark:hover #utLogo { fill: var(--accent); }
+
+#utMarkAnim {
+    display: none;
+    width: 96px;
+    aspect-ratio: 1607 / 452; /* the artwork's own bounds, matching #utLogo */
+}
+
+/* Once the animation is live it replaces the static mark. Its fill is baked
+   into the Lottie, so hover fades the whole mark rather than recolouring it. */
+#utMark.animated #utLogo { display: none; }
+#utMark.animated #utMarkAnim { display: block; }
+#utMark.animated { transition: var(--ease); }
+#utMark.animated:hover { opacity: 0.55; }
+
+#utMarkAnim svg { display: block; width: 100%; height: 100%; }
+
+#utTitleBlock { flex: 1; min-width: 0; }
+
+#utTitle {
+    margin: 0;
+    font-family: field-gothic-compact, sans-serif;
+    font-size: 26px;
+    line-height: 1;
+    text-transform: uppercase;
+}
+
+#utTagline {
+    margin: 2px 0 0;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.ghostBtn {
+    font-family: field-gothic-wide, sans-serif;
+    font-size: 13px;
+    padding: 8px 14px;
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+    transition: var(--ease);
+}
+.ghostBtn:hover { background: var(--ink); color: var(--paper); }
+
+/* ---------- body layout ---------- */
+
+#utBody {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+    width: 100%;
+    max-width: var(--shell);
+    margin: 0 auto;
+}
+
+@media (min-width: 1441px) {
+    #utBody {
+        border-left: 1px solid var(--line);
+        border-right: 1px solid var(--line);
+    }
+}
+
+#utStagePane {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    background: var(--stage);
+}
+
+#utStage {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    position: relative;
+    min-height: 0;
+}
+
+#utCanvasWrap {
+    max-width: 100%;
+    max-height: 100%;
+    line-height: 0;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+}
+
+#utCanvas {
+    max-width: 100%;
+    max-height: calc(100vh - 220px);
+    display: block;
+    background: var(--paper);
+    cursor: pointer;
+}
+
+/* ---------- drop zone ---------- */
+
+#utDrop {
+    border: 2px dashed var(--muted);
+    padding: 56px 48px;
+    text-align: center;
+    color: var(--ink);
+    max-width: 480px;
+    transition: var(--ease);
+}
+
+body.dragging #utDrop {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.dropIcon { width: 56px; height: 56px; color: var(--muted); }
+
+.dropTitle {
+    margin: 18px 0 6px;
+    font-family: field-gothic-compact, sans-serif;
+    font-size: 22px;
+    text-transform: uppercase;
+}
+
+.dropSub {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.9;
+    color: var(--muted);
+}
+
+.dropSub kbd {
+    font-family: inherit;
+    padding: 1px 5px;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    background: var(--paper);
+}
+
+.linkBtn {
+    font: inherit;
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--ink);
+    text-decoration: underline;
+    cursor: pointer;
+}
+.linkBtn:hover { color: var(--accent); }
+
+/* ---------- sample picker ---------- */
+
+#utPickerGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
+    gap: 12px;
+    margin: 18px 0 16px;
+}
+
+#utPickerGrid button {
+    padding: 0;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    line-height: 0;
+    cursor: pointer;
+    transition: var(--ease);
+}
+#utPickerGrid button:hover { border-color: var(--accent); }
+
+#utPickerGrid img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+}
+
+/* ---------- image library ---------- */
+
+#utLibrary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+/* Five to a row in a 280px panel; the strip wraps from there as history
+   builds up, which is the point of it. */
+.libItem {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    flex: none;
+}
+
+.libItem > button.pick {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 1px solid var(--line);
+    background: var(--paper) center / cover no-repeat;
+    cursor: pointer;
+    transition: var(--ease);
+}
+.libItem > button.pick:hover { border-color: var(--accent); }
+.libItem.current > button.pick { border-color: var(--ink); border-width: 2px; }
+
+.libItem > button.pick.add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: inherit;
+    font-size: 20px;
+    line-height: 1;
+    color: var(--muted);
+    border-style: dashed;
+}
+.libItem > button.pick.add:hover { color: var(--accent); }
+
+.libItem > button.del {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    font: inherit;
+    font-size: 11px;
+    line-height: 14px;
+    border: 1px solid var(--ink);
+    border-radius: 50%;
+    background: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+    opacity: 0;
+    transition: var(--ease);
+}
+.libItem:hover > button.del,
+.libItem > button.del:focus-visible { opacity: 1; }
+.libItem > button.del:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--paper);
+}
+
+/* no hover to reveal the control on touch, so leave it out */
+@media (hover: none) {
+    .libItem > button.del { opacity: 1; }
+}
+
+/* ---------- control panel ---------- */
+
+#utPanel {
+    width: 280px;
+    flex-shrink: 0;
+    padding: 24px 20px;
+    border-left: 1px solid var(--line);
+    background: var(--paper);
+    overflow-y: auto;
+}
+
+#utPlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 14px;
+    font-family: field-gothic-compact, sans-serif;
+    font-size: 20px;
+    text-transform: uppercase;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+    cursor: pointer;
+    transition: var(--ease);
+}
+#utPlay svg { width: 14px; height: 14px; fill: currentColor; }
+#utPlay svg[hidden] { display: none; }
+#utPlay:hover:not(:disabled) { background: var(--accent); border-color: var(--accent); }
+#utPlay:disabled {
+    background: var(--paper);
+    color: var(--line);
+    border-color: var(--line);
+    cursor: default;
+}
+
+#utStats {
+    margin: 12px 0 20px;
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+    min-height: 14px;
+}
+
+.ctl { margin-bottom: 22px; }
+
+.ctl label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+}
+
+.ctl .val { color: var(--muted); text-transform: none; letter-spacing: 0; }
+
+.ctl input[type="range"] {
+    width: 100%;
+    margin: 0;
+    accent-color: var(--ink);
+}
+
+/* Segmented icon buttons, same shape of control as the other tools use. */
+.iconRow {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+}
+
+.opt {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 46px;
+    padding: 0;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+    transition: var(--ease);
+}
+
+.opt:hover { border-color: var(--ink); }
+
+.opt[aria-checked="true"] {
+    border-color: var(--ink);
+    box-shadow: inset 0 0 0 1px var(--ink);
+}
+
+/* The icons are solid black artwork, so state is carried by the frame and by
+   fading the ones not in play. */
+.opt img {
+    display: block;
+    width: 34px;
+    height: 34px;
+    opacity: 0.45;
+    transition: var(--ease);
+}
+.opt:hover img { opacity: 0.75; }
+.opt[aria-checked="true"] img { opacity: 1; }
+
+/* The scale marks are upright shapes, so their buttons want to be square
+   rather than the full-width slabs that suit the waveforms. */
+#utScale { grid-template-columns: repeat(3, 50px); }
+#utScale .opt { height: 50px; }
+
+/* The waveform art fills 90% of its square horizontally but only 40%
+   vertically, so fitting it to a square box leaves a wisp. Oversize it and let
+   the empty top and bottom of the artboard spill out of the button. */
+.iconRow.wave .opt { overflow: hidden; }
+.iconRow.wave img { width: 62px; height: 62px; }
+
+/* ---------- narrow screens ---------- */
+
+@media (max-width: 860px) {
+    #utBody { flex-direction: column; }
+    #utPanel {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid var(--line);
+    }
+    #utStage { padding: 16px; }
+    #utCanvas { max-height: 52vh; }
+}
