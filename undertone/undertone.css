@@ -81,17 +81,28 @@ html, body {
     color: var(--muted);
 }
 
-.ghostBtn {
-    font-family: field-gothic-wide, sans-serif;
-    font-size: 13px;
-    padding: 8px 14px;
-    border: 1px solid var(--ink);
+/* The + control. One class for both the header button and the trailing tile in
+   the image strip, so the two stay identical by construction. */
+.addBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    font: inherit;
+    font-size: 20px;
+    line-height: 1;
+    border: 1px dashed var(--line);
     background: var(--paper);
-    color: var(--ink);
+    color: var(--muted);
     cursor: pointer;
     transition: var(--ease);
 }
-.ghostBtn:hover { background: var(--ink); color: var(--paper); }
+.addBtn:hover { color: var(--accent); border-color: var(--accent); }
+/* an author `display` beats the UA [hidden] rule, so restate it */
+.addBtn[hidden] { display: none; }
 
 /* ---------- body layout ---------- */
 
@@ -249,18 +260,6 @@ body.dragging #utDrop {
 }
 .libItem > button.pick:hover { border-color: var(--accent); }
 .libItem.current > button.pick { border-color: var(--ink); border-width: 2px; }
-
-.libItem > button.pick.add {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font: inherit;
-    font-size: 20px;
-    line-height: 1;
-    color: var(--muted);
-    border-style: dashed;
-}
-.libItem > button.pick.add:hover { color: var(--accent); }
 
 .libItem > button.del {
     position: absolute;

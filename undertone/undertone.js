@@ -31,7 +31,7 @@
         quantC: null,       // Otsu two-tone view, ditto
         W: 0, H: 0,
         beats: [],          // { x, strength (0..1), step }
-        notes: [],          // { x, y, r, strength (0..1), step, flashAt }
+        notes: [],          // { x, y, r, strength (0..1), step, flashAt, popAt }
         playing: false,
         bpm: 96,
         scale: 'minorPent',
@@ -130,7 +130,7 @@
         add.className = 'libItem';
         const plus = document.createElement('button');
         plus.type = 'button';
-        plus.className = 'pick add';
+        plus.className = 'addBtn';
         plus.textContent = '+';
         plus.title = 'Add an image';
         plus.setAttribute('aria-label', 'Add an image');
@@ -209,8 +209,18 @@
         img.src = src;
     }
 
+    // iPhone photos arrive as HEIC. Safari decodes it like any other image;
+    // Chrome and Firefox decode it by no route at all — not <img>, not
+    // createImageBitmap, not ImageDecoder — so they need the fallback below.
+    // The type is often empty when the file comes off a drag or a share sheet,
+    // hence the extension check.
+    function isHeic(file) {
+        return /^image\/hei[cf]/i.test(file.type || '') || /\.hei[cf]$/i.test(file.name || '');
+    }
+
     function acceptFile(file) {
-        if (!file || !file.type.startsWith('image/')) return;
+        if (!file) return;
+        if (!(file.type || '').startsWith('image/') && !isHeic(file)) return;
         unlockAudio();
 
         // the same file dropped twice is the same entry, not a second one
@@ -218,13 +228,60 @@
         const known = library.find(e => e.key === key);
         if (known) { openEntry(known); return; }
 
-        // the object URL outlives this load: the library keeps it so the image
-        // can be recalled later, and releases it when the entry is deleted
-        const url = URL.createObjectURL(file);
+        intake(file, URL.createObjectURL(file), key, false);
+    }
+
+    // The object URL outlives this load: the library keeps it so the image can
+    // be recalled later, and releases it when the entry is deleted.
+    function intake(file, url, key, converted) {
         loadImage(url, (img) => {
             libraryAdd({ key, src: url, name: file.name || 'Image', thumb: makeThumb(img), owned: true });
             show(key, img);
-        }, () => URL.revokeObjectURL(url));
+        }, () => {
+            URL.revokeObjectURL(url);
+            // Native decode failed. Try the HEIC decoder before giving up — but
+            // only once, or a file that also fails to load after conversion
+            // would bounce between these two branches forever.
+            if (converted || !isHeic(file)) { intakeFailed(file); return; }
+            heicToBlob(file)
+                .then((blob) => intake(file, URL.createObjectURL(blob), key, true))
+                .catch(() => intakeFailed(file));
+        });
+    }
+
+    function intakeFailed(file) {
+        const what = isHeic(file) ? 'that HEIC' : `“${file.name || 'that file'}”`;
+        note(`Couldn't read ${what}.`);
+    }
+
+    // Only fetched when a file actually needs it, so the weight never lands on
+    // anyone who doesn't drop a HEIC — and never on Safari, which decodes them
+    // natively and so never reaches this path.
+    let heifReady = null;
+
+    async function heicToBlob(file) {
+        note('Reading HEIC…');
+        if (!heifReady) heifReady = import('./vendor/libheif.js').then((m) => m.default());
+        const libheif = await heifReady;
+
+        const images = new libheif.HeifDecoder().decode(new Uint8Array(await file.arrayBuffer()));
+        if (!images || !images.length) throw new Error('no image in container');
+
+        const image = images[0];
+        const w = image.get_width(), h = image.get_height();
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        const ctx = c.getContext('2d');
+        const data = ctx.createImageData(w, h);
+        await new Promise((res, rej) => {
+            image.display(data, (out) => (out ? res(out) : rej(new Error('decode failed'))));
+        });
+        ctx.putImageData(data, 0, 0);
+        note('');
+
+        return new Promise((res, rej) => {
+            c.toBlob((b) => (b ? res(b) : rej(new Error('encode failed'))), 'image/jpeg', 0.92);
+        });
     }
 
     function acceptImage(source) {
@@ -274,6 +331,14 @@
 
     function updateStats() {
         els.stats.textContent = `${state.beats.length} beats · ${state.notes.length} notes`;
+    }
+
+    // A transient line in the panel for the things the reveal's own labels
+    // don't cover — decoding progress, a file that couldn't be read.
+    function note(msg) {
+        if (msg) { els.stats.textContent = msg; return; }
+        els.stats.innerHTML = '&nbsp;';
+        if (state.img && !intro) updateStats();
     }
 
     // Sobel at one pixel. Returns the pair so callers can ask about direction.
@@ -1138,13 +1203,17 @@
         const dotReveal = (y) => Math.max(0, Math.min(1, (dotsY - y) / (H * 0.12)));
 
         for (const n of state.notes) {
-            const ra = dotReveal(n.y);
-            if (ra <= 0) continue;
+            if (dotReveal(n.y) <= 0) continue;
+            // Stamped the first frame the wipe clears the dot, so arriving uses
+            // the same 260ms swell a note gets when it sounds — bigger, then
+            // settling to size — just without the colour change.
+            if (!n.popAt) n.popAt = now;
+            const pop = flash(n.popAt);
             const f = flash(n.flashAt);
             cx.fillStyle = f > 0 ? '#c62222' : '#000';
-            cx.globalAlpha = (0.55 + 0.45 * f) * ra;
+            cx.globalAlpha = (0.55 + 0.45 * f) * Math.min(1, 1.4 - pop);
             cx.beginPath();
-            cx.arc(n.x, n.y, n.r * (1 + f * 0.5) * (1 + 0.7 * (1 - ra)), 0, Math.PI * 2);
+            cx.arc(n.x, n.y, n.r * (1 + f * 0.5) * (1 + 0.5 * pop), 0, Math.PI * 2);
             cx.fill();
         }
         cx.globalAlpha = 1;
@@ -1300,7 +1369,10 @@
 
     document.addEventListener('paste', (e) => {
         for (const item of e.clipboardData?.items || []) {
-            if (item.type.startsWith('image/')) { acceptFile(item.getAsFile()); return; }
+            if (item.kind !== 'file') continue;
+            // match on the file, not the item type: HEIC often arrives untyped
+            const f = item.getAsFile();
+            if (f && ((f.type || '').startsWith('image/') || isHeic(f))) { acceptFile(f); return; }
         }
     });
 
