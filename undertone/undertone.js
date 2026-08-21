@@ -13,8 +13,7 @@
     const MIN_NOTES = 6;        // every image sings, even a soft one
     const BUSY_NOTES = 60;      // ...and a busy one sings a lot
     const BUSY_DETAIL = 0.25;   // edge density that counts as "busy"
-    const POP_MS = 420;         // how long a dot takes to settle on arrival
-    const POP_SCALE = 1.2;      // ...and how oversized it lands
+    const POP_MS = 420;         // how long a dot takes to grow to size on arrival
     const OVERLAY = 0.82;       // analysis layers ride over the photo, not instead of it
     const GHOST = 0.4;          // how much photo stays under the finished score
 
@@ -1106,6 +1105,8 @@
         { name: 'lines',  ms: 760, label: 'Reading the beat' },
         { name: 'lines',  ms: HOLD * 2, hold: true },   // the beat wants longer to land
         { name: 'dots',   ms: 820, label: 'Placing the notes' },
+        // the workings clear off the desk, leaving the score on the photograph
+        { name: 'clear',  ms: 900 },
     ];
 
     let intro = null; // { start, phase }
@@ -1246,19 +1247,17 @@
         const at = intro ? introAt(now) : null;
 
         // The source sits at the bottom of every frame and never leaves: the
-        // analysis layers ride over it translucent, so the photograph is the
-        // one constant the eye holds through the whole reveal. It recedes —
-        // partway — only once the score is the thing being read.
-        // The two-tone dissolves off while the stripes are going up, so the
-        // score is being drawn on a clearing picture rather than after one.
-        // It settles before the stripes finish.
-        const shed = at && at.name === 'lines' ? ease(Math.min(1, at.t / 0.7)) : 0;
+        // analysis layers ride over it translucent and the score is drawn on
+        // the full accumulated stack, so the whole reveal builds one picture
+        // up. Only after the last dot has arrived does the working material —
+        // Sobel and two-tone together — fade off, the photo receding partway
+        // with it so what is left is the score on a clean, quiet image.
+        const shed = at && at.name === 'clear' ? ease(at.t) : 0;
 
         let srcAlpha = GHOST;
         if (at) {
             if (at.name === 'source') srcAlpha = ease(at.t);
-            else if (at.name === 'lines') srcAlpha = 1 - (1 - GHOST) * shed;
-            else if (at.name === 'dots') srcAlpha = GHOST;
+            else if (at.name === 'clear') srcAlpha = 1 - (1 - GHOST) * shed;
             else srcAlpha = 1;
         }
 
@@ -1285,8 +1284,9 @@
             drawBand(state.edgeC, 0, W, OVERLAY);
             drawBand(state.quantC, wx, W, OVERLAY, 'multiply');
             if (!at.hold) drawWipeEdge(wx, wx + band);
-        } else if (at && at.name === 'lines') {
-            // the whole accumulated stack sheds together
+        } else if (at && (at.name === 'lines' || at.name === 'dots' || at.name === 'clear')) {
+            // the full composite holds under the score being drawn, then the
+            // whole accumulated stack sheds together once the dots are in
             const a = OVERLAY * (1 - shed);
             drawBand(state.edgeC, 0, W, a);
             drawBand(state.quantC, 0, W, a, 'multiply');
@@ -1299,7 +1299,7 @@
         let lineTop = 0;
         if (at) {
             if (at.name === 'lines') lineTop = H * (1 - easeWipe(at.t));
-            else if (at.name !== 'dots') lineTop = H;   // not drawn yet
+            else if (at.name !== 'dots' && at.name !== 'clear') lineTop = H;  // not drawn yet
         }
         if (lineTop < H) {
             for (const b of state.beats) {
@@ -1317,24 +1317,26 @@
 
         // Notes: dots, wiped on downwards from the ceiling during 'dots'.
         let dotsY = H * 1.2;                            // everything visible
-        if (at) dotsY = at.name === 'dots' ? -H * 0.1 + H * 1.3 * easeDots(at.t) : -1;
+        if (at) {
+            if (at.name === 'dots') dotsY = -H * 0.1 + H * 1.3 * easeDots(at.t);
+            else if (at.name !== 'clear') dotsY = -1;   // not placed yet
+        }
         const dotReveal = (y) => Math.max(0, Math.min(1, (dotsY - y) / (H * 0.12)));
 
         for (const n of state.notes) {
             if (dotReveal(n.y) <= 0) continue;
-            // Stamped the first frame the wipe clears the dot: it lands oversized
-            // and settles, the same gesture a note makes when it sounds, minus
-            // the colour. It needs to be bigger and slower than the sounding
-            // flash to read at all, because that one has red doing the work.
+            // Stamped the first frame the wipe clears the dot: it grows from
+            // nothing up to size, arriving out of the paper rather than landing
+            // on it. Only ceremonial during the reveal — outside it, dots are
+            // simply there at size, so a paused re-analysis never draws blanks.
             if (!n.popAt) n.popAt = now;
-            const raw = Math.max(0, 1 - (now - n.popAt) / POP_MS);
-            const pop = raw * raw;                  // collapse fast, then settle
+            const g = at ? Math.min(1, (now - n.popAt) / POP_MS) : 1;
+            const grow = 1 - Math.pow(1 - g, 3);
             const f = flash(n.flashAt);
             cx.fillStyle = f > 0 ? '#c62222' : '#000';
-            // barely faded — the size is the animation, not the opacity
-            cx.globalAlpha = (0.55 + 0.45 * f) * Math.min(1, 1.6 - 0.8 * raw);
+            cx.globalAlpha = 0.55 + 0.45 * f;
             cx.beginPath();
-            cx.arc(n.x, n.y, n.r * (1 + f * 0.5) * (1 + POP_SCALE * pop), 0, Math.PI * 2);
+            cx.arc(n.x, n.y, n.r * grow * (1 + f * 0.5), 0, Math.PI * 2);
             cx.fill();
         }
         cx.globalAlpha = 1;
