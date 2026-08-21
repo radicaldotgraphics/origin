@@ -1188,13 +1188,14 @@
     }
 
     // one layer of the reveal, clipped to the columns the wipe has passed
-    function drawBand(src, x0, x1, alpha) {
+    function drawBand(src, x0, x1, alpha, blend) {
         if (x1 <= x0) return;
         cx.save();
         cx.beginPath();
         cx.rect(x0, 0, x1 - x0, state.H);
         cx.clip();
         cx.globalAlpha = alpha;
+        if (blend) cx.globalCompositeOperation = blend;
         cx.drawImage(src, 0, 0);
         cx.restore();
         cx.globalAlpha = 1;
@@ -1276,12 +1277,19 @@
             drawBand(state.edgeC, 0, wx, OVERLAY);
             if (!at.hold) drawWipeEdge(wx, wx - band);
         } else if (at && at.name === 'quant') {
+            // The threshold pass does not erase the Sobel view — it multiplies
+            // over it, blacking in the dark mass while the edge drawing keeps
+            // showing through the light mass: each stage calculating on top of
+            // the one before, the picture building up rather than switching.
             const wx = W * (1 - easeWipe(at.t));       // and back, right to left
-            drawBand(state.edgeC, 0, wx, OVERLAY);     // edges survive only ahead of it
-            drawBand(state.quantC, wx, W, OVERLAY);
+            drawBand(state.edgeC, 0, W, OVERLAY);
+            drawBand(state.quantC, wx, W, OVERLAY, 'multiply');
             if (!at.hold) drawWipeEdge(wx, wx + band);
         } else if (at && at.name === 'lines') {
-            drawBand(state.quantC, 0, W, OVERLAY * (1 - shed));
+            // the whole accumulated stack sheds together
+            const a = OVERLAY * (1 - shed);
+            drawBand(state.edgeC, 0, W, a);
+            drawBand(state.quantC, 0, W, a, 'multiply');
         }
 
         const flash = (at2) => Math.max(0, 1 - (now - at2) / 260);
