@@ -1145,21 +1145,23 @@
     // The image walks through what the analyzer did to it — photograph, edges,
     // two-tone, score — and then the playhead takes over from the last wipe.
     // Each stage wipes in, then holds a beat so you can actually look at it.
-    const HOLD = 1000;
+    // Barely a breath between stages — the sequence reads as one continuous
+    // calculation, each move starting almost on the last one's heels.
+    const HOLD = 100;
     // Each wipe runs against the one before it: the edges come in left to
     // right, the two-tone comes back right to left, then the score is drawn on
-    // in two strokes — stripes up off the floor, dots down from the ceiling.
+    // in two strokes — stripes up off the floor, dots grown down the frame.
     const PHASES = [
         { name: 'source', ms: 420, label: 'Reading the image' },
         { name: 'source', ms: HOLD, hold: true },
         { name: 'edges',  ms: 900, label: 'Finding edges' },
         // no hold — the meter picks up the moment the wipe line leaves the frame
         { name: 'meter',  ms: 1600, label: 'Measuring lightness' },
-        { name: 'meter',  ms: 500, hold: true },        // a breath once the arrow lands
+        { name: 'meter',  ms: HOLD, hold: true },
         { name: 'quant',  ms: 900, label: 'Quantizing' },
         { name: 'quant',  ms: HOLD, hold: true },
         { name: 'lines',  ms: 760, label: 'Reading the beat' },
-        { name: 'lines',  ms: HOLD * 2, hold: true },   // the beat wants longer to land
+        { name: 'lines',  ms: HOLD, hold: true },
         { name: 'dots',   ms: 1200, label: 'Placing the notes' },
         // the workings clear off the desk, leaving the score on the photograph
         { name: 'clear',  ms: 900 },
