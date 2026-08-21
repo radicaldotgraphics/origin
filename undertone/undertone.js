@@ -13,7 +13,6 @@
     const MIN_NOTES = 6;        // every image sings, even a soft one
     const BUSY_NOTES = 60;      // ...and a busy one sings a lot
     const BUSY_DETAIL = 0.25;   // edge density that counts as "busy"
-    const POP_MS = 420;         // how long a dot takes to grow to size on arrival
     const OVERLAY = 0.82;       // analysis layers ride over the photo, not instead of it
     const GHOST = 0.4;          // how much photo stays under the finished score
 
@@ -546,14 +545,6 @@
         const ecx = edge.getContext('2d');
         const eimg = ecx.createImageData(W, H);
         const ed = eimg.data;
-        // A second cut of the same drawing for screen compositing: black
-        // ground, marks as light — screened over the stack the edges glow
-        // through without blackening what sits beneath them.
-        const edgeS = document.createElement('canvas');
-        edgeS.width = W; edgeS.height = H;
-        const scx = edgeS.getContext('2d');
-        const simg = scx.createImageData(W, H);
-        const sd = simg.data;
         const mag = new Float32Array(W * H);
         let busy = 0;
 
@@ -580,15 +571,9 @@
                 ed[i * 4 + 1] = 255 + (cg - 255) * k;
                 ed[i * 4 + 2] = 255 + (cb - 255) * k;
                 ed[i * 4 + 3] = 255;
-                // screen cut: accent-lit drums, pale grey everything else
-                sd[i * 4]     = (vertical ? state.accent.r : 235) * k;
-                sd[i * 4 + 1] = (vertical ? state.accent.g : 235) * k;
-                sd[i * 4 + 2] = (vertical ? state.accent.b : 235) * k;
-                sd[i * 4 + 3] = 255;
             }
         }
         ecx.putImageData(eimg, 0, 0);
-        scx.putImageData(simg, 0, 0);
 
         const otsu = otsuThreshold(gray);
         const dark = figureIsDark(gray, otsu);
@@ -608,7 +593,6 @@
         qcx.putImageData(qimg, 0, 0);
 
         state.edgeC = edge;
-        state.edgeSC = edgeS;
         state.quantC = quant;
         state.mag = mag;
         state.detail = busy / (W * H); // how much there is to say about this image
@@ -1176,7 +1160,7 @@
         { name: 'quant',  ms: HOLD, hold: true },
         { name: 'lines',  ms: 760, label: 'Reading the beat' },
         { name: 'lines',  ms: HOLD * 2, hold: true },   // the beat wants longer to land
-        { name: 'dots',   ms: 820, label: 'Placing the notes' },
+        { name: 'dots',   ms: 1200, label: 'Placing the notes' },
         // the workings clear off the desk, leaving the score on the photograph
         { name: 'clear',  ms: 900 },
     ];
@@ -1361,23 +1345,22 @@
         } else if (at && at.name === 'meter') {
             drawBand(state.edgeC, 0, W, OVERLAY);      // holds while the meter reads
         } else if (at && at.name === 'quant') {
-            // The threshold mass slides in *beneath* the edge drawing: the
-            // flat Sobel view lifts as the wipe starts, its screen cut takes
-            // over glowing on top, and the accent-coloured two-tone wipes in
-            // underneath — each stage calculating around the one before
-            // rather than erasing it.
-            const wx = W - (W + band + 2) * easeWipe(at.t);    // and back, out the near side
-            const lift = at.hold ? 1 : Math.min(1, at.t / 0.25);
-            drawBand(state.quantC, Math.max(0, wx), W, OVERLAY);
-            if (lift < 1) drawBand(state.edgeC, 0, W, OVERLAY * (1 - lift));
-            drawBand(state.edgeSC, 0, W, OVERLAY * lift, 'screen');
+            // A pure build-up: the standing Sobel view holds everywhere, and
+            // the wipe converts it region by region into two-tone with the
+            // same drawing multiplied back through — nothing fades, the mass
+            // arrives and the edges burn over it, both layers distinct.
+            const wx = Math.max(0, W - (W + band + 2) * easeWipe(at.t));  // and back, out the near side
+            drawBand(state.edgeC, 0, W, OVERLAY);
+            drawBand(state.quantC, wx, W, OVERLAY);
+            drawBand(state.edgeC, wx, W, OVERLAY, 'multiply');
             if (!at.hold) drawWipeEdge(wx, wx + band);
         } else if (at && (at.name === 'lines' || at.name === 'dots' || at.name === 'clear')) {
             // the full composite holds under the score being drawn, then the
             // whole accumulated stack sheds together once the dots are in
             const a = OVERLAY * (1 - shed);
+            drawBand(state.edgeC, 0, W, a);
             drawBand(state.quantC, 0, W, a);
-            drawBand(state.edgeSC, 0, W, a, 'screen');
+            drawBand(state.edgeC, 0, W, a, 'multiply');
         }
 
         const flash = (at2) => Math.max(0, 1 - (now - at2) / 260);
@@ -1404,21 +1387,21 @@
         }
 
         // Notes: dots, wiped on downwards from the ceiling during 'dots'.
-        let dotsY = H * 1.2;                            // everything visible
-        if (at) {
-            if (at.name === 'dots') dotsY = -H * 0.1 + H * 1.3 * easeDots(at.t);
-            else if (at.name !== 'clear') dotsY = -1;   // not placed yet
-        }
-        const dotReveal = (y) => Math.max(0, Math.min(1, (dotsY - y) / (H * 0.12)));
-
+        // Dots don't wipe on — they grow where they stand, top to bottom, a
+        // cascade rather than a curtain. Each dot's start is staggered by its
+        // height in the frame; the growth itself takes the back half of the
+        // phase, easing out so every dot arrives settling. Outside the reveal
+        // they are simply there at size, so a paused re-analysis never draws
+        // blanks.
+        const CASCADE = 0.55;                   // the stagger's share of the phase
         for (const n of state.notes) {
-            if (dotReveal(n.y) <= 0) continue;
-            // Stamped the first frame the wipe clears the dot: it grows from
-            // nothing up to size, arriving out of the paper rather than landing
-            // on it. Only ceremonial during the reveal — outside it, dots are
-            // simply there at size, so a paused re-analysis never draws blanks.
-            if (!n.popAt) n.popAt = now;
-            const g = at ? Math.min(1, (now - n.popAt) / POP_MS) : 1;
+            let g = 1;
+            if (at) {
+                if (at.name === 'dots') {
+                    g = Math.max(0, Math.min(1, (at.t - (n.y / H) * CASCADE) / (1 - CASCADE)));
+                } else if (at.name !== 'clear') g = 0;
+            }
+            if (g <= 0) continue;
             const grow = 1 - Math.pow(1 - g, 3);
             const f = flash(n.flashAt);
             cx.fillStyle = f > 0 ? accent() : '#000';
@@ -1430,7 +1413,6 @@
         cx.globalAlpha = 1;
 
         if (at && at.name === 'lines' && !at.hold) drawWipeEdgeH(lineTop, lineTop + bandY);
-        if (at && at.name === 'dots' && dotsY > 0) drawWipeEdgeH(dotsY, dotsY - bandY);
 
         // The register readout: after the Sobel pass has held, a 0–255
         // lightness ramp rises up the far left and the pointer drops onto the
