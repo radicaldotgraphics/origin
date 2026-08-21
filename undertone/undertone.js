@@ -13,6 +13,8 @@
     const MIN_NOTES = 6;        // every image sings, even a soft one
     const BUSY_NOTES = 60;      // ...and a busy one sings a lot
     const BUSY_DETAIL = 0.25;   // edge density that counts as "busy"
+    const POP_MS = 420;         // how long a dot takes to settle on arrival
+    const POP_SCALE = 1.2;      // ...and how oversized it lands
 
     const SCALES = {
         minorPent: [0, 3, 5, 7, 10],
@@ -35,6 +37,7 @@
         playing: false,
         bpm: 96,
         scale: 'minorPent',
+        root: 0,            // semitones from A, chosen by the image's dominant hue
         lineSens: 0.5,
         dotSens: 0.5,
     };
@@ -71,6 +74,7 @@
         key: `s:${s.file}`, src: s.file, thumb: s.thumb, name: s.name, sample: true,
     }));
     let currentKey = null;
+    let setScaleButton = null;   // assigned when the control panel is wired up
 
     function makeThumb(img) {
         const S = 92;
@@ -193,6 +197,98 @@
         els.dropInner.hidden = false;
     }
 
+    // ---------- colour ----------
+
+    // Hue is an angle, and it is meaningless on a pixel with no colour in it:
+    // sensor noise swings a near-grey pixel right round the wheel. So this is a
+    // saturation-weighted histogram, not an average — an average would read
+    // that noise as signal, and averaging 350° with 10° would land on cyan,
+    // the opposite of both. Near-black and near-white are skipped for the same
+    // reason: their hue is not trustworthy either.
+    function readColour(data, n) {
+        const BINS = 36;
+        const hues = new Float64Array(BINS);
+        const satHist = new Uint32Array(101);
+        let weight = 0, used = 0;
+
+        let lightSum = 0;
+
+        for (let i = 0; i < n; i++) {
+            const r = data[i * 4] / 255, g = data[i * 4 + 1] / 255, b = data[i * 4 + 2] / 255;
+            const max = Math.max(r, g, b), min = Math.min(r, g, b);
+            const l = (max + min) / 2;
+            lightSum += l;                  // every pixel counts towards register
+            if (l < 0.12 || l > 0.94) continue;
+            used++;
+
+            const d = max - min;
+            const s = max > 0 ? d / max : 0;
+            satHist[Math.round(s * 100)]++;
+            if (d <= 0) continue;
+
+            let h;
+            if (max === r) h = ((g - b) / d) % 6;
+            else if (max === g) h = (b - r) / d + 2;
+            else h = (r - g) / d + 4;
+            h = (h * 60 + 360) % 360;
+
+            const w = s * s;                 // vivid pixels get the loudest vote
+            hues[Math.floor(h / (360 / BINS)) % BINS] += w;
+            weight += w;
+        }
+
+        // "how vivid is this picture where it has any colour at all"
+        let cum = 0, sat = 0;
+        const target = used * 0.75;
+        for (let i = 0; i <= 100; i++) { cum += satHist[i]; if (cum >= target) { sat = i / 100; break; } }
+
+        // dominant hue: the tallest bin, nudged towards whichever neighbour is
+        // heavier so the reading is finer than the 10° buckets
+        let p = 0;
+        for (let i = 1; i < BINS; i++) if (hues[i] > hues[p]) p = i;
+        const a = hues[(p + BINS - 1) % BINS], c = hues[p], e = hues[(p + 1) % BINS];
+        const nudge = (e - a) / (a + c + e || 1);
+        const hue = ((p + 0.5 + nudge) * (360 / BINS) + 360) % 360;
+
+        return { hue, sat, colourfulness: used ? weight / used : 0, light: lightSum / n };
+    }
+
+    // Colour picks the key and the flavour; height still picks the note, so the
+    // score stays readable. Measured across the samples: greyscale sits at 0
+    // colourfulness, a muted photograph around 0.04, vivid artwork above 0.2.
+    const ACHROMATIC = 0.008;
+
+    function paletteFor(colour) {
+        // Hue walks the twelve keys, red sitting on the A the tool already used.
+        // Below the floor there is no real hue to read, so the key stays put.
+        let root = 0;
+        if (colour.colourfulness >= ACHROMATIC) {
+            root = Math.round(colour.hue / 30) % 12;
+            if (root > 5) root -= 12;        // keep the register near A2
+        }
+
+        // Saturation is a real reading even at zero — a picture with no colour
+        // in it is austere, and should sound that way.
+        const scale = colour.sat < 0.30 ? 'insen'
+                    : colour.sat < 0.65 ? 'minorPent'
+                    : 'majorPent';
+
+        // Lightness moves the register rather than the key, so two pictures of
+        // the same colour still separate — a dark one plays an octave below a
+        // pale one — while "red is A" stays true, since an octave does not
+        // change the note's name.
+        const octave = colour.light < 0.40 ? -1 : colour.light > 0.62 ? 1 : 0;
+
+        return { root: root + octave * 12, scale };
+    }
+
+    const NOTE_NAMES = ['A', 'A\u266F', 'B', 'C', 'C\u266F', 'D', 'D\u266F', 'E', 'F', 'F\u266F', 'G', 'G\u266F'];
+    const SCALE_NAMES = { minorPent: 'minor', majorPent: 'major', insen: 'in-sen' };
+
+    function keyName() {
+        return `${NOTE_NAMES[((state.root % 12) + 12) % 12]} ${SCALE_NAMES[state.scale]}`;
+    }
+
     // ---------- image intake ----------
 
     // Playback starts at the end of the reveal, seconds after the gesture that
@@ -301,6 +397,12 @@
             gray[i] = 0.299 * data[i * 4] + 0.587 * data[i * 4 + 1] + 0.114 * data[i * 4 + 2];
         }
 
+        // the last look at the colour before everything downstream goes grey
+        const palette = paletteFor(readColour(data, W * H));
+        state.root = palette.root;
+        state.scale = palette.scale;
+        if (setScaleButton) setScaleButton(palette.scale, false);
+
         state.img = off;
         state.gray = gray;
         state.W = W; state.H = H;
@@ -330,7 +432,8 @@
     }
 
     function updateStats() {
-        els.stats.textContent = `${state.beats.length} beats · ${state.notes.length} notes`;
+        els.stats.textContent =
+            `${state.beats.length} beats · ${state.notes.length} notes · ${keyName()}`;
     }
 
     // A transient line in the panel for the things the reveal's own labels
@@ -833,11 +936,12 @@
 
     function pitches() {
         const scale = SCALES[state.scale];
+        const base = BASE_FREQ * Math.pow(2, state.root / 12);
         const out = [];
         for (let o = 0; o <= OCTAVES; o++) {
-            for (const s of scale) out.push(BASE_FREQ * Math.pow(2, o + s / 12));
+            for (const s of scale) out.push(base * Math.pow(2, o + s / 12));
         }
-        out.push(BASE_FREQ * Math.pow(2, OCTAVES + 1));
+        out.push(base * Math.pow(2, OCTAVES + 1));
         return out;
     }
 
@@ -1204,16 +1308,19 @@
 
         for (const n of state.notes) {
             if (dotReveal(n.y) <= 0) continue;
-            // Stamped the first frame the wipe clears the dot, so arriving uses
-            // the same 260ms swell a note gets when it sounds — bigger, then
-            // settling to size — just without the colour change.
+            // Stamped the first frame the wipe clears the dot: it lands oversized
+            // and settles, the same gesture a note makes when it sounds, minus
+            // the colour. It needs to be bigger and slower than the sounding
+            // flash to read at all, because that one has red doing the work.
             if (!n.popAt) n.popAt = now;
-            const pop = flash(n.popAt);
+            const raw = Math.max(0, 1 - (now - n.popAt) / POP_MS);
+            const pop = raw * raw;                  // collapse fast, then settle
             const f = flash(n.flashAt);
             cx.fillStyle = f > 0 ? '#c62222' : '#000';
-            cx.globalAlpha = (0.55 + 0.45 * f) * Math.min(1, 1.4 - pop);
+            // barely faded — the size is the animation, not the opacity
+            cx.globalAlpha = (0.55 + 0.45 * f) * Math.min(1, 1.6 - 0.8 * raw);
             cx.beginPath();
-            cx.arc(n.x, n.y, n.r * (1 + f * 0.5) * (1 + 0.5 * pop), 0, Math.PI * 2);
+            cx.arc(n.x, n.y, n.r * (1 + f * 0.5) * (1 + POP_SCALE * pop), 0, Math.PI * 2);
             cx.fill();
         }
         cx.globalAlpha = 1;
@@ -1406,9 +1513,10 @@
         };
         for (const b of buttons) b.addEventListener('click', () => select(b.dataset.val, true));
         select(initial, false);
+        return select;
     }
 
-    radioGroup(els.scale, state.scale, (v) => { state.scale = v; });
+    setScaleButton = radioGroup(els.scale, state.scale, (v) => { state.scale = v; updateStats(); });
     radioGroup(els.lineSens, String(state.lineSens * 100), (v) => {
         state.lineSens = +v / 100;
         reanalyze();
