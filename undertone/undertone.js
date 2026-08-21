@@ -1038,6 +1038,36 @@
         noiseBuf = ac.createBuffer(1, ac.sampleRate / 2, ac.sampleRate);
         const nd = noiseBuf.getChannelData(0);
         for (let i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
+
+        // The reveal leaves seconds of silence between the unlock gesture and
+        // the deferred start, and a context that sits idle in that window is
+        // exactly what Safari likes to quietly suspend. So something
+        // inaudible renders from the moment the context exists — the graph is
+        // never idle, and the deferred resume() has nothing to refuse.
+        if (ac.createConstantSource) {
+            const hum = ac.createConstantSource();
+            const hg = ac.createGain();
+            hg.gain.value = 0.0001;         // -80dB: renders, cannot be heard
+            hum.connect(hg);
+            hg.connect(ac.destination);
+            hum.start();
+        }
+    }
+
+    // Belt to the keep-alive's braces: if the deferred resume() is refused
+    // anyway, the next real gesture anywhere retries it inside its own
+    // gesture window — worst case one tap restores sound, instead of
+    // permanent silence.
+    let rescueArmed = false;
+    function armResumeRescue() {
+        setTimeout(() => {
+            if (!state.playing || !ac || ac.state === 'running' || rescueArmed) return;
+            rescueArmed = true;
+            window.addEventListener('pointerdown', () => {
+                rescueArmed = false;
+                if (ac.state !== 'running') ac.resume();
+            }, { once: true, capture: true });
+        }, 300);
     }
 
     function playKick(t, vel) {
@@ -1125,6 +1155,7 @@
         } else {
             audioInit();
             ac.resume();
+            armResumeRescue();
             state.playing = true;
             stepIndex = 0;
             nextStepTime = ac.currentTime + 0.06;
@@ -1147,7 +1178,7 @@
     // Each stage wipes in, then holds a beat so you can actually look at it.
     // Barely a breath between stages — the sequence reads as one continuous
     // calculation, each move starting almost on the last one's heels.
-    const HOLD = 100;
+    const HOLD = 50;
     // Each wipe runs against the one before it: the edges come in left to
     // right, the two-tone comes back right to left, then the score is drawn on
     // in two strokes — stripes up off the floor, dots grown down the frame.
