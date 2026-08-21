@@ -1374,12 +1374,13 @@
                 const target = H * (1 - state.light);
                 const drop = at.name === 'quant' ? easeDots(at.t) : 1;
                 const y = (target + 4) * drop - 4;
-                // the /shaders dial marker at miniature, pointing at the left edge
-                const th = barW * 0.4, depth = barW * 0.55;
+                // the /shaders dial marker at miniature: base flush on the
+                // bar's right seam, tip reaching the centre of the ramp
+                const th = barW * 0.4;
                 cx.beginPath();
-                cx.moveTo(depth, y - th);
-                cx.lineTo(0, y);
-                cx.lineTo(depth, y + th);
+                cx.moveTo(barW, y - th);
+                cx.lineTo(barW / 2, y);
+                cx.lineTo(barW, y + th);
                 cx.closePath();
                 cx.fill();
                 const val = Math.round(255 * (1 - Math.min(1, Math.max(0, y / H))));
