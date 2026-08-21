@@ -1355,34 +1355,44 @@
         if (at && at.name !== 'source') {
             cx.globalAlpha = 1 - shed;
             const barW = Math.max(2.5, W / 320);
-            const barX = barW * 2;
             const rampH = H * (at.name === 'edges' ? easeWipe(at.t) : 1);
             const ramp = cx.createLinearGradient(0, H, 0, 0);
             ramp.addColorStop(0, '#000');
             ramp.addColorStop(1, '#fff');
             cx.fillStyle = ramp;
-            cx.fillRect(barX, H - rampH, barW, rampH);
-            cx.strokeStyle = 'rgba(0,0,0,0.35)';
-            cx.lineWidth = 0.75;
-            cx.strokeRect(barX, H - rampH, barW, rampH);
+            cx.fillRect(0, H - rampH, barW, rampH);
+            // only the right edge gets a stroke — the other three sit on the
+            // image's own edges
+            cx.strokeStyle = 'rgba(0,0,0,0.7)';
+            cx.lineWidth = 0.25;
+            cx.beginPath();
+            cx.moveTo(barW, H - rampH);
+            cx.lineTo(barW, H);
+            cx.stroke();
 
             if (at.name !== 'edges') {
-                const size = Math.max(5, W / 130);
                 const target = H * (1 - state.light);
                 const drop = at.name === 'quant' ? easeDots(at.t) : 1;
-                const y = -size + (target + size) * drop;
+                const y = (target + 4) * drop - 4;
                 const moving = at.name === 'quant' && !at.hold;
+                // the /shaders dial marker at miniature: a solid sliver at the
+                // rim pointing into the bar, hairlined so the dark end of the
+                // ramp can't swallow it
+                const th = barW * 0.4, depth = barW * 0.55;
                 cx.fillStyle = moving ? '#c62222' : '#000';
+                cx.strokeStyle = 'rgba(255,255,255,0.8)';
+                cx.lineWidth = 0.5;
                 cx.beginPath();
-                cx.moveTo(barX + barW + 1, y);
-                cx.lineTo(barX + barW + 1 + size, y - size * 0.6);
-                cx.lineTo(barX + barW + 1 + size, y + size * 0.6);
+                cx.moveTo(0, y - th);
+                cx.lineTo(depth, y);
+                cx.lineTo(0, y + th);
                 cx.closePath();
+                cx.stroke();
                 cx.fill();
                 const val = Math.round(255 * (1 - Math.min(1, Math.max(0, y / H))));
-                cx.font = `${Math.max(9, Math.round(W * 0.013))}px ui-monospace, monospace`;
+                cx.font = `${Math.max(7, Math.round(W * 0.008))}px ui-monospace, monospace`;
                 cx.textBaseline = 'middle';
-                cx.fillText(val, barX + barW + size + 4, Math.max(8, Math.min(H - 8, y)));
+                cx.fillText(val, barW + 3, Math.max(6, Math.min(H - 6, y)));
             }
             cx.globalAlpha = 1;
         }
