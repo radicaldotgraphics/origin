@@ -1361,39 +1361,33 @@
             ramp.addColorStop(1, '#fff');
             cx.fillStyle = ramp;
             cx.fillRect(0, H - rampH, barW, rampH);
-            // only the right edge gets a stroke — the other three sit on the
-            // image's own edges
-            cx.strokeStyle = 'rgba(0,0,0,0.7)';
-            cx.lineWidth = 0.25;
-            cx.beginPath();
-            cx.moveTo(barW, H - rampH);
-            cx.lineTo(barW, H);
-            cx.stroke();
+            // No drawn colour reads on every image, so everything laid over
+            // the ramp works in difference: white fills that invert whatever
+            // sits beneath them. The right edge is a difference seam rather
+            // than a stroke, and the marker and label can't be swallowed by
+            // either end of the ramp or the picture behind them.
+            cx.globalCompositeOperation = 'difference';
+            cx.fillStyle = '#fff';
+            cx.fillRect(barW, H - rampH, 0.5, rampH);
 
             if (at.name !== 'edges') {
                 const target = H * (1 - state.light);
                 const drop = at.name === 'quant' ? easeDots(at.t) : 1;
                 const y = (target + 4) * drop - 4;
-                const moving = at.name === 'quant' && !at.hold;
-                // the /shaders dial marker at miniature: a solid sliver at the
-                // rim pointing into the bar, hairlined so the dark end of the
-                // ramp can't swallow it
+                // the /shaders dial marker at miniature, pointing at the left edge
                 const th = barW * 0.4, depth = barW * 0.55;
-                cx.fillStyle = moving ? '#c62222' : '#000';
-                cx.strokeStyle = 'rgba(255,255,255,0.8)';
-                cx.lineWidth = 0.5;
                 cx.beginPath();
-                cx.moveTo(0, y - th);
-                cx.lineTo(depth, y);
-                cx.lineTo(0, y + th);
+                cx.moveTo(depth, y - th);
+                cx.lineTo(0, y);
+                cx.lineTo(depth, y + th);
                 cx.closePath();
-                cx.stroke();
                 cx.fill();
                 const val = Math.round(255 * (1 - Math.min(1, Math.max(0, y / H))));
                 cx.font = `${Math.max(7, Math.round(W * 0.008))}px ui-monospace, monospace`;
                 cx.textBaseline = 'middle';
                 cx.fillText(val, barW + 3, Math.max(6, Math.min(H - 6, y)));
             }
+            cx.globalCompositeOperation = 'source-over';
             cx.globalAlpha = 1;
         }
 
