@@ -77,6 +77,8 @@
     }));
     let currentKey = null;
     let setScaleButton = null;   // assigned when the control panel is wired up
+    let setLineSensButton = null;
+    let setDotSensButton = null;
 
     function makeThumb(img) {
         const S = 92;
@@ -421,8 +423,34 @@
 
         if (state.playing) togglePlay(); // a new image restarts the loop
         buildRasters();
-        analyze();
+        autoTuneSensitivity();
         startIntro(); // watch it become a score, then hear it
+    }
+
+    // Like the key, density is the image's call. Medium is only a first
+    // guess: the image is read at it, and if the score comes back far off
+    // the ideal complexity — around 20 beats, around 30 notes — the
+    // sensitivity steps once toward it and the image is read again. One
+    // step only, no feedback loop; the floors in the analyzers catch the
+    // rest. Runs per intake, so it never fights a manual nudge mid-image.
+    const IDEAL_BEATS = 20;
+    const IDEAL_NOTES = 30;
+
+    function autoTuneSensitivity() {
+        state.lineSens = 0.5;
+        state.dotSens = 0.5;
+        analyze();
+        const line = state.beats.length > IDEAL_BEATS * 1.6 ? 0
+                   : state.beats.length < IDEAL_BEATS * 0.5 ? 1 : 0.5;
+        const dot  = state.notes.length > IDEAL_NOTES * 1.6 ? 0
+                   : state.notes.length < IDEAL_NOTES * 0.5 ? 1 : 0.5;
+        if (line !== state.lineSens || dot !== state.dotSens) {
+            state.lineSens = line;
+            state.dotSens = dot;
+            analyze();
+        }
+        if (setLineSensButton) setLineSensButton(String(line * 100), false);
+        if (setDotSensButton) setDotSensButton(String(dot * 100), false);
     }
 
     // ---------- analysis ----------
@@ -1103,6 +1131,8 @@
         { name: 'source', ms: HOLD, hold: true },
         { name: 'edges',  ms: 900, label: 'Finding edges' },
         { name: 'edges',  ms: HOLD, hold: true },
+        { name: 'meter',  ms: 1600, label: 'Measuring lightness' },
+        { name: 'meter',  ms: 500, hold: true },        // a breath once the arrow lands
         { name: 'quant',  ms: 900, label: 'Quantizing' },
         { name: 'quant',  ms: HOLD, hold: true },
         { name: 'lines',  ms: 760, label: 'Reading the beat' },
@@ -1278,6 +1308,8 @@
             const wx = W * easeWipe(at.t);             // left to right
             drawBand(state.edgeC, 0, wx, OVERLAY);
             if (!at.hold) drawWipeEdge(wx, wx - band);
+        } else if (at && at.name === 'meter') {
+            drawBand(state.edgeC, 0, W, OVERLAY);      // holds while the meter reads
         } else if (at && at.name === 'quant') {
             // The threshold pass does not erase the Sobel view — it multiplies
             // over it, blacking in the dark mass while the edge drawing keeps
@@ -1347,15 +1379,20 @@
         if (at && at.name === 'lines' && lineTop > 0) drawWipeEdgeH(lineTop, lineTop + bandY);
         if (at && at.name === 'dots' && dotsY > 0 && dotsY < H) drawWipeEdgeH(dotsY, dotsY - bandY);
 
-        // The register readout: a 0–255 lightness ramp up the far left, wiped
-        // in with the Sobel pass; during the threshold pass a pointer drops
-        // from the top and eases onto the image's mean lightness — the number
-        // that chose the octave — its label counting down as it falls. The
-        // whole instrument clears off with the rest of the working material.
-        if (at && at.name !== 'source') {
+        // The register readout: after the Sobel pass has held, a 0–255
+        // lightness ramp rises up the far left and the pointer drops onto the
+        // image's mean lightness — the number that chose the octave — with a
+        // label counting down as it falls. Bar up then pointer down is one
+        // gesture on one in-out curve: the bar accelerates out of the floor,
+        // hands off at speed, and the pointer spends the ease-out settling
+        // onto the reading. The instrument clears off with the working
+        // material.
+        if (at && at.name !== 'source' && at.name !== 'edges') {
+            const seq = at.name === 'meter' ? easeDots(at.t) : 1;
+            const BAR_CUT = 0.45;               // the bar's share of the gesture
             cx.globalAlpha = 1 - shed;
             const barW = Math.max(2.5, W / 320);
-            const rampH = H * (at.name === 'edges' ? easeWipe(at.t) : 1);
+            const rampH = H * Math.min(1, seq / BAR_CUT);
             const ramp = cx.createLinearGradient(0, H, 0, 0);
             ramp.addColorStop(0, '#000');
             ramp.addColorStop(1, '#fff');
@@ -1370,9 +1407,9 @@
             cx.fillStyle = '#fff';
             cx.fillRect(barW, H - rampH, 0.5, rampH);
 
-            if (at.name !== 'edges') {
+            if (seq > BAR_CUT) {
                 const target = H * (1 - state.light);
-                const drop = at.name === 'quant' ? easeDots(at.t) : 1;
+                const drop = (seq - BAR_CUT) / (1 - BAR_CUT);
                 const y = (target + 4) * drop - 4;
                 // the /shaders dial marker at miniature: base flush on the
                 // bar's right seam, tip reaching the centre of the ramp
@@ -1581,11 +1618,11 @@
     }
 
     setScaleButton = radioGroup(els.scale, state.scale, (v) => { state.scale = v; updateStats(); });
-    radioGroup(els.lineSens, String(state.lineSens * 100), (v) => {
+    setLineSensButton = radioGroup(els.lineSens, String(state.lineSens * 100), (v) => {
         state.lineSens = +v / 100;
         reanalyze();
     });
-    radioGroup(els.dotSens, String(state.dotSens * 100), (v) => {
+    setDotSensButton = radioGroup(els.dotSens, String(state.dotSens * 100), (v) => {
         state.dotSens = +v / 100;
         reanalyze();
     });
