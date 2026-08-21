@@ -39,6 +39,7 @@
         bpm: 96,
         scale: 'minorPent',
         root: 0,            // semitones from A, chosen by the image's dominant hue
+        light: 0.5,         // mean lightness 0..1, the reading behind the register
         lineSens: 0.5,
         dotSens: 0.5,
     };
@@ -401,9 +402,11 @@
         }
 
         // the last look at the colour before everything downstream goes grey
-        const palette = paletteFor(readColour(data, W * H));
+        const colour = readColour(data, W * H);
+        const palette = paletteFor(colour);
         state.root = palette.root;
         state.scale = palette.scale;
+        state.light = colour.light;
         if (setScaleButton) setScaleButton(palette.scale, false);
 
         state.img = off;
@@ -1343,6 +1346,46 @@
 
         if (at && at.name === 'lines' && lineTop > 0) drawWipeEdgeH(lineTop, lineTop + bandY);
         if (at && at.name === 'dots' && dotsY > 0 && dotsY < H) drawWipeEdgeH(dotsY, dotsY - bandY);
+
+        // The register readout: a 0–255 lightness ramp up the far left, wiped
+        // in with the Sobel pass; during the threshold pass a pointer drops
+        // from the top and eases onto the image's mean lightness — the number
+        // that chose the octave — its label counting down as it falls. The
+        // whole instrument clears off with the rest of the working material.
+        if (at && at.name !== 'source') {
+            cx.globalAlpha = 1 - shed;
+            const barW = Math.max(2.5, W / 320);
+            const barX = barW * 2;
+            const rampH = H * (at.name === 'edges' ? easeWipe(at.t) : 1);
+            const ramp = cx.createLinearGradient(0, H, 0, 0);
+            ramp.addColorStop(0, '#000');
+            ramp.addColorStop(1, '#fff');
+            cx.fillStyle = ramp;
+            cx.fillRect(barX, H - rampH, barW, rampH);
+            cx.strokeStyle = 'rgba(0,0,0,0.35)';
+            cx.lineWidth = 0.75;
+            cx.strokeRect(barX, H - rampH, barW, rampH);
+
+            if (at.name !== 'edges') {
+                const size = Math.max(5, W / 130);
+                const target = H * (1 - state.light);
+                const drop = at.name === 'quant' ? easeDots(at.t) : 1;
+                const y = -size + (target + size) * drop;
+                const moving = at.name === 'quant' && !at.hold;
+                cx.fillStyle = moving ? '#c62222' : '#000';
+                cx.beginPath();
+                cx.moveTo(barX + barW + 1, y);
+                cx.lineTo(barX + barW + 1 + size, y - size * 0.6);
+                cx.lineTo(barX + barW + 1 + size, y + size * 0.6);
+                cx.closePath();
+                cx.fill();
+                const val = Math.round(255 * (1 - Math.min(1, Math.max(0, y / H))));
+                cx.font = `${Math.max(9, Math.round(W * 0.013))}px ui-monospace, monospace`;
+                cx.textBaseline = 'middle';
+                cx.fillText(val, barX + barW + size + 4, Math.max(8, Math.min(H - 8, y)));
+            }
+            cx.globalAlpha = 1;
+        }
 
         // once the last wipe is done the playhead has the frame to itself
         if (!at && state.playing) {
