@@ -562,11 +562,12 @@
                     vertical = ax > 40 && ax > ay * 1.4;
                     v = Math.min(1, m / 420);
                 }
-                // vertical edges are the ones that become drums, so they burn in
+                // vertical edges are the ones that become drums, so they burn
+                // in — in the image's own accent, same as the wipes and flashes
                 const k = vertical ? v : v * 0.5;
-                const cr = vertical ? 198 : 17;
-                const cg = vertical ? 34 : 17;
-                const cb = vertical ? 34 : 17;
+                const cr = vertical ? state.accent.r : 17;
+                const cg = vertical ? state.accent.g : 17;
+                const cb = vertical ? state.accent.b : 17;
                 ed[i * 4]     = 255 + (cr - 255) * k;
                 ed[i * 4 + 1] = 255 + (cg - 255) * k;
                 ed[i * 4 + 2] = 255 + (cb - 255) * k;
