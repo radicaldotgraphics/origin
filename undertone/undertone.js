@@ -546,6 +546,14 @@
         const ecx = edge.getContext('2d');
         const eimg = ecx.createImageData(W, H);
         const ed = eimg.data;
+        // A second cut of the same drawing for screen compositing: black
+        // ground, marks as light — screened over the stack the edges glow
+        // through without blackening what sits beneath them.
+        const edgeS = document.createElement('canvas');
+        edgeS.width = W; edgeS.height = H;
+        const scx = edgeS.getContext('2d');
+        const simg = scx.createImageData(W, H);
+        const sd = simg.data;
         const mag = new Float32Array(W * H);
         let busy = 0;
 
@@ -572,9 +580,15 @@
                 ed[i * 4 + 1] = 255 + (cg - 255) * k;
                 ed[i * 4 + 2] = 255 + (cb - 255) * k;
                 ed[i * 4 + 3] = 255;
+                // screen cut: accent-lit drums, pale grey everything else
+                sd[i * 4]     = (vertical ? state.accent.r : 235) * k;
+                sd[i * 4 + 1] = (vertical ? state.accent.g : 235) * k;
+                sd[i * 4 + 2] = (vertical ? state.accent.b : 235) * k;
+                sd[i * 4 + 3] = 255;
             }
         }
         ecx.putImageData(eimg, 0, 0);
+        scx.putImageData(simg, 0, 0);
 
         const otsu = otsuThreshold(gray);
         const dark = figureIsDark(gray, otsu);
@@ -584,13 +598,17 @@
         const qimg = qcx.createImageData(W, H);
         const qd = qimg.data;
         for (let i = 0; i < W * H; i++) {
-            const c = (gray[i] <= otsu) === dark ? 17 : 255;
-            qd[i * 4] = qd[i * 4 + 1] = qd[i * 4 + 2] = c;
+            // the figure mass renders in the image's own accent, not black
+            const fig = (gray[i] <= otsu) === dark;
+            qd[i * 4]     = fig ? state.accent.r : 255;
+            qd[i * 4 + 1] = fig ? state.accent.g : 255;
+            qd[i * 4 + 2] = fig ? state.accent.b : 255;
             qd[i * 4 + 3] = 255;
         }
         qcx.putImageData(qimg, 0, 0);
 
         state.edgeC = edge;
+        state.edgeSC = edgeS;
         state.quantC = quant;
         state.mag = mag;
         state.detail = busy / (W * H); // how much there is to say about this image
@@ -1343,20 +1361,23 @@
         } else if (at && at.name === 'meter') {
             drawBand(state.edgeC, 0, W, OVERLAY);      // holds while the meter reads
         } else if (at && at.name === 'quant') {
-            // The threshold pass does not erase the Sobel view — it multiplies
-            // over it, blacking in the dark mass while the edge drawing keeps
-            // showing through the light mass: each stage calculating on top of
-            // the one before, the picture building up rather than switching.
+            // The threshold mass slides in *beneath* the edge drawing: the
+            // flat Sobel view lifts as the wipe starts, its screen cut takes
+            // over glowing on top, and the accent-coloured two-tone wipes in
+            // underneath — each stage calculating around the one before
+            // rather than erasing it.
             const wx = W - (W + band + 2) * easeWipe(at.t);    // and back, out the near side
-            drawBand(state.edgeC, 0, W, OVERLAY);
-            drawBand(state.quantC, Math.max(0, wx), W, OVERLAY, 'multiply');
+            const lift = at.hold ? 1 : Math.min(1, at.t / 0.25);
+            drawBand(state.quantC, Math.max(0, wx), W, OVERLAY);
+            if (lift < 1) drawBand(state.edgeC, 0, W, OVERLAY * (1 - lift));
+            drawBand(state.edgeSC, 0, W, OVERLAY * lift, 'screen');
             if (!at.hold) drawWipeEdge(wx, wx + band);
         } else if (at && (at.name === 'lines' || at.name === 'dots' || at.name === 'clear')) {
             // the full composite holds under the score being drawn, then the
             // whole accumulated stack sheds together once the dots are in
             const a = OVERLAY * (1 - shed);
-            drawBand(state.edgeC, 0, W, a);
-            drawBand(state.quantC, 0, W, a, 'multiply');
+            drawBand(state.quantC, 0, W, a);
+            drawBand(state.edgeSC, 0, W, a, 'screen');
         }
 
         const flash = (at2) => Math.max(0, 1 - (now - at2) / 260);
