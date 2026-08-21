@@ -15,6 +15,8 @@
     const BUSY_DETAIL = 0.25;   // edge density that counts as "busy"
     const POP_MS = 420;         // how long a dot takes to settle on arrival
     const POP_SCALE = 1.2;      // ...and how oversized it lands
+    const OVERLAY = 0.82;       // analysis layers ride over the photo, not instead of it
+    const GHOST = 0.4;          // how much photo stays under the finished score
 
     const SCALES = {
         minorPent: [0, 3, 5, 7, 10],
@@ -268,8 +270,10 @@
         }
 
         // Saturation is a real reading even at zero — a picture with no colour
-        // in it is austere, and should sound that way.
-        const scale = colour.sat < 0.30 ? 'insen'
+        // in it is austere, and should sound that way. But in-sen is a strong
+        // flavour, reserved for the truly drained image; anything with ordinary
+        // colour in it lands minor or major.
+        const scale = colour.sat < 0.10 ? 'insen'
                     : colour.sat < 0.65 ? 'minorPent'
                     : 'majorPent';
 
@@ -1240,18 +1244,20 @@
         const now = performance.now();
         const at = intro ? introAt(now) : null;
 
-        // The source sits at the bottom of every frame: solid while the reveal
-        // runs over it, ghosted once the score is the thing being read.
-        // The two-tone dissolves to the ghost while the stripes are going up,
-        // so the score is being drawn on a receding picture rather than after
-        // one. It settles before the stripes finish.
+        // The source sits at the bottom of every frame and never leaves: the
+        // analysis layers ride over it translucent, so the photograph is the
+        // one constant the eye holds through the whole reveal. It recedes —
+        // partway — only once the score is the thing being read.
+        // The two-tone dissolves off while the stripes are going up, so the
+        // score is being drawn on a clearing picture rather than after one.
+        // It settles before the stripes finish.
         const shed = at && at.name === 'lines' ? ease(Math.min(1, at.t / 0.7)) : 0;
 
-        let srcAlpha = 0.22;
+        let srcAlpha = GHOST;
         if (at) {
             if (at.name === 'source') srcAlpha = ease(at.t);
-            else if (at.name === 'lines') srcAlpha = 1 - 0.78 * shed;
-            else if (at.name === 'dots') srcAlpha = 0.22;
+            else if (at.name === 'lines') srcAlpha = 1 - (1 - GHOST) * shed;
+            else if (at.name === 'dots') srcAlpha = GHOST;
             else srcAlpha = 1;
         }
 
@@ -1267,15 +1273,15 @@
 
         if (at && at.name === 'edges') {
             const wx = W * easeWipe(at.t);             // left to right
-            drawBand(state.edgeC, 0, wx, 1);
+            drawBand(state.edgeC, 0, wx, OVERLAY);
             if (!at.hold) drawWipeEdge(wx, wx - band);
         } else if (at && at.name === 'quant') {
             const wx = W * (1 - easeWipe(at.t));       // and back, right to left
-            drawBand(state.edgeC, 0, wx, 1);           // edges survive only ahead of it
-            drawBand(state.quantC, wx, W, 1);
+            drawBand(state.edgeC, 0, wx, OVERLAY);     // edges survive only ahead of it
+            drawBand(state.quantC, wx, W, OVERLAY);
             if (!at.hold) drawWipeEdge(wx, wx + band);
         } else if (at && at.name === 'lines') {
-            drawBand(state.quantC, 0, W, 1 - shed);
+            drawBand(state.quantC, 0, W, OVERLAY * (1 - shed));
         }
 
         const flash = (at2) => Math.max(0, 1 - (now - at2) / 260);
