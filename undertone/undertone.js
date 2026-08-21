@@ -40,6 +40,7 @@
         scale: 'minorPent',
         root: 0,            // semitones from A, chosen by the image's dominant hue
         light: 0.5,         // mean lightness 0..1, the reading behind the register
+        accent: { r: 198, g: 34, b: 34 },   // highlight colour, taken from the image
         lineSens: 0.5,
         dotSens: 0.5,
     };
@@ -288,6 +289,22 @@
         return { root: root + octave * 12, scale };
     }
 
+    function hslToRgb(h, s, l) {
+        const f = (n) => {
+            const k = (n + h / 30) % 12;
+            const c = l - s * Math.min(l, 1 - l) * Math.max(-1, Math.min(k - 3, 9 - k, 1));
+            return Math.round(c * 255);
+        };
+        return { r: f(0), g: f(8), b: f(4) };
+    }
+
+    // the accent everything red used to be: dominant hue at the house red's
+    // own saturation and weight, so every image highlights in its own colour
+    const accent = (a) => {
+        const c = state.accent;
+        return a == null ? `rgb(${c.r},${c.g},${c.b})` : `rgba(${c.r},${c.g},${c.b},${a})`;
+    };
+
     const NOTE_NAMES = ['A', 'A\u266F', 'B', 'C', 'C\u266F', 'D', 'D\u266F', 'E', 'F', 'F\u266F', 'G', 'G\u266F'];
     const SCALE_NAMES = { minorPent: 'minor', majorPent: 'major', insen: 'in-sen' };
 
@@ -409,6 +426,9 @@
         state.root = palette.root;
         state.scale = palette.scale;
         state.light = colour.light;
+        state.accent = colour.colourfulness >= ACHROMATIC
+            ? hslToRgb(colour.hue, 0.71, 0.45)
+            : { r: 198, g: 34, b: 34 };     // achromatic images keep the house red
         if (setScaleButton) setScaleButton(palette.scale, false);
 
         state.img = off;
@@ -1130,7 +1150,7 @@
         { name: 'source', ms: 420, label: 'Reading the image' },
         { name: 'source', ms: HOLD, hold: true },
         { name: 'edges',  ms: 900, label: 'Finding edges' },
-        { name: 'edges',  ms: HOLD, hold: true },
+        // no hold — the meter picks up the moment the wipe line leaves the frame
         { name: 'meter',  ms: 1600, label: 'Measuring lightness' },
         { name: 'meter',  ms: 500, hold: true },        // a breath once the arrow lands
         { name: 'quant',  ms: 900, label: 'Quantizing' },
@@ -1241,11 +1261,16 @@
     function drawWipeEdge(x, trailFrom) {
         const { H } = state;
         const g = cx.createLinearGradient(trailFrom, 0, x, 0);
-        g.addColorStop(0, 'rgba(198,34,34,0)');
-        g.addColorStop(1, 'rgba(198,34,34,0.3)');
+        g.addColorStop(0, accent(0));
+        g.addColorStop(1, accent(0.3));
         cx.fillStyle = g;
         cx.fillRect(Math.min(x, trailFrom), 0, Math.abs(x - trailFrom), H);
-        cx.strokeStyle = '#c62222';
+        // second pass in overlay, so the trail heightens the picture's own
+        // colour instead of just sitting on it
+        cx.globalCompositeOperation = 'overlay';
+        cx.fillRect(Math.min(x, trailFrom), 0, Math.abs(x - trailFrom), H);
+        cx.globalCompositeOperation = 'source-over';
+        cx.strokeStyle = accent();
         cx.lineWidth = 1.5;
         cx.beginPath();
         cx.moveTo(x, 0);
@@ -1256,11 +1281,14 @@
     function drawWipeEdgeH(y, trailFrom) {
         const { W } = state;
         const g = cx.createLinearGradient(0, trailFrom, 0, y);
-        g.addColorStop(0, 'rgba(198,34,34,0)');
-        g.addColorStop(1, 'rgba(198,34,34,0.3)');
+        g.addColorStop(0, accent(0));
+        g.addColorStop(1, accent(0.3));
         cx.fillStyle = g;
         cx.fillRect(0, Math.min(y, trailFrom), W, Math.abs(y - trailFrom));
-        cx.strokeStyle = '#c62222';
+        cx.globalCompositeOperation = 'overlay';
+        cx.fillRect(0, Math.min(y, trailFrom), W, Math.abs(y - trailFrom));
+        cx.globalCompositeOperation = 'source-over';
+        cx.strokeStyle = accent();
         cx.lineWidth = 1.5;
         cx.beginPath();
         cx.moveTo(0, y);
@@ -1304,8 +1332,11 @@
         const band = Math.max(6, W * 0.035);
         const bandY = Math.max(6, H * 0.035);
 
+        // Every wipe eases to rest a few pixels past the frame, so the
+        // leading line is never seen standing still — it settles offscreen,
+        // trail and all, instead of stopping dead at the edge.
         if (at && at.name === 'edges') {
-            const wx = W * easeWipe(at.t);             // left to right
+            const wx = (W + band + 2) * easeWipe(at.t);        // left to right, out the far side
             drawBand(state.edgeC, 0, wx, OVERLAY);
             if (!at.hold) drawWipeEdge(wx, wx - band);
         } else if (at && at.name === 'meter') {
@@ -1315,9 +1346,9 @@
             // over it, blacking in the dark mass while the edge drawing keeps
             // showing through the light mass: each stage calculating on top of
             // the one before, the picture building up rather than switching.
-            const wx = W * (1 - easeWipe(at.t));       // and back, right to left
+            const wx = W - (W + band + 2) * easeWipe(at.t);    // and back, out the near side
             drawBand(state.edgeC, 0, W, OVERLAY);
-            drawBand(state.quantC, wx, W, OVERLAY, 'multiply');
+            drawBand(state.quantC, Math.max(0, wx), W, OVERLAY, 'multiply');
             if (!at.hold) drawWipeEdge(wx, wx + band);
         } else if (at && (at.name === 'lines' || at.name === 'dots' || at.name === 'clear')) {
             // the full composite holds under the score being drawn, then the
@@ -1333,18 +1364,18 @@
         // lineTop is where the drawn part of each stripe stops.
         let lineTop = 0;
         if (at) {
-            if (at.name === 'lines') lineTop = H * (1 - easeWipe(at.t));
+            if (at.name === 'lines') lineTop = H - (H + bandY + 2) * easeWipe(at.t);
             else if (at.name !== 'dots' && at.name !== 'clear') lineTop = H;  // not drawn yet
         }
         if (lineTop < H) {
             for (const b of state.beats) {
                 const f = flash(b.flashAt);
-                cx.strokeStyle = f > 0 ? '#c62222' : '#000';
+                cx.strokeStyle = f > 0 ? accent() : '#000';
                 cx.globalAlpha = 0.35 + 0.65 * b.strength * (f > 0 ? 1 : 0.8);
                 cx.lineWidth = 1 + b.strength * 1.5 + f * 2;
                 cx.beginPath();
                 cx.moveTo(b.x + 0.5, H);
-                cx.lineTo(b.x + 0.5, lineTop);
+                cx.lineTo(b.x + 0.5, Math.max(0, lineTop));
                 cx.stroke();
             }
             cx.globalAlpha = 1;
@@ -1368,7 +1399,7 @@
             const g = at ? Math.min(1, (now - n.popAt) / POP_MS) : 1;
             const grow = 1 - Math.pow(1 - g, 3);
             const f = flash(n.flashAt);
-            cx.fillStyle = f > 0 ? '#c62222' : '#000';
+            cx.fillStyle = f > 0 ? accent() : '#000';
             cx.globalAlpha = 0.55 + 0.45 * f;
             cx.beginPath();
             cx.arc(n.x, n.y, n.r * grow * (1 + f * 0.5), 0, Math.PI * 2);
@@ -1376,8 +1407,8 @@
         }
         cx.globalAlpha = 1;
 
-        if (at && at.name === 'lines' && lineTop > 0) drawWipeEdgeH(lineTop, lineTop + bandY);
-        if (at && at.name === 'dots' && dotsY > 0 && dotsY < H) drawWipeEdgeH(dotsY, dotsY - bandY);
+        if (at && at.name === 'lines' && !at.hold) drawWipeEdgeH(lineTop, lineTop + bandY);
+        if (at && at.name === 'dots' && dotsY > 0) drawWipeEdgeH(dotsY, dotsY - bandY);
 
         // The register readout: after the Sobel pass has held, a 0–255
         // lightness ramp rises up the far left and the pointer drops onto the
@@ -1433,7 +1464,7 @@
         if (!at && state.playing) {
             const px = currentPlayhead();
             if (px >= 0) {
-                cx.strokeStyle = '#c62222';
+                cx.strokeStyle = accent();
                 cx.lineWidth = 1.5;
                 cx.beginPath();
                 cx.moveTo(px, 0);
