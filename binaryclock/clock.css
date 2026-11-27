@@ -1,0 +1,582 @@
+/* Binary Clock — radical.graphics/binaryclock
+   Page chrome follows /qrcode (qr.css); the orb is rebuilt from the
+   split-scene orb sketch: two blurred blob groups swirling in opposite
+   directions behind a white sparkle face. */
+
+:root {
+    --ink: #000;
+    --paper: #fff;
+    --stage: #eaeaea;
+    --line: #d8d8d8;
+    --muted: #767676;
+    --ease: all 0.3s ease-in-out;
+    --shell: 1244px;
+}
+
+* { box-sizing: border-box; }
+
+[hidden] { display: none !important; }
+
+body {
+    font-family: field-gothic-wide, sans-serif;
+    font-weight: 400;
+    color: var(--ink);
+    background: var(--paper);
+    font-size: 0.9em;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ── Header ─────────────────────────────────────────────── */
+
+#bcMark {
+    display: block;
+    line-height: 0;
+    text-decoration: none;
+    color: inherit;
+    transition: var(--ease);
+}
+
+#bcMark:hover { opacity: 0.55; }
+
+#bcLogo {
+    height: 56px;
+    width: auto;
+    fill: var(--ink);
+    display: block;
+}
+
+#bcMarkAnim {
+    display: none;
+    height: 56px;
+    aspect-ratio: 1607 / 452;
+}
+
+#bcMark.animated #bcLogo { display: none; }
+#bcMark.animated #bcMarkAnim { display: block; }
+#bcMarkAnim svg { display: block; width: 100%; height: 100%; }
+
+#bcTitle {
+    font-family: field-gothic-compact, sans-serif;
+    font-weight: 700;
+    font-size: clamp(26px, 2.8vw, 38px);
+    line-height: 1.05;
+    margin: 0;
+    letter-spacing: 0.01em;
+    text-align: center;
+}
+
+/* ── Layout ─────────────────────────────────────────────── */
+
+#bcApp {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    width: 100%;
+    max-width: var(--shell);
+    margin: 0 auto;
+}
+
+#bcHead {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding: 26px 32px 24px;
+    flex: 0 0 auto;
+}
+
+#bcBody {
+    flex: 1 1 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(320px, 30%, 420px);
+    align-items: stretch;
+    min-height: 0;
+}
+
+@media (min-width: 1245px) {
+    #bcApp {
+        border-left: 1px solid var(--line);
+        border-right: 1px solid var(--line);
+    }
+}
+
+#bcStagePane {
+    background: var(--stage);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    gap: 18px;
+    padding: 32px;
+    min-height: 0;
+}
+
+/* The clock face: a dark display card. Fullscreen makes it the whole screen. */
+#bcStage {
+    --bg: #0b0b10;
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+    transition: background 1.2s ease-in-out;
+    isolation: isolate;
+}
+
+#bcStage:fullscreen { border-radius: 0; }
+
+/* Where the Fullscreen API is missing (iPhone Safari), fill the viewport. */
+#bcStage.pseudo {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    height: auto;
+    border-radius: 0;
+}
+#bcStage:-webkit-full-screen { border-radius: 0; width: 100%; height: 100%; }
+
+/* Hide the cursor and exit control once the fullscreen view has been still. */
+#bcStage.idle { cursor: none; }
+
+#bcExit {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 40px;
+    height: 40px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 99px;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    transition: var(--ease);
+}
+
+#bcExit svg { width: 18px; height: 18px; }
+#bcExit:hover { border-color: #fff; color: #fff; }
+#bcStage.full #bcExit { display: flex; }
+#bcStage.full.idle #bcExit { opacity: 0; pointer-events: none; }
+
+#bcActions {
+    display: flex;
+    gap: 8px;
+    width: min(420px, 100%);
+    align-self: center;
+}
+
+.dlBtn {
+    flex: 1 1 0;
+    font-family: field-gothic-wide, sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    line-height: 1;
+    padding: 11px 8px;
+    border-radius: 99px;
+    border: 1px solid var(--ink);
+    background: var(--paper);
+    color: var(--ink);
+    cursor: pointer;
+    transition: var(--ease);
+}
+
+.dlBtn:hover {
+    background: var(--ink);
+    color: var(--paper);
+}
+
+#bcHint {
+    align-self: center;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted);
+    opacity: 0.75;
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    margin-top: -6px;
+}
+
+#bcHint::before {
+    content: "i";
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    font-size: 8px;
+    flex: 0 0 auto;
+}
+
+/* Touch screens have no keys to hint at. */
+@media (hover: none) { #bcHint { display: none; } }
+
+#bcControls {
+    padding: 22px 36px 48px;
+    overflow-y: auto;
+    border-left: 1px solid var(--line);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+#bcControls::-webkit-scrollbar { width: 0; background: transparent; }
+#bcControls:hover,
+#bcControls:focus-within { scrollbar-width: thin; }
+#bcControls:hover::-webkit-scrollbar,
+#bcControls:focus-within::-webkit-scrollbar { width: 6px; }
+#bcControls::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.22); border-radius: 99px; }
+
+#bcControls .group:first-of-type { padding-top: 0; }
+
+/* ── Groups ─────────────────────────────────────────────── */
+
+.group {
+    padding: 22px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+#bcControls .group:last-of-type { border-bottom: none; }
+
+.groupLabel {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+}
+
+.optRow + .groupLabel,
+.note + .groupLabel,
+#bcPalette + .groupLabel { margin-top: 20px; }
+
+.note {
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--muted);
+    margin-top: 10px;
+    letter-spacing: 0.02em;
+}
+
+.note:empty { display: none; }
+
+/* ── Option buttons ─────────────────────────────────────── */
+
+.optRow {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.opt {
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    background: #f2f2f2;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    color: var(--ink);
+    cursor: pointer;
+    transition: var(--ease);
+}
+
+.opt svg { width: 24px; height: 24px; display: block; }
+.opt:hover { background: #e4e4e4; }
+
+.opt[aria-checked="true"] {
+    background: var(--paper);
+    border-color: var(--ink);
+    box-shadow: 0 0 0 1px var(--ink);
+}
+
+.opt.pill {
+    width: auto;
+    min-width: 72px;
+    height: 40px;
+    padding: 0 18px;
+    border-radius: 99px;
+    font-family: inherit;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+}
+
+/* ── Palette chips ──────────────────────────────────────── */
+
+#bcPalette {
+    display: flex;
+    height: 38px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#bcPalette span {
+    flex: 1 1 0;
+    transition: background 0.6s ease-in-out;
+}
+
+/* ── Sliders and checks ─────────────────────────────────── */
+
+.sliderRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.sliderRow .val {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+}
+
+input[type="range"] {
+    width: 100%;
+    margin: 0 0 20px;
+    accent-color: var(--ink);
+}
+
+.check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    margin-top: 12px;
+    cursor: pointer;
+}
+
+.check input { margin: 0; cursor: pointer; accent-color: var(--ink); }
+
+/* ── Clock ──────────────────────────────────────────────── */
+
+#bcClock {
+    --d: 40px;          /* orb diameter, set from the stage size in JS */
+    --gap: calc(var(--d) * 0.55);
+    --glow: 0.6;        /* 0–1, from the Glow slider */
+    --spinA: 16s;       /* swirl durations, from the Swirl slider */
+    --spinB: 11s;
+    --play: running;
+    display: flex;
+    align-items: flex-end;
+    gap: calc(var(--gap) * 2.2);
+}
+
+#bcClock.rows {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--gap);
+}
+
+.unit {
+    display: flex;
+    gap: var(--gap);
+}
+
+#bcClock.rows .unit { align-items: center; }
+
+.col {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: var(--gap);
+}
+
+/* Digit labels — under each column, or at the end of each row. */
+.digit {
+    font-family: field-gothic-wide, sans-serif;
+    font-size: max(11px, calc(var(--d) * 0.32));
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    display: none;
+}
+
+#bcClock.rows .digit { width: 2.6em; text-align: right; }
+#bcClock.digits .digit { display: block; }
+
+#bcReadout {
+    position: absolute;
+    bottom: 18px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* ── Orb ────────────────────────────────────────────────── */
+
+.orb {
+    position: relative;
+    width: var(--d);
+    height: var(--d);
+    flex: 0 0 auto;
+}
+
+/* Faint ring marks the bit position while it's off. */
+.orb::before {
+    content: "";
+    position: absolute;
+    inset: 22%;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: rgba(255, 255, 255, 0.03);
+    transition: opacity 0.6s ease-in-out;
+}
+
+#bcClock.noGhost .orb::before { opacity: 0; }
+.orb.on::before { opacity: 0; }
+
+.orb__glow {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0;
+    scale: 0.35;
+    transition:
+        opacity 0.7s ease-out,
+        scale 1.1s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: rotate, scale;
+    pointer-events: none;
+}
+
+/* Wide, soft halo: the colors bleeding into the dark. */
+.orb__glow--background {
+    inset: calc(var(--d) * (-0.12 - 0.42 * var(--glow)));
+    filter: blur(calc(var(--d) * (0.12 + 0.18 * var(--glow))));
+    animation: orbSpin var(--spinA) linear infinite;
+    animation-play-state: var(--play);
+}
+
+/* Tighter, brighter swirl hugging the face, turning the other way. */
+.orb__glow--foreground {
+    inset: calc(var(--d) * -0.08);
+    filter: blur(calc(var(--d) * 0.09));
+    mix-blend-mode: screen;
+    animation: orbSpin var(--spinB) linear infinite reverse;
+    animation-play-state: var(--play);
+}
+
+.orb.on .orb__glow { opacity: 1; scale: 1; }
+.orb.on .orb__glow--background { opacity: calc(0.35 + 0.65 * var(--glow)); }
+
+@keyframes orbSpin {
+    to { rotate: 360deg; }
+}
+
+/* Five blobs, placed off-centre so the rotation reads as a swirl. */
+.orb__blob {
+    position: absolute;
+    width: 58%;
+    height: 58%;
+    border-radius: 50%;
+    transition: background 1.4s ease-in-out;
+}
+
+.blobA { left: 2%;  top: 4%;  background: var(--c1); }
+.blobB { right: 0;  top: 14%; background: var(--c2); }
+.blobC { left: 24%; bottom: 0; background: var(--c3); }
+.blobD { left: 8%;  top: 40%; width: 44%; height: 44%; background: var(--c4); }
+.blobE { right: 6%; bottom: 12%; width: 40%; height: 40%; background: var(--c5); }
+
+.orb__glow--foreground .orb__blob { width: 52%; height: 52%; }
+
+.orb__face {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    background: radial-gradient(circle,
+        rgba(255, 255, 255, 0.95) 0 16%,
+        rgba(255, 255, 255, 0.42) 34%,
+        rgba(255, 255, 255, 0) 68%);
+    opacity: 0;
+    scale: 0.4;
+    transition:
+        opacity 0.5s ease-out,
+        scale 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.orb.on .orb__face { opacity: 1; scale: 1; }
+
+/* A white flash as each bit lights. */
+.orb.on .orb__face { animation: orbPop 0.9s ease-out; }
+
+@keyframes orbPop {
+    0%   { filter: brightness(2.2); }
+    100% { filter: brightness(1); }
+}
+
+.orb__sparkle {
+    grid-area: 1 / 1;
+    width: 58%;
+    height: 58%;
+    filter: drop-shadow(0 0 calc(var(--d) * 0.08) rgba(255, 255, 255, 0.9));
+    animation: orbTwinkle 4.2s ease-in-out infinite;
+    animation-delay: var(--tw, 0s);
+}
+
+.orb__sparkle--small {
+    width: 26%;
+    height: 26%;
+    translate: 70% -70%;
+    opacity: 0.9;
+    animation-duration: 3.1s;
+}
+
+#bcClock.noSparkle .orb__sparkle { display: none; }
+
+@keyframes orbTwinkle {
+    0%, 100% { scale: 1;    rotate: 0deg; }
+    50%      { scale: 0.78; rotate: 45deg; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .orb__glow, .orb__sparkle { animation: none !important; }
+    .orb.on .orb__face { animation: none; }
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+    body { height: auto; min-height: 100vh; overflow: visible; }
+
+    #bcBody { grid-template-columns: 1fr; }
+
+    #bcHead { gap: 16px; padding: 24px 24px 22px; }
+
+    #bcStagePane { padding: 24px 16px 28px; }
+
+    #bcStage { flex: 0 0 auto; height: min(62vh, 420px); }
+
+    #bcControls {
+        border-left: none;
+        border-top: 1px solid var(--line);
+        padding: 28px 24px 48px;
+        overflow-y: visible;
+    }
+}
