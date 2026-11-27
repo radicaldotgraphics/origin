@@ -386,7 +386,7 @@ body {
 #bcClock {
     --d: 40px;          /* orb diameter, set from the stage size in JS */
     --gap: calc(var(--d) * 0.55);
-    --glow-scale: 0.8;  /* Glow size: 0.8 / 1 / 1.2 */
+    --glow-scale: 1;    /* Glow size: 1 / 1.08 / 1.18 */
     --speed: 1;         /* duration factor: 1.5 slow, 1 med, 0.65 fast */
     --play: running;
     display: flex;
@@ -446,6 +446,9 @@ body {
 
 .orb {
     --u: calc(var(--d) / 112);
+    /* How far the blobs wander from centre, as a share of the sketch's orbit.
+       Kept small so the colour hugs the face as an outer glow. */
+    --spread: 0.28;
     position: relative;
     width: var(--d);
     height: var(--d);
@@ -466,16 +469,16 @@ body {
 
 .orb.on .orb__glow { opacity: 1; scale: var(--glow-scale); }
 
-.orb__glow--background { --blur-amt: calc(var(--u) * 18); z-index: 0; }
-.orb__glow--foreground { --blur-amt: calc(var(--u) * 20); z-index: 1; }
+.orb__glow--background { --blur-amt: calc(var(--u) * 9); z-index: 0; }
+.orb__glow--foreground { --blur-amt: calc(var(--u) * 6); z-index: 1; }
 
 .orb__blob {
     --blob-color: var(--c1);
     position: absolute;
-    top: calc(var(--u) * 6);
-    left: calc(var(--u) * 6);
-    width: calc(var(--u) * 90);
-    height: calc(var(--u) * 90);
+    top: calc(var(--u) * 4);
+    left: calc(var(--u) * 4);
+    width: calc(var(--u) * 104);
+    height: calc(var(--u) * 104);
     scale: 1.1;
     border-radius: 60% 40% 58% 22%;
     background: var(--blob-color);
@@ -497,10 +500,10 @@ body {
 
 .orb__blob.blobC {
     --blob-color: var(--c3);
-    width: calc(var(--u) * 80);
-    height: calc(var(--u) * 62);
-    top: calc(var(--u) * 17);
-    left: calc(var(--u) * 16);
+    width: calc(var(--u) * 98);
+    height: calc(var(--u) * 84);
+    top: calc(var(--u) * 14);
+    left: calc(var(--u) * 7);
     animation-duration: calc(5s * var(--speed));
     animation-delay: calc(-11s + var(--off, 0s));
 }
@@ -519,12 +522,13 @@ body {
 }
 
 @keyframes glow-orbit {
-    0%   { transform: rotate(0deg)   translate(calc(var(--u) * 25), calc(var(--u) * -5)) scale(0.95); }
-    25%  { transform: rotate(90deg)  translate(calc(var(--u) * 32), calc(var(--u) * 4))  scale(1.12, 0.92); }
-    50%  { transform: rotate(180deg) translate(calc(var(--u) * 23), calc(var(--u) * -7)) scale(0.9, 1.08); }
-    75%  { transform: rotate(270deg) translate(calc(var(--u) * 30), calc(var(--u) * 6))  scale(1.08); }
-    100% { transform: rotate(360deg) translate(calc(var(--u) * 25), calc(var(--u) * -5)) scale(0.95); }
+    0%   { transform: rotate(0deg)   translate(calc(var(--u) * 25 * var(--spread)), calc(var(--u) * -5 * var(--spread))) scale(0.95); }
+    25%  { transform: rotate(90deg)  translate(calc(var(--u) * 32 * var(--spread)), calc(var(--u) * 4 * var(--spread)))  scale(1.12, 0.92); }
+    50%  { transform: rotate(180deg) translate(calc(var(--u) * 23 * var(--spread)), calc(var(--u) * -7 * var(--spread))) scale(0.9, 1.08); }
+    75%  { transform: rotate(270deg) translate(calc(var(--u) * 30 * var(--spread)), calc(var(--u) * 6 * var(--spread)))  scale(1.08); }
+    100% { transform: rotate(360deg) translate(calc(var(--u) * 25 * var(--spread)), calc(var(--u) * -5 * var(--spread))) scale(0.95); }
 }
+
 
 .orb__face {
     position: absolute;

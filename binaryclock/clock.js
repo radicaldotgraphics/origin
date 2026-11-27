@@ -25,7 +25,9 @@ const defaults = {
 };
 
 const SPEED = { still: 1, slow: 1.5, med: 1, fast: 0.65 };
-const SCALE = { small: 0.8, med: 1, lg: 1.2 };
+// Tighter than the sketch's 0.8 / 1 / 1.2: the glow sits just outside the
+// face, so these only nudge how far past the rim it reaches.
+const SCALE = { small: 1, med: 1.08, lg: 1.18 };
 
 const state = { ...defaults, ...loadSettings() };
 if (!Array.isArray(state.colors) || state.colors.length !== 5) state.colors = [...defaults.colors];
@@ -218,7 +220,7 @@ function applyLook() {
     c.classList.toggle('digits', state.digits);
     c.classList.toggle('noSparkle', !state.sparkle);
     c.classList.toggle('noGhost', !state.ghost);
-    c.style.setProperty('--glow-scale', String(SCALE[state.scale] || 0.8));
+    c.style.setProperty('--glow-scale', String(SCALE[state.scale] || 1));
     c.style.setProperty('--speed', String(SPEED[state.speed] || 1));
     c.style.setProperty('--play', state.speed === 'still' ? 'paused' : 'running');
     el.stage.classList.toggle('light', state.theme === 'light');
