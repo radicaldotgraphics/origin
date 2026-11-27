@@ -1,6 +1,8 @@
 /* Binary Clock — UI wiring and the clock itself.
-   Each bit is an orb (see clock.css). Colors come from the site sketch's
-   palettes (/palettes.json); the darkest swatch becomes the night behind them. */
+   Each bit is an orb from the orb sketch (see clock.css). The five glow
+   colors come from the sketch's palettes, mapped the way it maps them. */
+
+import palettes from './palettes.js';
 
 const STORE_KEY = 'bc-settings';
 const MAX_D = 132; // largest orb diameter, px
@@ -10,16 +12,25 @@ const defaults = {
     layout: 'bcd',
     seconds: true,
     digits: false,
-    mix: 'blend',
+    // The sketch's own defaults: cyan, blue, lime, white, lime.
+    colors: ['#1ebbf7', '#0045aa', '#b8f42e', '#ffffff', '#b8f42e'],
+    paletteName: '',
+    mix: 'varied',
     auto: 'off',
-    glow: 50,
-    swirl: 50,
+    theme: 'dark',
+    speed: 'med',
+    scale: 'small',
     sparkle: true,
     ghost: true,
-    palette: null,
 };
 
+const SPEED = { still: 1, slow: 1.5, med: 1, fast: 0.65 };
+const SCALE = { small: 0.8, med: 1, lg: 1.2 };
+
 const state = { ...defaults, ...loadSettings() };
+if (!Array.isArray(state.colors) || state.colors.length !== 5) state.colors = [...defaults.colors];
+for (const k of ['palette', 'glow', 'swirl']) delete state[k];
+if (!['uniform', 'varied', 'group'].includes(state.mix)) state.mix = defaults.mix;
 
 const $ = (id) => document.getElementById(id);
 
@@ -28,22 +39,16 @@ const el = {
     clock: $('bcClock'),
     readout: $('bcReadout'),
     palette: $('bcPalette'),
+    paletteName: $('bcPaletteName'),
     layoutNote: $('bcLayoutNote'),
     seconds: $('bcSeconds'),
     digits: $('bcDigits'),
-    glow: $('bcGlow'), glowVal: $('bcGlowVal'),
-    swirl: $('bcSwirl'), swirlVal: $('bcSwirlVal'),
     sparkle: $('bcSparkle'),
     ghost: $('bcGhost'),
     shuffle: $('bcShuffle'),
     full: $('bcFull'),
     exit: $('bcExit'),
 };
-
-let palettes = [
-    // Stand-in until /palettes.json arrives, and the fallback if it doesn't.
-    { name: 'fallback', colors: ['#051f39', '#4a2480', '#c53a9d', '#ff8e80'] },
-];
 
 /** Every orb on screen, with the unit it reads and the bit it shows. */
 let orbs = [];
@@ -69,100 +74,61 @@ function saveSettings() {
 
 /* ── color ─────────────────────────────────────────────────────────── */
 
-function hexToRgb(hex) {
-    const v = hex.replace('#', '');
-    const n = parseInt(v.length === 3 ? v.replace(/./g, '$&$&') : v, 16);
-    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
-}
-
-function rgbToHex([r, g, b]) {
-    return '#' + [r, g, b].map((c) => Math.round(c).toString(16).padStart(2, '0')).join('');
-}
-
-function luminance(hex) {
-    const [r, g, b] = hexToRgb(hex).map((c) => {
-        c /= 255;
-        return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
-    });
-    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
-}
-
-function saturation(hex) {
-    const [r, g, b] = hexToRgb(hex).map((c) => c / 255);
-    const max = Math.max(r, g, b), min = Math.min(r, g, b);
-    return max === 0 ? 0 : (max - min) / max;
-}
-
-function mix(a, b, t) {
-    const A = hexToRgb(a), B = hexToRgb(b);
-    return rgbToHex(A.map((c, i) => c + (B[i] - c) * t));
-}
-
-/**
- * Split a palette into a background and the colors the orbs glow in.
- * The darkest swatch is pushed most of the way to black so the glow reads;
- * swatches too dark to glow against it are left out of the orbs.
- */
-function preparePalette(colors) {
-    const sorted = [...colors].sort((a, b) => luminance(a) - luminance(b));
-    const bg = mix(sorted[0], '#000000', 0.7);
-    let lights = sorted.slice(1).filter((c) => luminance(c) > 0.035);
-    if (!lights.length) lights = [mix(sorted[sorted.length - 1], '#ffffff', 0.5)];
-    // Brightest-and-most-saturated first, so "mono" and group leads are lively.
-    lights.sort((a, b) => saturation(b) + luminance(b) - (saturation(a) + luminance(a)));
-    return { bg, lights };
-}
-
-let colorSet = preparePalette(palettes[0].colors);
-
-/** The five blob colors for one orb. */
+/** The five glow colors for one orb, rotated through the working five. */
 function orbColors(orb, i) {
-    const L = colorSet.lights;
-    const n = L.length;
-    if (state.mix === 'mono') return [L[0], L[0], mix(L[0], '#ffffff', 0.25), L[0], mix(L[0], '#000000', 0.2)];
-    if (state.mix === 'column') {
-        const lead = L[orb.group % n];
-        const next = L[(orb.group + 1) % n];
-        return [lead, next, lead, mix(lead, '#ffffff', 0.2), next];
-    }
-    // blend: every orb carries the whole palette, each starting somewhere else.
-    return [0, 1, 2, 3, 4].map((k) => L[(i * 2 + k) % n]);
+    const C = state.colors;
+    const shift = state.mix === 'varied' ? i : state.mix === 'group' ? orb.group : 0;
+    return [0, 1, 2, 3, 4].map((k) => C[(k + shift) % 5]);
 }
 
 function applyColors() {
-    el.stage.style.setProperty('--bg', colorSet.bg);
     orbs.forEach((orb, i) => {
         orbColors(orb, i).forEach((c, k) => orb.node.style.setProperty(`--c${k + 1}`, c));
     });
 }
 
-function renderPaletteChips() {
-    const pal = palettes[state.palette] || palettes[0];
-    el.palette.replaceChildren(...pal.colors.map((c) => {
-        const s = document.createElement('span');
-        s.style.background = c;
-        s.title = c.toUpperCase();
-        return s;
-    }));
+/** Five editable swatches, like the sketch's color inputs. */
+const swatches = state.colors.map((c, k) => {
+    const label = document.createElement('label');
+    label.className = 'paletteSwatch';
+    const input = document.createElement('input');
+    input.type = 'color';
+    input.setAttribute('aria-label', `Glow color ${k + 1}`);
+    input.addEventListener('input', () => {
+        state.colors[k] = input.value;
+        state.paletteName = '';
+        syncSwatches();
+        applyColors();
+    });
+    input.addEventListener('change', saveSettings);
+    label.append(input);
+    el.palette.append(label);
+    return { label, input };
+});
+
+function syncSwatches() {
+    swatches.forEach(({ label, input }, k) => {
+        label.style.background = state.colors[k];
+        input.value = state.colors[k];
+    });
+    el.paletteName.textContent = state.paletteName
+        ? `${state.paletteName} — tap a swatch to edit`
+        : 'Tap a swatch to edit';
 }
 
+let lastPick = -1;
+
+/** Pick a palette at random and map it the way the sketch does. */
 function shuffle() {
-    if (palettes.length > 1) {
-        let next;
-        do { next = Math.floor(Math.random() * palettes.length); } while (next === state.palette);
-        state.palette = next;
-    } else {
-        state.palette = 0;
-    }
-    usePalette();
-    saveSettings();
-}
-
-function usePalette() {
-    const pal = palettes[state.palette] || palettes[0];
-    colorSet = preparePalette(pal.colors);
-    renderPaletteChips();
+    let i;
+    do { i = Math.floor(Math.random() * palettes.length); } while (i === lastPick && palettes.length > 1);
+    lastPick = i;
+    const { name, colors } = palettes[i];
+    state.colors = [0, 1, 2, 3, 4].map((k) => colors[k % colors.length]);
+    state.paletteName = name;
+    syncSwatches();
     applyColors();
+    saveSettings();
 }
 
 /* ── building the clock ────────────────────────────────────────────── */
@@ -182,12 +148,8 @@ function makeOrb() {
         + `<svg class="orb__sparkle" viewBox="0 0 80 80"><path d="${SPARKLE}" fill="currentColor"/></svg>`
         + `<svg class="orb__sparkle orb__sparkle--small" viewBox="0 0 80 80"><path d="${SPARKLE}" fill="currentColor"/></svg>`
         + '</div>';
-    // Desync the swirls and twinkles so the orbs don't move in lockstep.
-    const [bgGlow, fgGlow] = node.querySelectorAll('.orb__glow');
-    bgGlow.style.animationDelay = `${-Math.random() * 20}s`;
-    fgGlow.style.animationDelay = `${-Math.random() * 20}s`;
-    bgGlow.style.rotate = fgGlow.style.rotate = `${Math.random() * 360}deg`;
-    node.style.setProperty('--tw', `${-Math.random() * 5}s`);
+    // Offset each orb's orbits so neighbours don't move in lockstep.
+    node.style.setProperty('--off', `${(-Math.random() * 30).toFixed(2)}s`);
     return node;
 }
 
@@ -256,19 +218,10 @@ function applyLook() {
     c.classList.toggle('digits', state.digits);
     c.classList.toggle('noSparkle', !state.sparkle);
     c.classList.toggle('noGhost', !state.ghost);
-    c.style.setProperty('--glow', String(state.glow / 100));
-
-    const speed = state.swirl / 50; // 1× at the midpoint
-    if (speed <= 0) {
-        c.style.setProperty('--play', 'paused');
-    } else {
-        c.style.setProperty('--play', 'running');
-        c.style.setProperty('--spinA', `${(16 / speed).toFixed(2)}s`);
-        c.style.setProperty('--spinB', `${(11 / speed).toFixed(2)}s`);
-    }
-
-    el.glowVal.textContent = `${state.glow}%`;
-    el.swirlVal.textContent = speed <= 0 ? 'Still' : `${speed.toFixed(1)}×`;
+    c.style.setProperty('--glow-scale', String(SCALE[state.scale] || 0.8));
+    c.style.setProperty('--speed', String(SPEED[state.speed] || 1));
+    c.style.setProperty('--play', state.speed === 'still' ? 'paused' : 'running');
+    el.stage.classList.toggle('light', state.theme === 'light');
 
     el.layoutNote.textContent = state.layout === 'rows'
         ? 'Each row is a whole number. Left to right: 32 16 8 4 2 1.'
@@ -439,25 +392,17 @@ function wireCheck(input, key, after) {
     });
 }
 
-function wireRange(input, key) {
-    input.value = state[key];
-    input.addEventListener('input', () => {
-        state[key] = Number(input.value);
-        applyLook();
-    });
-    input.addEventListener('change', saveSettings);
-}
-
 wireOptions('optHours', 'hours', build);
 wireOptions('optLayout', 'layout', build);
 wireOptions('optMix', 'mix', applyColors);
 wireOptions('optAuto', 'auto', () => {});
+wireOptions('optTheme', 'theme', applyLook);
+wireOptions('optSpeed', 'speed', applyLook);
+wireOptions('optScale', 'scale', applyLook);
 wireCheck(el.seconds, 'seconds', build);
 wireCheck(el.digits, 'digits', () => { applyLook(); fit(); });
 wireCheck(el.sparkle, 'sparkle', applyLook);
 wireCheck(el.ghost, 'ghost', applyLook);
-wireRange(el.glow, 'glow');
-wireRange(el.swirl, 'swirl');
 
 el.shuffle.addEventListener('click', shuffle);
 
@@ -531,20 +476,6 @@ function initMarkAnimation() {
 build();
 schedule();
 
-fetch('/palettes.json')
-    .then((r) => {
-        if (!r.ok) throw new Error(`palettes.json ${r.status}`);
-        return r.json();
-    })
-    .then((list) => {
-        const valid = list.filter((p) => Array.isArray(p.colors) && p.colors.length >= 2);
-        if (!valid.length) return;
-        palettes = valid;
-        if (!(state.palette >= 0 && state.palette < palettes.length)) {
-            state.palette = Math.floor(Math.random() * palettes.length);
-        }
-        usePalette();
-    })
-    .catch(() => { state.palette = 0; usePalette(); });
+syncSwatches();
 
 initMarkAnimation();

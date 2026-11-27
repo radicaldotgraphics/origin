@@ -120,7 +120,11 @@ body {
 
 /* The clock face: a dark display card. Fullscreen makes it the whole screen. */
 #bcStage {
-    --bg: #0b0b10;
+    /* Scene tokens from the orb sketch (dark scheme). */
+    --bg: oklch(0.17 0.022 258);
+    --orb-face: oklch(0.2904 0.0411 267.2);
+    --sparkle: oklch(1 0 0);
+    --soft: rgba(255, 255, 255, 0.55);
     position: relative;
     flex: 1 1 auto;
     min-height: 0;
@@ -135,6 +139,16 @@ body {
     transition: background 1.2s ease-in-out;
     isolation: isolate;
 }
+
+/* …and its light scheme. */
+#bcStage.light {
+    --bg: oklch(0.97 0.012 250);
+    --orb-face: oklch(1 0 0);
+    --sparkle: oklch(0.17 0.022 258);
+    --soft: rgba(10, 25, 50, 0.5);
+}
+
+#bcStage.light #bcExit { border-color: rgba(10, 25, 50, 0.3); color: rgba(10, 25, 50, 0.8); }
 
 #bcStage:fullscreen { border-radius: 0; }
 
@@ -312,16 +326,16 @@ body {
 
 .opt.pill {
     width: auto;
-    min-width: 72px;
+    min-width: 60px;
     height: 40px;
-    padding: 0 18px;
+    padding: 0 15px;
     border-radius: 99px;
     font-family: inherit;
     font-size: 12px;
     letter-spacing: 0.06em;
 }
 
-/* ── Palette chips ──────────────────────────────────────── */
+/* ── Glow color swatches ────────────────────────────────── */
 
 #bcPalette {
     display: flex;
@@ -331,30 +345,29 @@ body {
     overflow: hidden;
 }
 
-#bcPalette span {
+.paletteSwatch {
+    position: relative;
     flex: 1 1 0;
+    cursor: pointer;
     transition: background 0.6s ease-in-out;
 }
 
-/* ── Sliders and checks ─────────────────────────────────── */
+.paletteSwatch + .paletteSwatch { border-left: 1px solid rgba(0, 0, 0, 0.06); }
 
-.sliderRow {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-}
-
-.sliderRow .val {
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 0.04em;
-}
-
-input[type="range"] {
+.paletteSwatch input {
+    position: absolute;
+    inset: 0;
     width: 100%;
-    margin: 0 0 20px;
-    accent-color: var(--ink);
+    height: 100%;
+    opacity: 0;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
 }
+
+.paletteSwatch:focus-within { outline: 2px solid var(--ink); outline-offset: -2px; }
+
+/* ── Checks ───────────────────────────────────────────── */
 
 .check {
     display: flex;
@@ -373,9 +386,8 @@ input[type="range"] {
 #bcClock {
     --d: 40px;          /* orb diameter, set from the stage size in JS */
     --gap: calc(var(--d) * 0.55);
-    --glow: 0.6;        /* 0–1, from the Glow slider */
-    --spinA: 16s;       /* swirl durations, from the Swirl slider */
-    --spinB: 11s;
+    --glow-scale: 0.8;  /* Glow size: 0.8 / 1 / 1.2 */
+    --speed: 1;         /* duration factor: 1.5 slow, 1 med, 0.65 fast */
     --play: running;
     display: flex;
     align-items: flex-end;
@@ -407,7 +419,7 @@ input[type="range"] {
     font-family: field-gothic-wide, sans-serif;
     font-size: max(11px, calc(var(--d) * 0.32));
     letter-spacing: 0.08em;
-    color: rgba(255, 255, 255, 0.55);
+    color: var(--soft);
     line-height: 1;
     font-variant-numeric: tabular-nums;
     display: none;
@@ -424,140 +436,137 @@ input[type="range"] {
     text-align: center;
     font-size: 11px;
     letter-spacing: 0.14em;
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--soft);
 }
 
 /* ── Orb ────────────────────────────────────────────────── */
+/* Straight from the orb sketch, with every length taken as a fraction of
+   its 112px orb (--u) so the orb scales to the clock. Lit bits bloom their
+   glow in; unlit bits keep only a faint face. */
 
 .orb {
+    --u: calc(var(--d) / 112);
     position: relative;
     width: var(--d);
     height: var(--d);
     flex: 0 0 auto;
+    isolation: isolate;
 }
-
-/* Faint ring marks the bit position while it's off. */
-.orb::before {
-    content: "";
-    position: absolute;
-    inset: 22%;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    background: rgba(255, 255, 255, 0.03);
-    transition: opacity 0.6s ease-in-out;
-}
-
-#bcClock.noGhost .orb::before { opacity: 0; }
-.orb.on::before { opacity: 0; }
 
 .orb__glow {
     position: absolute;
-    border-radius: 50%;
+    inset: 0;
     opacity: 0;
-    scale: 0.35;
+    scale: calc(var(--glow-scale) * 0.35);
     transition:
         opacity 0.7s ease-out,
         scale 1.1s cubic-bezier(0.34, 1.56, 0.64, 1);
-    will-change: rotate, scale;
     pointer-events: none;
 }
 
-/* Wide, soft halo: the colors bleeding into the dark. */
-.orb__glow--background {
-    inset: calc(var(--d) * (-0.12 - 0.42 * var(--glow)));
-    filter: blur(calc(var(--d) * (0.12 + 0.18 * var(--glow))));
-    animation: orbSpin var(--spinA) linear infinite;
-    animation-play-state: var(--play);
-}
+.orb.on .orb__glow { opacity: 1; scale: var(--glow-scale); }
 
-/* Tighter, brighter swirl hugging the face, turning the other way. */
-.orb__glow--foreground {
-    inset: calc(var(--d) * -0.08);
-    filter: blur(calc(var(--d) * 0.09));
-    mix-blend-mode: screen;
-    animation: orbSpin var(--spinB) linear infinite reverse;
-    animation-play-state: var(--play);
-}
+.orb__glow--background { --blur-amt: calc(var(--u) * 18); z-index: 0; }
+.orb__glow--foreground { --blur-amt: calc(var(--u) * 20); z-index: 1; }
 
-.orb.on .orb__glow { opacity: 1; scale: 1; }
-.orb.on .orb__glow--background { opacity: calc(0.35 + 0.65 * var(--glow)); }
-
-@keyframes orbSpin {
-    to { rotate: 360deg; }
-}
-
-/* Five blobs, placed off-centre so the rotation reads as a swirl. */
 .orb__blob {
+    --blob-color: var(--c1);
     position: absolute;
-    width: 58%;
-    height: 58%;
-    border-radius: 50%;
+    top: calc(var(--u) * 6);
+    left: calc(var(--u) * 6);
+    width: calc(var(--u) * 90);
+    height: calc(var(--u) * 90);
+    scale: 1.1;
+    border-radius: 60% 40% 58% 22%;
+    background: var(--blob-color);
+    filter: blur(var(--blur-amt));
+    mix-blend-mode: plus-lighter;
+    animation: glow-orbit calc(5s * var(--speed)) linear infinite;
+    /* --off desyncs orbs that would otherwise orbit in lockstep */
+    animation-delay: var(--off, 0s);
+    animation-play-state: var(--play);
     transition: background 1.4s ease-in-out;
 }
 
-.blobA { left: 2%;  top: 4%;  background: var(--c1); }
-.blobB { right: 0;  top: 14%; background: var(--c2); }
-.blobC { left: 24%; bottom: 0; background: var(--c3); }
-.blobD { left: 8%;  top: 40%; width: 44%; height: 44%; background: var(--c4); }
-.blobE { right: 6%; bottom: 12%; width: 40%; height: 40%; background: var(--c5); }
+.orb__blob.blobB {
+    --blob-color: var(--c2);
+    animation-duration: calc(4s * var(--speed));
+    animation-delay: calc(-6s + var(--off, 0s));
+    animation-direction: reverse;
+}
 
-.orb__glow--foreground .orb__blob { width: 52%; height: 52%; }
+.orb__blob.blobC {
+    --blob-color: var(--c3);
+    width: calc(var(--u) * 80);
+    height: calc(var(--u) * 62);
+    top: calc(var(--u) * 17);
+    left: calc(var(--u) * 16);
+    animation-duration: calc(5s * var(--speed));
+    animation-delay: calc(-11s + var(--off, 0s));
+}
+
+.orb__blob.blobD {
+    --blob-color: var(--c4);
+    animation-duration: calc(7s * var(--speed));
+    animation-delay: calc(-15s + var(--off, 0s));
+    animation-direction: reverse;
+}
+
+.orb__blob.blobE {
+    --blob-color: var(--c5);
+    animation-duration: calc(3s * var(--speed));
+    animation-delay: calc(-20s + var(--off, 0s));
+}
+
+@keyframes glow-orbit {
+    0%   { transform: rotate(0deg)   translate(calc(var(--u) * 25), calc(var(--u) * -5)) scale(0.95); }
+    25%  { transform: rotate(90deg)  translate(calc(var(--u) * 32), calc(var(--u) * 4))  scale(1.12, 0.92); }
+    50%  { transform: rotate(180deg) translate(calc(var(--u) * 23), calc(var(--u) * -7)) scale(0.9, 1.08); }
+    75%  { transform: rotate(270deg) translate(calc(var(--u) * 30), calc(var(--u) * 6))  scale(1.08); }
+    100% { transform: rotate(360deg) translate(calc(var(--u) * 25), calc(var(--u) * -5)) scale(0.95); }
+}
 
 .orb__face {
     position: absolute;
     inset: 0;
+    z-index: 2;
     border-radius: 50%;
-    display: grid;
-    place-items: center;
-    color: #fff;
-    background: radial-gradient(circle,
-        rgba(255, 255, 255, 0.95) 0 16%,
-        rgba(255, 255, 255, 0.42) 34%,
-        rgba(255, 255, 255, 0) 68%);
-    opacity: 0;
-    scale: 0.4;
-    transition:
-        opacity 0.5s ease-out,
-        scale 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+    background: var(--orb-face);
+    color: var(--sparkle);
+    opacity: 0.28;
+    transition: opacity 0.6s ease-in-out, background 1.2s ease-in-out;
 }
 
-.orb.on .orb__face { opacity: 1; scale: 1; }
-
-/* A white flash as each bit lights. */
-.orb.on .orb__face { animation: orbPop 0.9s ease-out; }
-
-@keyframes orbPop {
-    0%   { filter: brightness(2.2); }
-    100% { filter: brightness(1); }
-}
+.orb.on .orb__face { opacity: 1; }
+#bcClock.noGhost .orb:not(.on) .orb__face { opacity: 0; }
 
 .orb__sparkle {
-    grid-area: 1 / 1;
-    width: 58%;
-    height: 58%;
-    filter: drop-shadow(0 0 calc(var(--d) * 0.08) rgba(255, 255, 255, 0.9));
-    animation: orbTwinkle 4.2s ease-in-out infinite;
-    animation-delay: var(--tw, 0s);
+    position: absolute;
+    top: calc(var(--u) * 27);
+    left: calc(var(--u) * 27);
+    width: calc(var(--u) * 56);
+    height: calc(var(--u) * 56);
+    display: block;
+    opacity: 0;
+    scale: 0.3;
+    transition:
+        opacity 0.4s ease-out,
+        scale 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .orb__sparkle--small {
-    width: 26%;
-    height: 26%;
-    translate: 70% -70%;
-    opacity: 0.9;
-    animation-duration: 3.1s;
+    top: calc(var(--u) * 57);
+    left: calc(var(--u) * 57);
+    width: calc(var(--u) * 28);
+    height: calc(var(--u) * 28);
+    transition-delay: 0.12s;
 }
 
+.orb.on .orb__sparkle { opacity: 1; scale: 1; }
 #bcClock.noSparkle .orb__sparkle { display: none; }
 
-@keyframes orbTwinkle {
-    0%, 100% { scale: 1;    rotate: 0deg; }
-    50%      { scale: 0.78; rotate: 45deg; }
-}
-
 @media (prefers-reduced-motion: reduce) {
-    .orb__glow, .orb__sparkle { animation: none !important; }
-    .orb.on .orb__face { animation: none; }
+    .orb__blob { animation-play-state: paused; }
 }
 
 /* ── Responsive ─────────────────────────────────────────── */

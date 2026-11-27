@@ -84,14 +84,15 @@
 
                 <!-- ── Color ────────────────────────────────────────── -->
                 <div class="group">
-                    <span class="groupLabel">Palette</span>
-                    <div id="bcPalette" aria-label="Current palette"></div>
+                    <span class="groupLabel">Glow colors</span>
+                    <div id="bcPalette" role="group" aria-label="Glow colors"></div>
+                    <div class="note" id="bcPaletteName"></div>
 
                     <span class="groupLabel">Color mix</span>
                     <div class="optRow" id="optMix" role="radiogroup" aria-label="Color mix">
-                        <button class="opt pill" data-val="blend" role="radio" title="Every orb swirls the whole palette">Blend</button>
-                        <button class="opt pill" data-val="column" role="radio" title="Each column or row leads with its own color">Group</button>
-                        <button class="opt pill" data-val="mono" role="radio" title="One color throughout">Mono</button>
+                        <button class="opt pill" data-val="uniform" role="radio" title="Every orb glows the same">Uniform</button>
+                        <button class="opt pill" data-val="varied" role="radio" title="Each orb starts the palette somewhere else">Varied</button>
+                        <button class="opt pill" data-val="group" role="radio" title="Each column or row shares a mix">Group</button>
                     </div>
 
                     <span class="groupLabel">Auto shuffle</span>
@@ -104,17 +105,26 @@
 
                 <!-- ── Glow ─────────────────────────────────────────── -->
                 <div class="group">
-                    <div class="sliderRow">
-                        <label class="groupLabel" for="bcGlow">Glow</label>
-                        <span class="val" id="bcGlowVal"></span>
+                    <span class="groupLabel">Background</span>
+                    <div class="optRow" id="optTheme" role="radiogroup" aria-label="Background">
+                        <button class="opt pill" data-val="dark" role="radio">Dark</button>
+                        <button class="opt pill" data-val="light" role="radio">Light</button>
                     </div>
-                    <input type="range" id="bcGlow" min="0" max="100" step="1">
 
-                    <div class="sliderRow">
-                        <label class="groupLabel" for="bcSwirl">Swirl speed</label>
-                        <span class="val" id="bcSwirlVal"></span>
+                    <span class="groupLabel">Speed</span>
+                    <div class="optRow" id="optSpeed" role="radiogroup" aria-label="Speed">
+                        <button class="opt pill" data-val="still" role="radio">Still</button>
+                        <button class="opt pill" data-val="slow" role="radio">Slow</button>
+                        <button class="opt pill" data-val="med" role="radio">Med</button>
+                        <button class="opt pill" data-val="fast" role="radio">Fast</button>
                     </div>
-                    <input type="range" id="bcSwirl" min="0" max="100" step="1">
+
+                    <span class="groupLabel">Glow size</span>
+                    <div class="optRow" id="optScale" role="radiogroup" aria-label="Glow size">
+                        <button class="opt pill" data-val="small" role="radio">Small</button>
+                        <button class="opt pill" data-val="med" role="radio">Med</button>
+                        <button class="opt pill" data-val="lg" role="radio">Large</button>
+                    </div>
 
                     <label class="check">
                         <input type="checkbox" id="bcSparkle">
