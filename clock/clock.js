@@ -5,10 +5,9 @@
 import palettes from './palettes.js';
 
 const STORE_KEY = 'bc-settings';
-// Largest cell, px. The dot is 30% of it, so ~11px radius on the page;
-// fullscreen lets the clock grow to fill a big display.
+// Largest cell, px. The dot is 30% of it, so ~11px radius on the page.
+// Fullscreen has no cap: the clock scales to fill whatever display it's on.
 const MAX_D = 72;
-const MAX_D_FULL = 140;
 
 const defaults = {
     hours: guessHourCycle(),
@@ -21,19 +20,16 @@ const defaults = {
     mix: 'varied',
     auto: 'off',
     theme: 'dark',
-    speed: 'med',
     scale: 'small',
     ghost: true,
 };
 
-const SPEED = { still: 1, slow: 1.5, med: 1, fast: 0.65 };
-// Tighter than the sketch's 0.8 / 1 / 1.2: the glow sits just outside the
-// face, so these only nudge how far past the rim it reaches.
-const SCALE = { small: 1, med: 1.08, lg: 1.18 };
+// How far the glow reaches past the dot.
+const SCALE = { small: 1.3, med: 1.7, lg: 2.2 };
 
 const state = { ...defaults, ...loadSettings() };
 if (!Array.isArray(state.colors) || state.colors.length !== 5) state.colors = [...defaults.colors];
-for (const k of ['palette', 'glow', 'swirl', 'sparkle']) delete state[k];
+for (const k of ['palette', 'glow', 'swirl', 'sparkle', 'speed']) delete state[k];
 if (!['uniform', 'varied', 'group'].includes(state.mix)) state.mix = defaults.mix;
 
 const $ = (id) => document.getElementById(id);
@@ -139,15 +135,7 @@ function shuffle() {
 function makeOrb() {
     const node = document.createElement('div');
     node.className = 'orb';
-    const blobs = '<span class="orb__blob blobA"></span><span class="orb__blob blobB"></span>'
-        + '<span class="orb__blob blobC"></span><span class="orb__blob blobD"></span>'
-        + '<span class="orb__blob blobE"></span>';
-    node.innerHTML =
-        `<div class="orb__glow orb__glow--background">${blobs}</div>`
-        + `<div class="orb__glow orb__glow--foreground">${blobs}</div>`
-        + '<div class="orb__face"></div>';
-    // Offset each orb's orbits so neighbours don't move in lockstep.
-    node.style.setProperty('--off', `${(-Math.random() * 30).toFixed(2)}s`);
+    node.innerHTML = '<div class="orb__face"></div>';
     return node;
 }
 
@@ -215,9 +203,7 @@ function applyLook() {
     const c = el.clock;
     c.classList.toggle('digits', state.digits);
     c.classList.toggle('noGhost', !state.ghost);
-    c.style.setProperty('--glow-scale', String(SCALE[state.scale] || 1));
-    c.style.setProperty('--speed', String(SPEED[state.speed] || 1));
-    c.style.setProperty('--play', state.speed === 'still' ? 'paused' : 'running');
+    c.style.setProperty('--glow-scale', String(SCALE[state.scale] || 1.3));
     el.stage.classList.toggle('light', state.theme === 'light');
 
     el.layoutNote.textContent = state.layout === 'rows'
@@ -241,7 +227,11 @@ function fit() {
         wc = cols + n * g + (n - 1) * g * 2.2 + 1;
         hc = 4 + 3 * g + (state.digits ? 0.9 : 0) + 1.4;
     }
-    const d = Math.max(10, Math.min(isFull() ? MAX_D_FULL : MAX_D, W / wc, H / hc));
+    // Fullscreen is for phones and screensaver displays: centre the clock and
+    // scale it to the screen, with a margin so it never touches the edges.
+    const full = isFull();
+    const margin = full ? 1.15 : 1;
+    const d = Math.max(10, Math.min(full ? Infinity : MAX_D, W / (wc * margin), H / (hc * margin)));
     el.clock.style.setProperty('--d', `${d.toFixed(1)}px`);
 }
 
@@ -331,6 +321,7 @@ function toggleFullscreen() {
 
 async function onFullChange() {
     const full = isFull();
+    document.documentElement.classList.toggle('pseudoFull', el.stage.classList.contains('pseudo'));
     el.stage.classList.toggle('full', full);
     el.full.textContent = full ? 'Exit fullscreen' : 'Fullscreen';
     poke();
@@ -394,7 +385,6 @@ wireOptions('optLayout', 'layout', build);
 wireOptions('optMix', 'mix', applyColors);
 wireOptions('optAuto', 'auto', () => {});
 wireOptions('optTheme', 'theme', applyLook);
-wireOptions('optSpeed', 'speed', applyLook);
 wireOptions('optScale', 'scale', applyLook);
 wireCheck(el.seconds, 'seconds', build);
 wireCheck(el.digits, 'digits', () => { applyLook(); fit(); });
