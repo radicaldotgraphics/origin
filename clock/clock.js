@@ -2,7 +2,7 @@
    Each bit is a glowing dot built from the orb sketch (see clock.css). The five glow
    colors come from the sketch's palettes, mapped the way it maps them. */
 
-import palettes from './palettes.js?v=4';
+import palettes from './palettes.js?v=5';
 
 const STORE_KEY = 'bc-settings';
 // Largest cell, px. The dot is 30% of it, so ~11px radius on the page.
@@ -16,8 +16,6 @@ const defaults = {
     digits: false,
     // The sketch's own defaults: cyan, blue, lime, white, lime.
     colors: ['#1ebbf7', '#0045aa', '#b8f42e', '#ffffff', '#b8f42e'],
-    paletteName: '',
-    mix: 'varied',
     auto: 'off',
     theme: 'dark',
     scale: 'small',
@@ -29,8 +27,7 @@ const SCALE = { small: 1.3, med: 1.7, lg: 2.2 };
 
 const state = { ...defaults, ...loadSettings() };
 if (!Array.isArray(state.colors) || state.colors.length !== 5) state.colors = [...defaults.colors];
-for (const k of ['palette', 'glow', 'swirl', 'sparkle', 'speed']) delete state[k];
-if (!['uniform', 'varied', 'group'].includes(state.mix)) state.mix = defaults.mix;
+for (const k of ['palette', 'glow', 'swirl', 'sparkle', 'speed', 'mix', 'paletteName']) delete state[k];
 
 const $ = (id) => document.getElementById(id);
 
@@ -39,7 +36,6 @@ const el = {
     clock: $('bcClock'),
     readout: $('bcReadout'),
     palette: $('bcPalette'),
-    paletteName: $('bcPaletteName'),
     layoutNote: $('bcLayoutNote'),
     seconds: $('bcSeconds'),
     digits: $('bcDigits'),
@@ -73,11 +69,10 @@ function saveSettings() {
 
 /* ── color ─────────────────────────────────────────────────────────── */
 
-/** The five glow colors for one orb, rotated through the working five. */
+/** The five glow colors for one orb: each starts the palette one further on. */
 function orbColors(orb, i) {
     const C = state.colors;
-    const shift = state.mix === 'varied' ? i : state.mix === 'group' ? orb.group : 0;
-    return [0, 1, 2, 3, 4].map((k) => C[(k + shift) % 5]);
+    return [0, 1, 2, 3, 4].map((k) => C[(k + i) % 5]);
 }
 
 function applyColors() {
@@ -95,7 +90,6 @@ const swatches = state.colors.map((c, k) => {
     input.setAttribute('aria-label', `Glow color ${k + 1}`);
     input.addEventListener('input', () => {
         state.colors[k] = input.value;
-        state.paletteName = '';
         syncSwatches();
         applyColors();
     });
@@ -110,9 +104,6 @@ function syncSwatches() {
         label.style.background = state.colors[k];
         input.value = state.colors[k];
     });
-    el.paletteName.textContent = state.paletteName
-        ? `${state.paletteName} — tap a swatch to edit`
-        : 'Tap a swatch to edit';
 }
 
 let lastPick = -1;
@@ -122,9 +113,8 @@ function shuffle() {
     let i;
     do { i = Math.floor(Math.random() * palettes.length); } while (i === lastPick && palettes.length > 1);
     lastPick = i;
-    const { name, colors } = palettes[i];
+    const { colors } = palettes[i];
     state.colors = [0, 1, 2, 3, 4].map((k) => colors[k % colors.length]);
-    state.paletteName = name;
     syncSwatches();
     applyColors();
     saveSettings();
@@ -400,7 +390,6 @@ function wireCheck(input, key, after) {
 
 wireOptions('optHours', 'hours', build);
 wireOptions('optLayout', 'layout', build);
-wireOptions('optMix', 'mix', applyColors);
 wireOptions('optAuto', 'auto', () => {});
 wireOptions('optTheme', 'theme', applyLook);
 wireOptions('optScale', 'scale', applyLook);
