@@ -2,7 +2,7 @@
    Each bit is a glowing dot built from the orb sketch (see clock.css). The five glow
    colors come from the sketch's palettes, mapped the way it maps them. */
 
-import palettes from './palettes.js';
+import palettes from './palettes.js?v=4';
 
 const STORE_KEY = 'bc-settings';
 // Largest cell, px. The dot is 30% of it, so ~11px radius on the page.
@@ -280,11 +280,29 @@ function tick() {
     last = { h: t.h, m: t.m, s: t.s };
 }
 
-/** Tick on the second boundary rather than drifting with setInterval. */
+/**
+ * Tick on the second boundary rather than drifting with setInterval, and
+ * only while the page is visible: a hidden clock does no work at all.
+ */
+let tickTimer = 0;
+
 function schedule() {
+    clearTimeout(tickTimer);
+    if (document.hidden) return;
     tick();
-    setTimeout(() => requestAnimationFrame(schedule), 1000 - (Date.now() % 1000) + 5);
+    tickTimer = setTimeout(schedule, 1000 - (Date.now() % 1000) + 5);
 }
+
+/**
+ * Coming back after a while, many bits change at once; snap them to the
+ * current time instead of fading a burst of them in and out.
+ */
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { clearTimeout(tickTimer); return; }
+    el.clock.classList.add('instant');
+    schedule();
+    requestAnimationFrame(() => requestAnimationFrame(() => el.clock.classList.remove('instant')));
+});
 
 /* ── fullscreen ────────────────────────────────────────────────────── */
 
@@ -408,55 +426,6 @@ window.addEventListener('keydown', (e) => {
 
 new ResizeObserver(fit).observe(el.stage);
 
-/* ── logo animation ────────────────────────────────────────────────── */
-
-/** True when a layer paints with the lavender accent rather than the ink colour. */
-function isAccentLayer(layer) {
-    let accent = false;
-    (function walk(node) {
-        if (accent || !node || typeof node !== 'object') return;
-        if (Array.isArray(node)) { node.forEach(walk); return; }
-        if (node.ty === 'fl' && node.c && Array.isArray(node.c.k)) {
-            const [r, g, b] = node.c.k;
-            if (r + g + b > 1.5) accent = true;
-        }
-        Object.values(node).forEach(walk);
-    })(layer);
-    return accent;
-}
-
-/** The site's animated mark, loaded last; the inline SVG covers any failure. */
-function initMarkAnimation() {
-    const host = $('bcMarkAnim');
-    const mark = $('bcMark');
-    if (!host || !mark) return;
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    Promise.all([
-        import('/qrcode/vendor/lottie-light.js'),
-        fetch('/data.json').then((r) => {
-            if (!r.ok) throw new Error(`data.json ${r.status}`);
-            return r.json();
-        }),
-    ])
-        .then(([{ default: lottie }, data]) => {
-            data.layers = data.layers.filter((l) => !isAccentLayer(l));
-            const anim = lottie.loadAnimation({
-                container: host,
-                renderer: 'svg',
-                loop: true,
-                autoplay: true,
-                animationData: data,
-                rendererSettings: {
-                    viewBoxSize: '191 271 1607 452',
-                    preserveAspectRatio: 'xMidYMid meet',
-                },
-            });
-            anim.addEventListener('DOMLoaded', () => mark.classList.add('animated'));
-        })
-        .catch(() => { /* static mark stands in */ });
-}
-
 /* ── start ─────────────────────────────────────────────────────────── */
 
 build();
@@ -464,4 +433,3 @@ schedule();
 
 syncSwatches();
 
-initMarkAnimation();

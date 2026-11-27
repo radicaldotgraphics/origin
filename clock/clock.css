@@ -52,15 +52,6 @@ body {
     display: block;
 }
 
-#bcMarkAnim {
-    display: none;
-    height: 56px;
-    aspect-ratio: 1607 / 452;
-}
-
-#bcMark.animated #bcLogo { display: none; }
-#bcMark.animated #bcMarkAnim { display: block; }
-#bcMarkAnim svg { display: block; width: 100%; height: 100%; }
 
 #bcTitle {
     font-family: field-gothic-compact, sans-serif;
@@ -496,6 +487,15 @@ html.pseudoFull, html.pseudoFull body { overflow: hidden; }
 }
 
 .orb.on .orb__face::before { opacity: 1; }
+
+/* Snap, don't fade, when catching up after the page was hidden. */
+#bcClock.instant .orb__face,
+#bcClock.instant .orb__face::before { transition: none; }
+
+/* Nothing moves for people who ask for that, not even the fades. */
+@media (prefers-reduced-motion: reduce) {
+    .orb__face, .orb__face::before { transition: none; }
+}
 
 /* ── Responsive ─────────────────────────────────────────── */
 
