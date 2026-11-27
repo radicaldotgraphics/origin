@@ -1,7 +1,7 @@
 /* Binary Clock — radical.graphics/binaryclock
    Page chrome follows /qrcode (qr.css); the orb is rebuilt from the
-   split-scene orb sketch: two blurred blob groups swirling in opposite
-   directions behind a white sparkle face. */
+   split-scene orb sketch: two groups of blurred blobs orbiting a small
+   bright dot, so each lit bit reads as a glow. */
 
 :root {
     --ink: #000;
@@ -123,7 +123,7 @@ body {
     /* Scene tokens from the orb sketch (dark scheme). */
     --bg: oklch(0.17 0.022 258);
     --orb-face: oklch(0.2904 0.0411 267.2);
-    --sparkle: oklch(1 0 0);
+    --dot: oklch(1 0 0);
     --soft: rgba(255, 255, 255, 0.55);
     position: relative;
     flex: 1 1 auto;
@@ -144,7 +144,7 @@ body {
 #bcStage.light {
     --bg: oklch(0.97 0.012 250);
     --orb-face: oklch(1 0 0);
-    --sparkle: oklch(0.17 0.022 258);
+    --dot: oklch(0.17 0.022 258);
     --soft: rgba(10, 25, 50, 0.5);
 }
 
@@ -385,7 +385,7 @@ body {
 
 #bcClock {
     --d: 40px;          /* orb diameter, set from the stage size in JS */
-    --gap: calc(var(--d) * 0.55);
+    --gap: calc(var(--d) * 0.2);
     --glow-scale: 1;    /* Glow size: 1 / 1.08 / 1.18 */
     --speed: 1;         /* duration factor: 1.5 slow, 1 med, 0.65 fast */
     --play: running;
@@ -440,15 +440,16 @@ body {
 }
 
 /* ── Orb ────────────────────────────────────────────────── */
-/* Straight from the orb sketch, with every length taken as a fraction of
-   its 112px orb (--u) so the orb scales to the clock. Lit bits bloom their
-   glow in; unlit bits keep only a faint face. */
+/* Each cell (--d) holds a small dot, 30% of the cell, with the sketch's
+   blobs orbiting behind it. Blob lengths are in --u, a 112th of the dot,
+   so the sketch's proportions carry over; the blobs are sized up so the
+   colour reaches a little past the dot as a halo. */
 
 .orb {
-    --u: calc(var(--d) / 112);
-    /* How far the blobs wander from centre, as a share of the sketch's orbit.
-       Kept small so the colour hugs the face as an outer glow. */
-    --spread: 0.28;
+    --dot-d: calc(var(--d) * 0.3);
+    --u: calc(var(--dot-d) / 112);
+    /* How far the blobs wander, as a share of the sketch's orbit. */
+    --spread: 0.4;
     position: relative;
     width: var(--d);
     height: var(--d);
@@ -458,7 +459,11 @@ body {
 
 .orb__glow {
     position: absolute;
-    inset: 0;
+    left: 50%;
+    top: 50%;
+    width: var(--dot-d);
+    height: var(--dot-d);
+    translate: -50% -50%;
     opacity: 0;
     scale: calc(var(--glow-scale) * 0.35);
     transition:
@@ -467,18 +472,22 @@ body {
     pointer-events: none;
 }
 
-.orb.on .orb__glow { opacity: 1; scale: var(--glow-scale); }
+/* Ten plus-lighter blobs add up fast, so each group is held back to keep
+   the colour a halo rather than a white-out. */
+.orb.on .orb__glow { scale: var(--glow-scale); }
+.orb.on .orb__glow--background { opacity: 0.5; }
+.orb.on .orb__glow--foreground { opacity: 0.4; }
 
-.orb__glow--background { --blur-amt: calc(var(--u) * 9); z-index: 0; }
-.orb__glow--foreground { --blur-amt: calc(var(--u) * 6); z-index: 1; }
+.orb__glow--background { --blur-amt: calc(var(--u) * 44); z-index: 0; }
+.orb__glow--foreground { --blur-amt: calc(var(--u) * 26); z-index: 1; }
 
 .orb__blob {
     --blob-color: var(--c1);
     position: absolute;
-    top: calc(var(--u) * 4);
-    left: calc(var(--u) * 4);
-    width: calc(var(--u) * 104);
-    height: calc(var(--u) * 104);
+    top: calc(var(--u) * -40);
+    left: calc(var(--u) * -40);
+    width: calc(var(--u) * 192);
+    height: calc(var(--u) * 192);
     scale: 1.1;
     border-radius: 60% 40% 58% 22%;
     background: var(--blob-color);
@@ -491,6 +500,14 @@ body {
     transition: background 1.4s ease-in-out;
 }
 
+/* The foreground blobs sit closer in, for a brighter rim around the dot. */
+.orb__glow--foreground .orb__blob {
+    top: calc(var(--u) * -20);
+    left: calc(var(--u) * -20);
+    width: calc(var(--u) * 152);
+    height: calc(var(--u) * 152);
+}
+
 .orb__blob.blobB {
     --blob-color: var(--c2);
     animation-duration: calc(4s * var(--speed));
@@ -498,12 +515,12 @@ body {
     animation-direction: reverse;
 }
 
-.orb__blob.blobC {
+.orb__glow .orb__blob.blobC {
     --blob-color: var(--c3);
-    width: calc(var(--u) * 98);
-    height: calc(var(--u) * 84);
-    top: calc(var(--u) * 14);
-    left: calc(var(--u) * 7);
+    width: calc(var(--u) * 150);
+    height: calc(var(--u) * 116);
+    top: calc(var(--u) * -2);
+    left: calc(var(--u) * -19);
     animation-duration: calc(5s * var(--speed));
     animation-delay: calc(-11s + var(--off, 0s));
 }
@@ -529,45 +546,23 @@ body {
     100% { transform: rotate(360deg) translate(calc(var(--u) * 25 * var(--spread)), calc(var(--u) * -5 * var(--spread))) scale(0.95); }
 }
 
-
+/* The dot itself: bright when lit, a faint mark when not. */
 .orb__face {
     position: absolute;
-    inset: 0;
+    left: 50%;
+    top: 50%;
+    width: var(--dot-d);
+    height: var(--dot-d);
+    translate: -50% -50%;
     z-index: 2;
     border-radius: 50%;
-    background: var(--orb-face);
-    color: var(--sparkle);
-    opacity: 0.28;
+    background: var(--dot);
+    opacity: 0.14;
     transition: opacity 0.6s ease-in-out, background 1.2s ease-in-out;
 }
 
 .orb.on .orb__face { opacity: 1; }
 #bcClock.noGhost .orb:not(.on) .orb__face { opacity: 0; }
-
-.orb__sparkle {
-    position: absolute;
-    top: calc(var(--u) * 27);
-    left: calc(var(--u) * 27);
-    width: calc(var(--u) * 56);
-    height: calc(var(--u) * 56);
-    display: block;
-    opacity: 0;
-    scale: 0.3;
-    transition:
-        opacity 0.4s ease-out,
-        scale 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.orb__sparkle--small {
-    top: calc(var(--u) * 57);
-    left: calc(var(--u) * 57);
-    width: calc(var(--u) * 28);
-    height: calc(var(--u) * 28);
-    transition-delay: 0.12s;
-}
-
-.orb.on .orb__sparkle { opacity: 1; scale: 1; }
-#bcClock.noSparkle .orb__sparkle { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
     .orb__blob { animation-play-state: paused; }

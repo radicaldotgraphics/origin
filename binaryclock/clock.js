@@ -1,11 +1,14 @@
 /* Binary Clock — UI wiring and the clock itself.
-   Each bit is an orb from the orb sketch (see clock.css). The five glow
+   Each bit is a glowing dot built from the orb sketch (see clock.css). The five glow
    colors come from the sketch's palettes, mapped the way it maps them. */
 
 import palettes from './palettes.js';
 
 const STORE_KEY = 'bc-settings';
-const MAX_D = 132; // largest orb diameter, px
+// Largest cell, px. The dot is 30% of it, so ~11px radius on the page;
+// fullscreen lets the clock grow to fill a big display.
+const MAX_D = 72;
+const MAX_D_FULL = 140;
 
 const defaults = {
     hours: guessHourCycle(),
@@ -20,7 +23,6 @@ const defaults = {
     theme: 'dark',
     speed: 'med',
     scale: 'small',
-    sparkle: true,
     ghost: true,
 };
 
@@ -31,7 +33,7 @@ const SCALE = { small: 1, med: 1.08, lg: 1.18 };
 
 const state = { ...defaults, ...loadSettings() };
 if (!Array.isArray(state.colors) || state.colors.length !== 5) state.colors = [...defaults.colors];
-for (const k of ['palette', 'glow', 'swirl']) delete state[k];
+for (const k of ['palette', 'glow', 'swirl', 'sparkle']) delete state[k];
 if (!['uniform', 'varied', 'group'].includes(state.mix)) state.mix = defaults.mix;
 
 const $ = (id) => document.getElementById(id);
@@ -45,7 +47,6 @@ const el = {
     layoutNote: $('bcLayoutNote'),
     seconds: $('bcSeconds'),
     digits: $('bcDigits'),
-    sparkle: $('bcSparkle'),
     ghost: $('bcGhost'),
     shuffle: $('bcShuffle'),
     full: $('bcFull'),
@@ -135,8 +136,6 @@ function shuffle() {
 
 /* ── building the clock ────────────────────────────────────────────── */
 
-const SPARKLE = 'M40 4C44.5 28.5 51.5 35.5 76 40C51.5 44.5 44.5 51.5 40 76C35.5 51.5 28.5 44.5 4 40C28.5 35.5 35.5 28.5 40 4Z';
-
 function makeOrb() {
     const node = document.createElement('div');
     node.className = 'orb';
@@ -146,10 +145,7 @@ function makeOrb() {
     node.innerHTML =
         `<div class="orb__glow orb__glow--background">${blobs}</div>`
         + `<div class="orb__glow orb__glow--foreground">${blobs}</div>`
-        + '<div class="orb__face">'
-        + `<svg class="orb__sparkle" viewBox="0 0 80 80"><path d="${SPARKLE}" fill="currentColor"/></svg>`
-        + `<svg class="orb__sparkle orb__sparkle--small" viewBox="0 0 80 80"><path d="${SPARKLE}" fill="currentColor"/></svg>`
-        + '</div>';
+        + '<div class="orb__face"></div>';
     // Offset each orb's orbits so neighbours don't move in lockstep.
     node.style.setProperty('--off', `${(-Math.random() * 30).toFixed(2)}s`);
     return node;
@@ -218,7 +214,6 @@ function build() {
 function applyLook() {
     const c = el.clock;
     c.classList.toggle('digits', state.digits);
-    c.classList.toggle('noSparkle', !state.sparkle);
     c.classList.toggle('noGhost', !state.ghost);
     c.style.setProperty('--glow-scale', String(SCALE[state.scale] || 1));
     c.style.setProperty('--speed', String(SPEED[state.speed] || 1));
@@ -235,18 +230,18 @@ function fit() {
     const W = el.stage.clientWidth;
     const H = el.stage.clientHeight;
     if (!W || !H) return;
-    const g = 0.55;
+    const g = 0.2;
     const n = units().length;
     let wc, hc;
     if (state.layout === 'rows') {
-        wc = 6 + 5 * g + (state.digits ? 1.6 : 0) + 2;
-        hc = n + (n - 1) * g + 2;
+        wc = 6 + 5 * g + (state.digits ? 1.6 : 0) + 1;
+        hc = n + (n - 1) * g + 1;
     } else {
         const cols = n * 2;
-        wc = cols + n * g + (n - 1) * g * 2.2 + 2;
-        hc = 4 + 3 * g + (state.digits ? 0.9 : 0) + 2.2;
+        wc = cols + n * g + (n - 1) * g * 2.2 + 1;
+        hc = 4 + 3 * g + (state.digits ? 0.9 : 0) + 1.4;
     }
-    const d = Math.max(10, Math.min(MAX_D, W / wc, H / hc));
+    const d = Math.max(10, Math.min(isFull() ? MAX_D_FULL : MAX_D, W / wc, H / hc));
     el.clock.style.setProperty('--d', `${d.toFixed(1)}px`);
 }
 
@@ -403,7 +398,6 @@ wireOptions('optSpeed', 'speed', applyLook);
 wireOptions('optScale', 'scale', applyLook);
 wireCheck(el.seconds, 'seconds', build);
 wireCheck(el.digits, 'digits', () => { applyLook(); fit(); });
-wireCheck(el.sparkle, 'sparkle', applyLook);
 wireCheck(el.ghost, 'ghost', applyLook);
 
 el.shuffle.addEventListener('click', shuffle);
